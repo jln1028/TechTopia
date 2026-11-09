@@ -27,3 +27,5 @@ flowchart LR
 
 !!! warning "Hardware verification"
     The Python projects have not been tested on a physical Sense HAT, and the `pitop` snippets in the challenge materials have not been validated on a device. Check them on your hardware before classroom use.
+
+Site: <https://jln1028.github.io/TechTopia/>
