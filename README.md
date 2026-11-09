@@ -136,7 +136,13 @@ Shared conventions:
 
 ## Licensing
 
-This repository is licensed under [CC BY-SA 4.0](LICENSE) because its materials are assumed to be adapted from [Raspberry Pi Foundation](https://www.raspberrypi.org) learning resources, which use that license. You may share and adapt it, but you must give credit, indicate changes, and license derivatives under CC BY-SA 4.0. Some content was drafted with AI tools. See [`NOTICE.md`](NOTICE.md) for the attribution text, caveats and sources table.
+There is no single license for this repository; the status depends on the content:
+
+- **Lessons, curriculum hub and team guides:** adapted from [Raspberry Pi Foundation](https://www.raspberrypi.org) projects ([Getting started with the Sense HAT](https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat) and [Physical Computing with Python](https://projects.raspberrypi.org/en/projects/physical-computing)), licensed under [CC BY-SA 4.0](LICENSE-CC-BY-SA-4.0.txt). Credit the Foundation, indicate changes, and share adaptations under the same license.
+- **Quizzes and the four Python projects:** generated with AI tools without reference material. **No license is assigned yet**, so all rights are reserved by default.
+- **Documentation and tooling:** no license assigned yet.
+
+See [`NOTICE.md`](NOTICE.md) for the attribution text, sources and open decisions.
 
 ## More documentation
 

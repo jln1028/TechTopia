@@ -110,7 +110,7 @@ Lower-effort alternative (no moves): keep all folders and apply only the documen
 - Follow [CONTRIBUTING.md](https://github.com/jln1028/TechTopia/blob/main/CONTRIBUTING.md): clone, run the tests, read the conventions, check the pre-commit list.
 - Added: `run_tests.py` at the root runs every project's tests (running `unittest discover` from the root finds none), and `.github/workflows/tests.yml` runs it in CI.
 - Still open:
-  - A `LICENSE` file; none is present, so reuse terms are undefined. The choice of licence is the owner's decision.
+  - Licensing for the quizzes, Python projects and docs: not assigned yet (see `NOTICE.md`). The adapted lessons and guides are CC BY-SA 4.0.
   - Issue templates for "hardware test report" and "lesson content error".
 
 **Hardware testers**
@@ -163,5 +163,5 @@ Information-architecture recommendations:
 3. Root test script and CI (done: `run_tests.py`, `.github/workflows/tests.yml`).
 4. `index.html` pages for the lessons and challenge folders (done).
 5. MkDocs site scaffold and Pages workflow (done; enable GitHub Pages with source "GitHub Actions" in the repository settings).
-6. `LICENSE` (open: needs the owner's choice).
+6. Licence for the quizzes, Python projects and docs (open: needs the owner's choice; lessons and guides are CC BY-SA 4.0, see `NOTICE.md`).
 7. Rename and move folders per section 4, in one commit with `git mv`, then update links in the READMEs, `docs/` and `index.html` pages (open: deliberately not done, because it breaks existing links and bookmarks).

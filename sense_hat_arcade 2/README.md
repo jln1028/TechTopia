@@ -41,6 +41,6 @@ New tests were written first and run against the previous implementation. They f
 
 The tests verify logic, not physical Sense HAT behavior. Test LED orientation, scrolling, joystick events, and timing on the real device. Best scores are **session-only**, not saved to disk. The score scroll temporarily blocks gameplay, only after game over.
 
-## License and attribution
+## AI-drafted code and licensing
 
-Adapted from learning resources by the [Raspberry Pi Foundation](https://www.raspberrypi.org), licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Changes were made for the TechTopia classroom, including AI-assisted drafting. Not endorsed by the Raspberry Pi Foundation. See [`NOTICE.md`](../NOTICE.md) and [`LICENSE`](../LICENSE).
+This code was drafted with AI tools (ChatGPT and Claude) without reference material. No license has been assigned to it yet. See [`NOTICE.md`](../NOTICE.md).
