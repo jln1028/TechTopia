@@ -17,8 +17,8 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting started: getting-started.md
-  - Learn: lessons.md
-  - Challenge: challenge.md
-  - Sense HAT projects: projects.md
+  - Part 1, Lessons: lessons.md
+  - Part 2, Physical Computing: physical-computing.md
+  - Extra exploration: projects.md
   - Reference:
       - Repository guide: repository-guide.md

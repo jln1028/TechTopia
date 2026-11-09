@@ -1,54 +1,66 @@
 # TechTopia
 
-Classroom materials for the **TechTopia Industry Challenge** on physical computing. The repository combines:
+Classroom materials for the **TechTopia Industry Challenge** on physical computing. The course has two parts, plus optional extension activities:
 
-- interactive HTML lessons that teach students from first power-on to Python and the Sense HAT,
-- curriculum, quiz and team build-guide pages for the showcase challenge, and
-- four small Raspberry Pi **Sense HAT** Python projects with automated tests.
+| Part | What | Folder |
+|---|---|---|
+| **Part 1: Lessons** | Five interactive HTML lessons, from first power-on to Python and the Sense HAT | [`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/) |
+| **Part 2: Physical Computing** | Bridges the Sense HAT into physical computing with external components: curriculum hub, quizzes, and three team build guides | [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.txt) |
+| **Extra exploration** | Four example Sense HAT games and apps written in Python, to read, run and modify | [Sense HAT Python examples](#extra-exploration-sense-hat-python-examples) |
 
 ## Where do I start?
 
 | I am a... | Start here |
 |---|---|
-| **Student** new to the pi-top [4] | [Intro lessons](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/), in order 1 to 5 |
-| **Student** in a showcase team | Your team guide in [`03_Showcase_Team_Guides/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/03_Showcase_Team_Guides/) |
-| **Teacher** planning a unit | [Physical Computing Hub](TechTopia_Industry_Challenge_Physical_Computing_Materials/01_Curriculum_Websites/TechTopia_Physical_Computing_Hub.html), then the [quizzes](TechTopia_Industry_Challenge_Physical_Computing_Materials/02_Student_Assessment/) |
-| **Student or teacher** wanting Sense HAT programs to run or extend | [Sense HAT projects](#sense-hat-python-projects) below |
+| **Student** | Part 1: [intro lessons](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/), in order 1 to 5. Then Part 2 (physical computing). |
+| **Student** building a team project | Your team guide in [`03_Showcase_Team_Guides/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/03_Showcase_Team_Guides/) (after Part 1) |
+| **Student** who finishes early or wants more | [Extra exploration](#extra-exploration-sense-hat-python-examples) |
+| **Teacher** planning the course | The [course flow](#course-flow) below, then the [Physical Computing Hub](TechTopia_Industry_Challenge_Physical_Computing_Materials/01_Curriculum_Websites/TechTopia_Physical_Computing_Hub.html) |
 | **Contributor** | [`CONTRIBUTING.md`](CONTRIBUTING.md), then [`docs/repository-guide.md`](docs/repository-guide.md) |
 
-## Suggested learning path
+## Course flow
 
 ```mermaid
 flowchart LR
-    A[1 Using your pi-top 4] --> B[2 Intro to the Terminal]
-    B --> C[3 Pac-Man Terminal Treasure Hunt]
-    C --> D[4 Intro to Python]
-    D --> E[5 Sense HAT Interactive Lab]
-    D --> F[Physical Computing Hub]
-    F --> G[Team build guides 1 to 3]
-    E --> H[Sense HAT Python projects]
-    F --> Q[20-question quiz]
-    E --> Q2[Sense HAT quiz]
+    subgraph P1[Part 1: Lessons]
+        A[1 Using your pi-top 4] --> B[2 Terminal]
+        B --> C[3 Treasure Hunt]
+        C --> D[4 Python]
+        D --> E[5 Sense HAT Lab]
+    end
+    subgraph P2[Part 2: Physical Computing]
+        F[Physical Computing Hub] --> G[Team guides 1 to 3]
+        F --> Q[Quizzes]
+    end
+    subgraph X[Extra exploration]
+        H[Compass]
+        I[Maze]
+        J[Arcade]
+        K[Enhanced arcade]
+    end
+    E --> F
+    E -.optional.-> X
+    G -.optional.-> X
 ```
 
-The numbered lessons are designed to be taken in order. The Sense HAT track (Lab 5 and the Python projects) and the pi-top component track (Hub and team guides) can be done in either order after lesson 4.
+Part 1 is taken in order. Part 2 follows it and moves from the Sense HAT to physical computing with external components. The Python examples are optional extension activities for students who want to go further with the Sense HAT; nothing in Parts 1 or 2 depends on them.
 
 ## Repository layout
 
-| Folder | What it is | Hardware / SDK |
-|---|---|---|
-| [`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/) | Five interactive HTML lessons: pi-top [4] basics, terminal, terminal treasure hunt, Python, Sense HAT lab | pi-top [4]; `sense_hat` in lesson 5 |
-| [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.txt) | Curriculum hub, two quizzes, and three team build guides | `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer) |
-| [`sensehat_compass/`](sensehat_compass/README.md) | Joystick-controlled compass: arrow, cardinal and numeric heading modes | Sense HAT |
-| [`sensehat_maze_joystick/`](sensehat_maze_joystick/README.md) | Marble maze controlled by joystick or by tilting the board | Sense HAT |
-| [`sense_hat_arcade/`](sense_hat_arcade/README.md) | Arcade with 3 games, three difficulty levels and persistent high scores | Sense HAT |
-| [`sense_hat_arcade 2/`](sense_hat_arcade%202/README.md) | "Enhanced Edition" arcade with 6 games, countdown and session-only best scores | Sense HAT |
+| Folder | Course role | What it is | Hardware / SDK |
+|---|---|---|---|
+| [`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/) | Part 1 | Five interactive HTML lessons: pi-top [4] basics, terminal, terminal treasure hunt, Python, Sense HAT lab | pi-top [4]; `sense_hat` in lesson 5 |
+| [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.txt) | Part 2 | Bridges the Sense HAT into physical computing: curriculum hub, two quizzes, and three team build guides | `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer) |
+| [`sensehat_compass/`](sensehat_compass/README.md) | Extra | Joystick-controlled compass: arrow, cardinal and numeric heading modes | Sense HAT |
+| [`sensehat_maze_joystick/`](sensehat_maze_joystick/README.md) | Extra | Marble maze controlled by joystick or by tilting the board | Sense HAT |
+| [`sense_hat_arcade/`](sense_hat_arcade/README.md) | Extra | Arcade with 3 games, three difficulty levels and persistent high scores | Sense HAT |
+| [`sense_hat_arcade 2/`](sense_hat_arcade%202/README.md) | Extra | "Enhanced Edition" arcade with 6 games, countdown and session-only best scores | Sense HAT |
 
 Everything is self-contained: there is no shared code, no build step and no dependency file. The two arcade folders are different codebases, not versions of one program.
 
-### Classroom materials in detail
+### Part 1 and Part 2 in detail
 
-**Intro lessons** (open in a browser):
+**Part 1: intro lessons** (open in a browser, take in order):
 
 1. Using Your pi-top [4]
 2. Introduction to the Terminal
@@ -56,13 +68,22 @@ Everything is self-contained: there is no shared code, no build step and no depe
 4. Intro to Python
 5. Sense HAT Interactive Lab
 
-**Challenge materials**:
+**Part 2: physical computing materials**:
 
 - `01_Curriculum_Websites/`: Physical Computing Hub (concepts, project library, coding constructs, glossary)
 - `02_Student_Assessment/`: 20-question physical computing quiz; Sense HAT getting-started quiz
 - `03_Showcase_Team_Guides/`: Team 1 Smart Security System, Team 2 Reaction Challenge, Team 3 Smart Crosswalk (each has wiring, roles, checklist, build steps and final code)
 
-## Sense HAT Python projects
+## Extra exploration: Sense HAT Python examples
+
+Four complete example programs for students who want to explore further after lesson 5. Each is a working Sense HAT game or app written in Python. Students can run them, read the code, and change them (for example colours, speed, difficulty or controls). They are not required for the challenge.
+
+Suggested activities:
+
+- Run one example on the Sense HAT and describe how the joystick controls it.
+- Change a value (a colour, a speed, a difficulty setting) and predict the effect before running it.
+- Read a test file and explain what behaviour it checks.
+- Add a small feature, for example a new compass mode or a new maze.
 
 ### Requirements
 
@@ -131,22 +152,24 @@ Shared conventions:
 ## Known limitations
 
 - The Python projects have not been tested on physical Sense HAT hardware. Check LED orientation, timing, joystick events and sensor readings on the device.
-- The Python snippets in the challenge materials target pi-top [4] hardware and were carried forward from class materials; validate SDK component names, ports and sensor ranges before classroom use.
+- The Python snippets in the Part 2 materials target pi-top [4] hardware and were carried forward from class materials; validate SDK component names, ports and sensor ranges before classroom use.
 - The materials folder has no embedded pi-top photos or TechTopia background images.
 
 ## Licensing
 
-There is no single license for this repository; the status depends on the content:
+Different parts use different licenses (details in [`LICENSE.md`](LICENSE.md) and [`NOTICE.md`](NOTICE.md)):
 
-- **Lessons, curriculum hub and team guides:** adapted from [Raspberry Pi Foundation](https://www.raspberrypi.org) projects ([Getting started with the Sense HAT](https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat) and [Physical Computing with Python](https://projects.raspberrypi.org/en/projects/physical-computing)), licensed under [CC BY-SA 4.0](LICENSE-CC-BY-SA-4.0.txt). Credit the Foundation, indicate changes, and share adaptations under the same license.
-- **Quizzes and the four Python projects:** generated with AI tools without reference material. **No license is assigned yet**, so all rights are reserved by default.
-- **Documentation and tooling:** no license assigned yet.
+| Content | License |
+|---|---|
+| Intro lessons, curriculum hub, team guides (adapted from [Raspberry Pi Foundation](https://www.raspberrypi.org) projects [Getting started with the Sense HAT](https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat) and [Physical Computing with Python](https://projects.raspberrypi.org/en/projects/physical-computing)) | [CC BY-SA 4.0](LICENSE-CC-BY-SA-4.0.txt): credit the Foundation, indicate changes, share adaptations under the same license |
+| Python projects, test runner, CI and site config | [MIT](LICENSE-MIT.txt) |
+| Quizzes and documentation | [CC BY 4.0](LICENSE-CC-BY-4.0.txt) |
 
-See [`NOTICE.md`](NOTICE.md) for the attribution text, sources and open decisions.
+The Python projects and quizzes were drafted with AI tools without reference material.
 
 ## More documentation
 
 - [`docs/repository-guide.md`](docs/repository-guide.md): groupings, proposed folder structure and information-architecture recommendations
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): onboarding, conventions and how to add a project or lesson
 - `docs/` and [`mkdocs.yml`](mkdocs.yml): MkDocs site source. Preview with `pip install mkdocs-material && mkdocs serve`.
-- Entry pages for the HTML content: [intro lessons](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/index.html) and [challenge materials](TechTopia_Industry_Challenge_Physical_Computing_Materials/index.html).
+- Entry pages for the HTML content: [intro lessons](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/index.html) and [Part 2 materials](TechTopia_Industry_Challenge_Physical_Computing_Materials/index.html).

@@ -1,6 +1,15 @@
-# Sense HAT projects
+# Extra exploration: Sense HAT Python examples
 
-Four independent Python projects for the Raspberry Pi Sense HAT. The logic is testable on any computer; only the runner script needs the hardware.
+Four complete example games and apps written in Python for the Raspberry Pi Sense HAT. They are **optional extension activities** for students who want to go further after [lesson 5](lessons.md); nothing in Parts 1 or 2 depends on them.
+
+Students can run an example, read the code, change it and see what happens. Suggested activities:
+
+- Run one example and describe how the joystick controls it.
+- Change a value (a colour, a speed, a difficulty setting) and predict the effect before running it.
+- Read a test file and explain what behaviour it checks.
+- Add a small feature, for example a new compass mode or a new maze.
+
+The logic is testable on any computer; only the runner script needs the hardware.
 
 | Project | What it does | Run on a Pi | Details |
 |---|---|---|---|

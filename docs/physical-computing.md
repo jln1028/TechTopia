@@ -1,6 +1,8 @@
-# Challenge materials
+# Part 2: Physical Computing
 
-Curriculum, assessment and build guides for the Physical Computing showcase. These use the `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer), except the Sense HAT quiz.
+Take these after the [Part 1 lessons](lessons.md).
+
+This part bridges what students learned with the Sense HAT into physical computing: connecting their own components and programming them with the `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer). It includes the curriculum hub, quizzes and three team build guides. The Sense HAT quiz is the one page that uses `sense_hat`.
 
 ## Curriculum
 

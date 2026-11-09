@@ -7,7 +7,7 @@ An analysis of how the TechTopia repository is organised today, a proposed struc
 | Folder | Purpose | Format | Hardware / SDK |
 |---|---|---|---|
 | `TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/` | Five numbered interactive lessons: pi-top [4] basics, terminal, terminal treasure hunt, Python, Sense HAT lab | 5 self-contained HTML pages | pi-top [4]; `sense_hat` (lesson 5) |
-| `TechTopia_Industry_Challenge_Physical_Computing_Materials/` | Curriculum hub, assessments, and team build guides for the showcase | 6 HTML pages in 3 subfolders, plus `README.txt` | `pitop` SDK |
+| `TechTopia_Industry_Challenge_Physical_Computing_Materials/` | Part 2: bridges the Sense HAT into physical computing with external components. Curriculum hub, assessments, and team build guides | 6 HTML pages in 3 subfolders, plus `README.txt` | `pitop` SDK |
 | `sensehat_compass/` | Interactive compass (arrow, cardinal, numeric) | Python + `unittest` | Sense HAT |
 | `sensehat_maze_joystick/` | Marble maze, joystick or tilt | Python + `unittest` | Sense HAT |
 | `sense_hat_arcade/` | 3-game arcade, difficulty levels, persistent high scores | Python + `unittest` | Sense HAT |
@@ -16,20 +16,20 @@ An analysis of how the TechTopia repository is organised today, a proposed struc
 ### What each group of materials contains
 
 - **Intro lessons:** `1-using-your-pitop4`, `2-intro-to-terminal-pitop4`, `3-pacman-terminal-treasure-hunt-pitop4`, `4-intro-to-python`, `5-sense-hat-interactive-lab`.
-- **Challenge materials:**
+- **Part 2 (physical computing) materials:**
   - `01_Curriculum_Websites/TechTopia_Physical_Computing_Hub.html`: concepts, project library, naming guide, coding constructs, glossary, teacher note.
   - `02_Student_Assessment/`: `TechTopia_20_Question_Quiz.html`, `TechTopia_sense_hat_quiz.html`.
   - `03_Showcase_Team_Guides/`: Team 1 Smart Security System, Team 2 Reaction Challenge, Team 3 Smart Crosswalk. Each has a wiring guide, team roles, build checklist, build steps, finished code and presentation reminders.
 
 ## 2. Logical groupings
 
-By **use case**:
+By **course role**:
 
 | Group | Members | Audience |
 |---|---|---|
-| A. Foundations (learn) | Intro lessons 1 to 4 | Students, no prior experience |
-| B. Sense HAT track (learn, then build) | Lesson 5, quiz `TechTopia_sense_hat_quiz`, the four Python projects | Students and teachers |
-| C. pi-top component track (build for the showcase) | Physical Computing Hub, team guides 1 to 3, 20-question quiz | Teams and teachers |
+| Part 1: Lessons | Intro lessons 1 to 5 | All students, no prior experience |
+| Part 2: Physical Computing | Physical Computing Hub, quizzes, team guides 1 to 3 | Students and teams after Part 1; teachers |
+| Extra exploration | The four Python Sense HAT examples | Students who want to go further (optional) |
 
 By **technology**:
 
@@ -69,19 +69,19 @@ TechTopia/
 │   ├── getting-started.md
 │   ├── repository-guide.md
 │   └── hardware-notes.md
-├── lessons/                       # Group A + lesson 5
+├── part1-lessons/                 # Part 1
 │   ├── index.html
 │   ├── 1-using-your-pitop4.html
 │   ├── 2-intro-to-terminal-pitop4.html
 │   ├── 3-pacman-terminal-treasure-hunt-pitop4.html
 │   ├── 4-intro-to-python.html
 │   └── 5-sense-hat-interactive-lab.html
-├── challenge/                     # Group C
+├── part2-physical-computing/      # Part 2
 │   ├── README.md                  # converted from README.txt
 │   ├── curriculum/
 │   ├── assessment/
 │   └── team-guides/
-└── sensehat-projects/             # Group B
+└── extra-exploration/             # optional Python examples
     ├── README.md                  # table of projects + shared conventions
     ├── compass/
     ├── maze/
@@ -91,7 +91,7 @@ TechTopia/
 
 Rationale:
 
-- Top-level names say **what the content is for** (learn, challenge, build) instead of repeating the programme name.
+- Top-level names follow the **course order** (Part 1, Part 2, extra exploration) instead of repeating the programme name.
 - No spaces in any folder name.
 - `arcade-classic` / `arcade-enhanced` states the relationship that the current names hide.
 - Each group gets its own index page, so no part of the repo is more than two clicks from the root README.
@@ -110,7 +110,6 @@ Lower-effort alternative (no moves): keep all folders and apply only the documen
 - Follow [CONTRIBUTING.md](https://github.com/jln1028/TechTopia/blob/main/CONTRIBUTING.md): clone, run the tests, read the conventions, check the pre-commit list.
 - Added: `run_tests.py` at the root runs every project's tests (running `unittest discover` from the root finds none), and `.github/workflows/tests.yml` runs it in CI.
 - Still open:
-  - Licensing for the quizzes, Python projects and docs: not assigned yet (see `NOTICE.md`). The adapted lessons and guides are CC BY-SA 4.0.
   - Issue templates for "hardware test report" and "lesson content error".
 
 **Hardware testers**
@@ -130,12 +129,12 @@ nav:
   - Getting started:
       - Teacher quick start: getting-started.md
       - Contributor setup: contributing.md
-  - Learn:
+  - Part 1, Lessons:
       - Intro lessons: lessons.md
-  - Challenge:
-      - Overview: challenge.md
+  - Part 2, Physical Computing:
+      - Overview: physical-computing.md
       - Team guides: team-guides.md
-  - Sense HAT projects:
+  - Extra exploration:
       - Overview: projects/index.md
       - Compass: projects/compass.md
       - Maze: projects/maze.md
@@ -148,7 +147,7 @@ nav:
 
 Information-architecture recommendations:
 
-1. **Organise by task, not by folder.** Learn, build, assess and contribute are the questions visitors ask.
+1. **Organise by course flow.** Part 1, Part 2 and extra exploration is how teachers and students move through the material.
 2. **One page per project**, using the same headings as the current READMEs: what it does, controls, run tests, run on a Pi, limitations. Reuse the existing content.
 3. **Link to the HTML pages** from the site (copy them under `docs/` as static assets, or link to the GitHub Pages path) and add a back link to the site from each page.
 4. **Add an `index.html`** in the lessons and challenge folders that lists the pages in order, so students are not browsing files.
@@ -163,5 +162,5 @@ Information-architecture recommendations:
 3. Root test script and CI (done: `run_tests.py`, `.github/workflows/tests.yml`).
 4. `index.html` pages for the lessons and challenge folders (done).
 5. MkDocs site scaffold and Pages workflow (done; enable GitHub Pages with source "GitHub Actions" in the repository settings).
-6. Licence for the quizzes, Python projects and docs (open: needs the owner's choice; lessons and guides are CC BY-SA 4.0, see `NOTICE.md`).
+6. Licensing (done: see `LICENSE.md` and `NOTICE.md`; lessons and guides CC BY-SA 4.0, code MIT, quizzes and docs CC BY 4.0).
 7. Rename and move folders per section 4, in one commit with `git mv`, then update links in the READMEs, `docs/` and `index.html` pages (open: deliberately not done, because it breaks existing links and bookmarks).

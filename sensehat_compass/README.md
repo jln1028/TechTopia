@@ -24,6 +24,6 @@ The initial RED run failed because `compass_core` had not been implemented (`red
 
 The `sense.get_compass()` API returns a heading in degrees based on the Sense HAT's sensors. Nearby metal or electronics can distort readings; test away from magnets and verify directions against a known compass. The program does not apply geographic declination and reports magnetic, not true, north. `show_letter` is used instead of blocking scrolling text so joystick presses remain responsive.
 
-## AI-drafted code and licensing
+## License
 
-This code was drafted with AI tools (ChatGPT and Claude) without reference material. No license has been assigned to it yet. See [`NOTICE.md`](../NOTICE.md).
+MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has not been tested on physical hardware.

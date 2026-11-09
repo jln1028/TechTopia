@@ -1,4 +1,4 @@
-# Learn: intro lessons
+# Part 1: Lessons
 
 Five interactive lessons. Take them in order.
 
@@ -13,4 +13,4 @@ Five interactive lessons. Take them in order.
 !!! note
     The links open the standalone lesson pages. They work on the published site and when the repository is opened locally with the `docs/` folder served from the repository root.
 
-Next: [Sense HAT projects](projects.md) or the [challenge materials](challenge.md).
+Next: [Part 2, Physical Computing](physical-computing.md). For optional extension activities after lesson 5, see [Extra exploration](projects.md).

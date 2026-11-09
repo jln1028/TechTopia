@@ -15,6 +15,6 @@ Run game on Raspberry Pi with Sense HAT: `python3 marble_maze.py`
 
 Tilt orientation depends on mounting. If movement is reversed, adjust `tilt_step` in `maze_logic.py`.
 
-## AI-drafted code and licensing
+## License
 
-This code was drafted with AI tools (ChatGPT and Claude) without reference material. No license has been assigned to it yet. See [`NOTICE.md`](../NOTICE.md).
+MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has not been tested on physical hardware.

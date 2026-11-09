@@ -55,7 +55,7 @@ python3 -m unittest -v test_compass.CompassTests.test_cardinal_boundaries
 - **Style:** existing files differ (compact style in `compass_core.py` and `arcade_core.py`, PEP 8 elsewhere). Match the file you are editing; do not reformat unrelated code.
 - **Tests first:** the projects were built red/green. Write a failing `unittest` case, then implement.
 
-## 5. Adding a new Sense HAT project
+## 5. Adding a new Sense HAT example (extra exploration)
 
 1. Create a folder named `sensehat_<name>/` (lowercase, underscores).
 2. Add `<name>_core.py` (no `sense_hat` import), `<name>_app.py` (runner) and `test_<name>.py`.

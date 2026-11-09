@@ -4,15 +4,16 @@
 
 ## Summary
 
-| Content | Origin | License status |
+| Content | Origin | License |
 |---|---|---|
-| Intro lessons 1 to 5 (`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`) | Adapted from Raspberry Pi Foundation learning resources | **CC BY-SA 4.0** (see below) |
-| Curriculum hub and team guides (`.../01_Curriculum_Websites/`, `.../03_Showcase_Team_Guides/`) | Adapted from Raspberry Pi Foundation learning resources | **CC BY-SA 4.0** (see below) |
-| Quizzes (`.../02_Student_Assessment/`) | Generated with AI tools (ChatGPT, Claude), no reference material | **No license assigned yet** |
-| Python projects (`sensehat_compass/`, `sensehat_maze_joystick/`, `sense_hat_arcade/`, `sense_hat_arcade 2/`) | Generated with AI tools (ChatGPT, Claude), no reference material | **No license assigned yet** |
-| Documentation (`README.md`, `CONTRIBUTING.md`, `docs/`, `mkdocs.yml`, `run_tests.py`, `.github/`) | Written for this repository | **No license assigned yet** |
+| Intro lessons 1 to 5 (`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`) | Adapted from Raspberry Pi Foundation learning resources (confirmed by the maintainer) | **CC BY-SA 4.0** |
+| Curriculum hub and team guides (`.../01_Curriculum_Websites/`, `.../03_Showcase_Team_Guides/`) | Adapted from Raspberry Pi Foundation learning resources (confirmed by the maintainer) | **CC BY-SA 4.0** |
+| Quizzes (`.../02_Student_Assessment/`) | Generated with AI tools (ChatGPT, Claude), no reference material | **CC BY 4.0** |
+| Python projects (`sensehat_compass/`, `sensehat_maze_joystick/`, `sense_hat_arcade/`, `sense_hat_arcade 2/`) | Generated with AI tools (ChatGPT, Claude), no reference material | **MIT** |
+| Tooling (`run_tests.py`, `mkdocs.yml`, `.github/`) | Written for this repository | **MIT** |
+| Documentation (`README.md`, `CONTRIBUTING.md`, `NOTICE.md`, `docs/`, the two `index.html` entry pages) | Written for this repository | **CC BY 4.0** |
 
-"No license assigned yet" means all rights are reserved by default: others may view the files on GitHub but have no granted right to copy or reuse them. See "Open decisions" below.
+The license texts are in [`LICENSE-MIT.txt`](LICENSE-MIT.txt), [`LICENSE-CC-BY-4.0.txt`](LICENSE-CC-BY-4.0.txt) and [`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt); [`LICENSE.md`](LICENSE.md) maps each to its content. The maintainer does not claim ownership of the AI-generated quizzes; they are offered under CC BY 4.0 to the extent any rights exist.
 
 ## Material adapted from the Raspberry Pi Foundation
 
@@ -23,7 +24,7 @@ The lessons, curriculum hub and team guides were adapted from these Raspberry Pi
 | [Getting started with the Sense HAT](https://projects.raspberrypi.org/en/projects/getting-started-with-the-sense-hat) | CC BY-SA 4.0 (stated on the page, checked 2026-11-09) | Lesson 5 (Sense HAT Interactive Lab) |
 | [Physical Computing with Python](https://projects.raspberrypi.org/en/projects/physical-computing) | CC BY-SA 4.0 (stated on the page, checked 2026-11-09) | Physical computing material (curriculum hub, team guides) |
 
-The maintainer states that the lessons came from these sites. The mapping of individual files to individual source pages is not yet recorded; the table above lists the sources, not a file-by-file mapping. The full license text is in [`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt).
+The maintainer confirms that all of the lessons (1 to 5), the curriculum hub and the team guides were derived from these two sites. A file-by-file mapping to individual source pages is not recorded; the table above lists the sources. The full license text is in [`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt).
 
 Attribution used on the adapted pages:
 
@@ -33,13 +34,13 @@ CC BY-SA 4.0 requires that anyone reusing the adapted files credit the Foundatio
 
 ## AI-generated material
 
-The quizzes and the Python projects were generated with AI tools (ChatGPT and Claude) without reference material, and some drafting assistance was also used elsewhere. Copyright in purely AI-generated output is unsettled and varies by country, so ownership of those parts may be limited or absent. Because they are not derived from the Foundation's material, the CC BY-SA 4.0 share-alike condition does not apply to them.
+The quizzes and the Python projects were generated with AI tools (ChatGPT and Claude) without reference material, and some drafting assistance was also used elsewhere. Copyright in purely AI-generated output is unsettled and varies by country, so ownership of those parts may be limited or absent. Because they are not derived from the Foundation's material, the CC BY-SA 4.0 share-alike condition does not apply to them, so they use MIT (code) and CC BY 4.0 (text). Where no copyright exists in AI-generated output, these licenses have no effect on that part.
 
 ## Open decisions
 
-- **License for the quizzes, Python projects and documentation.** Options include MIT or Apache 2.0 for code and CC BY 4.0 for text, or CC0 if you want no restrictions. Until chosen, they remain all rights reserved. Who the copyright holder is (if anyone) is for the maintainer to decide.
-- **File-to-source mapping** for the adapted lessons and guides, and confirmation that no other source was used. Earlier notes said some material was sourced from others. If any file came from a source other than those above, list it with its own license; it may not be compatible with CC BY-SA 4.0.
-- **Embedded third-party code.** The HTML pages may contain Python examples from the Foundation's projects. Those fall under the same CC BY-SA 4.0 terms.
+- **Copyright holder.** `LICENSE-MIT.txt` names "TechTopia contributors" and 2026 as placeholders. Replace with the real holder name and year if you want a specific one.
+- **File-to-source mapping** for the adapted lessons and guides, if you want it recorded per file.
+- **Embedded third-party code.** The HTML pages may contain Python examples from the Foundation's projects. Those fall under the same CC BY-SA 4.0 terms as the pages.
 
 ## Other third-party terms
 

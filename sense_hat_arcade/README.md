@@ -41,6 +41,6 @@ At the end of each round the Sense HAT scrolls status, score, best score and hea
 ## Tests and limitations
 The project has 18 passing automated unit tests, including six new tests for menu flow, difficulty behavior, restarting, and score persistence. The Sense HAT hardware interface has not been tested on physical hardware. Flood Escape is a compact 8x8 platform game; students should playtest and adjust level difficulty. Tetris crushers are square clusters rather than the seven traditional tetromino shapes. The LED matrix has no sound output.
 
-## AI-drafted code and licensing
+## License
 
-This code was drafted with AI tools (ChatGPT and Claude) without reference material. No license has been assigned to it yet. See [`NOTICE.md`](../NOTICE.md).
+MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has not been tested on physical hardware.

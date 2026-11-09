@@ -1,12 +1,12 @@
 # Getting started (teachers)
 
-## Which track do you need?
+## Course structure
 
-| Track | Hardware | SDK | Materials |
+| Part | Hardware | SDK | Materials |
 |---|---|---|---|
-| Foundations | pi-top [4] | none | [Intro lessons](lessons.md) 1 to 4 |
-| Sense HAT | pi-top [4] or Raspberry Pi with a Sense HAT | `sense_hat` | Lesson 5, the Sense HAT quiz, [Sense HAT projects](projects.md) |
-| pi-top components (showcase) | pi-top [4] with Foundation/Expansion Plate components | `pitop` | [Challenge materials](challenge.md) |
+| Part 1: Lessons | pi-top [4] (lesson 5 needs a Sense HAT) | none for lessons 1 to 4; `sense_hat` in lesson 5 | [Lessons](lessons.md) 1 to 5, in order |
+| Part 2: Physical Computing | pi-top [4] with Foundation/Expansion Plate components | `pitop` | [Physical computing materials](physical-computing.md): hub, quizzes, team guides |
+| Extra exploration (optional) | Raspberry Pi or pi-top with a Sense HAT | `sense_hat` | [Python examples](projects.md) |
 
 ## Pre-class checklist
 
@@ -17,8 +17,8 @@
 
 ## Suggested sequence
 
-1. Lessons 1 to 4, in order.
-2. Either lesson 5 and the Sense HAT projects, or the Physical Computing Hub and team guides.
-3. Finish with a quiz: the Sense HAT quiz after lesson 5, or the 20-question quiz after the Hub.
+1. **Part 1:** lessons 1 to 5, in order.
+2. **Part 2:** the Physical Computing Hub, then the team guides; use the quizzes as assessment.
+3. **Extra exploration:** offer the Python examples to students who finish early or want more of the Sense HAT. They are optional.
 
 Time per lesson has not been measured; pilot one lesson before planning a schedule.
