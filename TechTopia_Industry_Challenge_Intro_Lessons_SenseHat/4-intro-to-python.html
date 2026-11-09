@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intro to Python &mdash; Interactive Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1420;
+    --panel:#131b2a;
+    --panel2:#182337;
+    --border:#28374e;
+    --border-soft:#1d2941;
+    --text:#eef3fa;
+    --muted:#93a6c2;
+    --muted-dim:#5c6f8a;
+    --yellow:#ffd43b;
+    --yellow-dim:#8a7526;
+    --blue:#5b9bd9;
+    --green:#4caf50;
+    --danger:#ff6b6b;
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans:'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    --display:'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 750px at 12% -8%, #1b2a44 0%, transparent 60%),
+      radial-gradient(950px 680px at 108% 8%, #2a2410 0%, transparent 55%),
+      var(--bg);
+    color:var(--text); font-family:var(--sans); min-height:100vh;
+  }
+  a{color:var(--blue);}
+
+  header{
+    padding:22px clamp(16px,3vw,40px) 16px; border-bottom:1px solid var(--border-soft);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .badge{
+    width:44px; height:44px; border-radius:10px; flex:none; position:relative;
+    background:linear-gradient(155deg,#20304a,#0e1524); border:1px solid var(--border);
+    overflow:hidden;
+  }
+  .badge::before{ content:''; position:absolute; left:0; top:0; width:100%; height:60%; background:var(--blue); opacity:.85; clip-path:path('M0,0 H44 V20 Q22,30 0,20 Z'); }
+  .badge::after{ content:''; position:absolute; left:0; bottom:0; width:100%; height:60%; background:var(--yellow); opacity:.9; clip-path:path('M0,26 Q22,16 44,26 V44 H0 Z'); }
+  header h1{font-family:var(--display); font-size:1.32rem; margin:0; font-weight:700;}
+  header p{margin:2px 0 0; color:var(--muted); font-size:.87rem;}
+  header .tagline{margin-left:auto; text-align:right; color:var(--muted-dim); font-size:.76rem; max-width:300px; line-height:1.45;}
+
+  .layout{
+    display:grid; grid-template-columns:200px minmax(0,1fr) 360px;
+    gap:18px; padding:18px clamp(16px,3vw,40px) 44px; align-items:start;
+  }
+  @media (max-width:1120px){ .layout{grid-template-columns:1fr;} }
+
+  nav#lessonNav{
+    position:sticky; top:16px; display:flex; flex-direction:column; gap:6px;
+    background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:10px;
+  }
+  nav#lessonNav .navlabel{font-family:var(--mono); font-size:.68rem; color:var(--muted-dim); padding:6px 8px 2px;}
+  .navbtn{
+    display:flex; align-items:baseline; gap:8px; text-align:left; background:transparent;
+    border:1px solid transparent; color:var(--muted); padding:9px 10px; border-radius:8px; cursor:pointer;
+    font-family:var(--sans); font-size:.85rem; line-height:1.25; width:100%;
+  }
+  .navbtn .n{font-family:var(--mono); font-size:.72rem; color:var(--muted-dim); flex:none;}
+  .navbtn:hover{background:var(--panel2); color:var(--text);}
+  .navbtn.active{background:#20283a; border-color:var(--border); color:var(--text);}
+  .navbtn.active .n{color:var(--yellow);}
+
+  section#lessonPanel{min-width:0; display:flex; flex-direction:column; gap:16px;}
+  .card{background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:18px 20px;}
+  #lessonIntro h2{font-family:var(--display); font-size:1.22rem; margin:0 0 10px;}
+  #lessonIntro h3{font-family:var(--display); font-size:1rem; margin:20px 0 8px; color:var(--text);}
+  #lessonIntro p{color:var(--muted); font-size:.92rem; line-height:1.62; margin:0 0 12px;}
+  #lessonIntro p:last-child{margin-bottom:0;}
+  #lessonIntro code{
+    background:#0a0f18; border:1px solid var(--border-soft); border-radius:4px; padding:1px 6px;
+    font-family:var(--mono); font-size:.84em; color:var(--yellow);
+  }
+  #lessonIntro ol, #lessonIntro ul.plain{color:var(--muted); font-size:.92rem; line-height:1.65; margin:0 0 12px; padding-left:20px;}
+  #lessonIntro li{margin-bottom:6px;}
+  #lessonIntro strong{color:var(--text);}
+
+  table.paramTable{width:100%; border-collapse:collapse; margin:6px 0 16px; font-size:.85rem;}
+  table.paramTable th,table.paramTable td{border:1px solid var(--border-soft); padding:8px 10px; text-align:left; vertical-align:top;}
+  table.paramTable th{background:var(--panel2); color:var(--yellow); font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.4px; font-weight:500;}
+  table.paramTable td{color:var(--muted);}
+  table.paramTable td code{white-space:nowrap;}
+
+  .note{background:#171f14; border-left:3px solid var(--yellow); border-radius:0 8px 8px 0; padding:10px 14px; margin:12px 0; font-size:.85rem; color:var(--muted); line-height:1.55;}
+  .note b{color:var(--yellow);}
+  .skillTags{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 14px;}
+  .skillTags span{background:var(--panel2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:.72rem; padding:4px 9px; border-radius:20px;}
+  .ctaRow{margin-top:14px;}
+  button.cta{background:var(--yellow); color:#241c02; border:none; border-radius:8px; padding:10px 18px; font-weight:600; font-size:.86rem; cursor:pointer; font-family:var(--sans);}
+  button.cta:hover{filter:brightness(1.06);}
+
+  .exampleBar{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .exampleBar label{font-size:.78rem; color:var(--muted-dim); font-family:var(--mono);}
+  select#exampleSelect{
+    background:var(--panel2); color:var(--text); border:1px solid var(--border);
+    border-radius:7px; padding:7px 10px; font-family:var(--sans); font-size:.85rem;
+  }
+
+  .editorCard{padding:0; overflow:hidden;}
+  .editorTop{display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border-soft); background:var(--panel2);}
+  .dots{display:flex; gap:6px; margin-right:4px;}
+  .dots span{width:9px;height:9px;border-radius:50%; display:inline-block;}
+  .dots span:nth-child(1){background:#ff6767;}
+  .dots span:nth-child(2){background:#ffc655;}
+  .dots span:nth-child(3){background:#63e6a0;}
+  .editorTop .fname{font-family:var(--mono); font-size:.78rem; color:var(--muted);}
+  .editorTop .spacer{flex:1;}
+  button.ctrl{font-family:var(--sans); font-weight:600; font-size:.82rem; border-radius:7px; padding:7px 14px; cursor:pointer; border:1px solid transparent; display:inline-flex; align-items:center; gap:6px;}
+  button.run{background:var(--yellow); color:#241c02; border-color:var(--yellow);}
+  button.run:disabled{opacity:.45; cursor:not-allowed;}
+  button.stop{background:transparent; color:var(--danger); border-color:#5a2c34;}
+  button.stop:disabled{opacity:.35; cursor:not-allowed;}
+  button.ghost{background:transparent; color:var(--muted); border-color:var(--border);}
+  button.ghost:hover{color:var(--text); border-color:var(--muted-dim);}
+  #status{font-family:var(--mono); font-size:.75rem; color:var(--muted-dim); white-space:nowrap;}
+  #status.busy{color:var(--yellow);}
+  #status.err{color:var(--danger);}
+  #status.ok{color:var(--green);}
+
+  textarea#codeEditor{
+    width:100%; height:300px; resize:vertical; background:#090e17; color:#e4ecf7;
+    border:none; outline:none; font-family:var(--mono); font-size:.86rem; line-height:1.55;
+    padding:16px 18px; tab-size:4; display:block;
+  }
+
+  pre#consoleOutput{
+    margin:0; padding:14px 18px; height:190px; overflow-y:auto;
+    font-family:var(--mono); font-size:.8rem; line-height:1.5; white-space:pre-wrap; word-break:break-word;
+    background:#070b12; color:#cfe0f5;
+  }
+  pre#consoleOutput .err{color:var(--danger);}
+  pre#consoleOutput .sys{color:var(--muted-dim); font-style:italic;}
+  pre#consoleOutput .ok{color:var(--green);}
+  .termInputRow{display:flex; gap:6px; align-items:center;}
+  .termInputRow .prompt{color:var(--yellow); white-space:pre;}
+  .termInputRow input{flex:1; background:transparent; border:none; outline:none; color:#fff; font-family:var(--mono); font-size:.8rem; border-bottom:1px dashed var(--muted-dim);}
+
+  #ideasBox h3{font-family:var(--display); font-size:.95rem; margin:0 0 8px; color:var(--blue); display:flex; align-items:center; gap:8px;}
+  #ideasBox ul{margin:0; padding-left:18px; color:var(--muted); font-size:.86rem; line-height:1.65;}
+
+  /* ---------- turtle / output panel ---------- */
+  aside#devicePanel{display:flex; flex-direction:column; gap:14px; position:sticky; top:16px;}
+  .canvasShell{background:linear-gradient(180deg,#182337,#0f1626); border:1px solid var(--border); border-radius:16px; padding:16px;}
+  .canvasShell .hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .canvasShell .hdr .t{font-family:var(--mono); font-size:.7rem; color:var(--muted-dim); letter-spacing:.4px;}
+  #turtleBgWrap{background:#fff; border-radius:10px; border:1px solid #263049; position:relative; overflow:hidden;}
+  #turtleBgWrap canvas{position:absolute; top:0; left:0;}
+  .turtleHint{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center;
+    color:#7c8ba0; font-family:var(--mono); font-size:.7rem; padding:20px; pointer-events:none;
+  }
+  .canvasFoot{display:flex; justify-content:space-between; align-items:center; margin-top:10px;}
+  .canvasFoot button{background:transparent; border:1px solid var(--border); color:var(--muted); font-size:.72rem; padding:5px 10px; border-radius:6px; cursor:pointer; font-family:var(--mono);}
+  .canvasFoot button:hover{border-color:var(--yellow); color:var(--yellow);}
+  .canvasFoot .cap{font-family:var(--mono); font-size:.66rem; color:var(--muted-dim);}
+
+  #loadOverlay{
+    position:fixed; inset:0; background:#05070de6; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:14px; z-index:50; font-family:var(--mono); color:var(--muted);
+  }
+  #loadOverlay .spin{width:34px;height:34px;border-radius:50%; border:3px solid #223049; border-top-color:var(--yellow); animation:spin 0.9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #loadOverlay small{color:var(--muted-dim); max-width:320px; text-align:center; line-height:1.5;}
+  .hidden{display:none !important;}
+
+  footer{text-align:center; color:var(--muted-dim); font-size:.74rem; padding:10px 20px 30px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+
+<div id="loadOverlay">
+  <div class="spin"></div>
+  <div>Starting the Python engine&hellip;</div>
+  <small>This loads Pyodide (a real Python interpreter that runs in your browser). It usually takes a few seconds on a school network.</small>
+</div>
+
+<header>
+  <div class="badge"></div>
+  <div>
+    <h1>Intro to Python</h1>
+    <p>A hands-on first look at Python &mdash; real code, real output, no experience required.</p>
+  </div>
+  <div class="tagline">Finish this before the Sense HAT lab &mdash; every concept here (variables, loops, functions) shows up again there.</div>
+</header>
+
+<div class="layout">
+
+  <nav id="lessonNav"></nav>
+
+  <section id="lessonPanel">
+    <div class="card" id="lessonIntro"></div>
+
+    <div class="exampleBar card" id="exampleBarCard" style="padding:12px 16px;">
+      <label for="exampleSelect">Example:</label>
+      <select id="exampleSelect"></select>
+      <div style="flex:1"></div>
+      <button class="ctrl ghost" id="resetBtn" title="Put the original example code back in the editor">&#8635; Reset code</button>
+    </div>
+
+    <div class="card editorCard" id="editorCardEl">
+      <div class="editorTop">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="fname" id="fileName">program.py</div>
+        <div class="spacer"></div>
+        <span id="status">loading&hellip;</span>
+        <button class="ctrl run" id="runBtn" disabled>&#9654; Run</button>
+        <button class="ctrl stop" id="stopBtn" disabled>&#9632; Stop</button>
+      </div>
+      <textarea id="codeEditor" spellcheck="false"></textarea>
+    </div>
+
+    <div class="card editorCard" id="consoleWrap">
+      <div class="editorTop">
+        <div class="fname">Console (type answers here when a program asks for input)</div>
+        <div class="spacer"></div>
+        <button class="ctrl ghost" id="clearConsoleBtn" style="padding:4px 10px;">Clear</button>
+      </div>
+      <pre id="consoleOutput"><span class="sys">Console output (and input prompts) will appear here.</span></pre>
+    </div>
+
+    <div class="card" id="ideasBox">
+      <h3>&#9733; Try it yourself</h3>
+      <ul id="ideasList"></ul>
+    </div>
+  </section>
+
+  <aside id="devicePanel">
+    <div class="canvasShell">
+      <div class="hdr"><span class="t">OUTPUT CANVAS</span><span class="t" id="canvasModeLabel">turtle graphics</span></div>
+      <div id="turtleBgWrap" style="width:100%;aspect-ratio:1/1;">
+        <canvas id="turtleCanvas" width="320" height="320"></canvas>
+        <canvas id="turtleMarkerCanvas" width="320" height="320"></canvas>
+        <div class="turtleHint" id="turtleHint">Run a turtle-graphics example to see it draw here</div>
+      </div>
+      <div class="canvasFoot">
+        <span class="cap">320&times;320 &middot; origin at centre</span>
+        <button id="clearCanvasBtn">&#8635; Clear canvas</button>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<footer>Runs entirely in your browser via Pyodide &middot; nothing you type is uploaded anywhere</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+/* ======================================================================
+   1. Fake `turtle` module (real Python, runs inside Pyodide)
+   ====================================================================== */
+const TURTLE_SRC = `
+import js
+import json
+import math
+
+_COLOURS = {
+    'black': (0, 0, 0), 'white': (255, 255, 255), 'red': (255, 0, 0), 'green': (0, 200, 0),
+    'blue': (0, 90, 255), 'yellow': (255, 210, 0), 'orange': (255, 140, 0), 'purple': (150, 60, 200),
+    'pink': (255, 150, 200), 'brown': (139, 69, 19), 'gray': (130, 130, 130), 'grey': (130, 130, 130),
+    'cyan': (0, 210, 210), 'magenta': (220, 0, 220),
+}
+
+
+def _to_rgb(c):
+    if isinstance(c, str):
+        return _COLOURS.get(c.lower(), (0, 0, 0))
+    return tuple(int(v) for v in c)
+
+
+class Turtle:
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+        self.heading = 0.0
+        self.is_down = True
+        self.colour = (20, 20, 20)
+        self.pensize_ = 2
+        js.turtleMarker(self.x, self.y, self.heading)
+
+    def forward(self, dist):
+        rad = math.radians(self.heading)
+        nx = self.x + dist * math.cos(rad)
+        ny = self.y + dist * math.sin(rad)
+        if self.is_down:
+            js.turtleLine(self.x, self.y, nx, ny, json.dumps(list(self.colour)), self.pensize_)
+        self.x, self.y = nx, ny
+        js.turtleMarker(self.x, self.y, self.heading)
+    fd = forward
+
+    def backward(self, dist):
+        self.forward(-dist)
+    bk = backward
+    back = backward
+
+    def right(self, angle):
+        self.heading -= angle
+        js.turtleMarker(self.x, self.y, self.heading)
+    rt = right
+
+    def left(self, angle):
+        self.heading += angle
+        js.turtleMarker(self.x, self.y, self.heading)
+    lt = left
+
+    def penup(self):
+        self.is_down = False
+    pu = penup
+    up = penup
+
+    def pendown(self):
+        self.is_down = True
+    pd = pendown
+    down = pendown
+
+    def color(self, c, c2=None):
+        self.colour = _to_rgb(c)
+    pencolor = color
+
+    def pensize(self, w):
+        self.pensize_ = w
+    width = pensize
+
+    def goto(self, x, y):
+        nx, ny = float(x), float(y)
+        if self.is_down:
+            js.turtleLine(self.x, self.y, nx, ny, json.dumps(list(self.colour)), self.pensize_)
+        self.x, self.y = nx, ny
+        js.turtleMarker(self.x, self.y, self.heading)
+    setpos = goto
+    setposition = goto
+
+    def setheading(self, h):
+        self.heading = h
+        js.turtleMarker(self.x, self.y, self.heading)
+    seth = setheading
+
+    def home(self):
+        self.goto(0, 0)
+        self.setheading(0)
+
+    def speed(self, s=None):
+        pass
+
+    def shape(self, s=None):
+        pass
+
+    def write(self, text, **kwargs):
+        js.turtleText(self.x, self.y, str(text), json.dumps(list(self.colour)))
+
+    def circle(self, radius, extent=360, steps=None):
+        steps = steps or max(12, int(abs(extent) / 6))
+        angle_step = extent / steps
+        step_len = 2 * math.pi * abs(radius) * (extent / 360) / steps
+        for _ in range(steps):
+            self.forward(step_len)
+            self.left(angle_step)
+
+
+_default_turtle = None
+
+
+def _get_default():
+    global _default_turtle
+    if _default_turtle is None:
+        _default_turtle = Turtle()
+    return _default_turtle
+
+
+def forward(dist): _get_default().forward(dist)
+def fd(dist): _get_default().forward(dist)
+def backward(dist): _get_default().backward(dist)
+def bk(dist): _get_default().backward(dist)
+def right(a): _get_default().right(a)
+def rt(a): _get_default().right(a)
+def left(a): _get_default().left(a)
+def lt(a): _get_default().left(a)
+def penup(): _get_default().penup()
+def pu(): _get_default().penup()
+def pendown(): _get_default().pendown()
+def pd(): _get_default().pendown()
+def color(c, c2=None): _get_default().color(c, c2)
+def pencolor(c): _get_default().color(c)
+def pensize(w): _get_default().pensize(w)
+def width(w): _get_default().pensize(w)
+def goto(x, y): _get_default().goto(x, y)
+def setpos(x, y): _get_default().goto(x, y)
+def setheading(h): _get_default().setheading(h)
+def seth(h): _get_default().setheading(h)
+def home(): _get_default().home()
+def speed(s=None): pass
+def shape(s=None): pass
+def write(text, **kwargs): _get_default().write(text, **kwargs)
+def circle(radius, extent=360, steps=None): _get_default().circle(radius, extent, steps)
+
+
+def bgcolor(c=None):
+    js.turtleBg(json.dumps(list(_to_rgb(c))) if c else json.dumps([255, 255, 255]))
+
+
+def done(): pass
+def mainloop(): pass
+
+
+def clear():
+    global _default_turtle
+    js.turtleReset()
+    _default_turtle = None
+
+
+def reset():
+    clear()
+`;
+
+const SETUP_SRC = `
+import time, js, builtins
+
+async def __js_delay(ms):
+    await js.jsDelay(ms)
+
+async def __patched_sleep(seconds):
+    try:
+        seconds = float(seconds)
+    except Exception:
+        seconds = 0
+    await __js_delay(max(0, seconds) * 1000)
+    if js.stopRequested:
+        raise KeyboardInterrupt("stopped")
+
+time.sleep = __patched_sleep
+
+async def __yield__():
+    await __js_delay(15)
+    if js.stopRequested:
+        raise KeyboardInterrupt("stopped")
+
+async def __input(prompt=''):
+    if js.stopRequested:
+        raise KeyboardInterrupt("stopped")
+    try:
+        val = await js.jsPrompt(str(prompt))
+    except Exception:
+        raise KeyboardInterrupt("stopped")
+    if js.stopRequested:
+        raise KeyboardInterrupt("stopped")
+    return val
+
+builtins.input = __input
+# User code runs in its own fresh namespace, so helpers must live in builtins to be visible there
+builtins.__yield__ = __yield__
+`;
+
+/* ======================================================================
+   2. JS-side globals Python calls into
+   ====================================================================== */
+window.stopRequested = false;
+window.jsDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/* ---- turtle canvas rendering ---- */
+const CENTER = 160;
+const turtleCanvas = document.getElementById('turtleCanvas');
+const turtleCtx = turtleCanvas.getContext('2d');
+const markerCanvas = document.getElementById('turtleMarkerCanvas');
+const markerCtx = markerCanvas.getContext('2d');
+function toCX(x){ return CENTER + x; }
+function toCY(y){ return CENTER - y; }
+function hideTurtleHint(){ const h = document.getElementById('turtleHint'); if (h) h.style.display = 'none'; }
+
+function drawMarker(x,y,heading){
+  markerCtx.clearRect(0,0,320,320);
+  const cx = toCX(x), cy = toCY(y);
+  const rad = heading * Math.PI/180;
+  const size = 9;
+  const tipX = cx + size*Math.cos(rad), tipY = cy - size*Math.sin(rad);
+  const leftX = cx + size*0.6*Math.cos(rad+2.5), leftY = cy - size*0.6*Math.sin(rad+2.5);
+  const rightX = cx + size*0.6*Math.cos(rad-2.5), rightY = cy - size*0.6*Math.sin(rad-2.5);
+  markerCtx.fillStyle = '#2f9e44';
+  markerCtx.beginPath();
+  markerCtx.moveTo(tipX,tipY); markerCtx.lineTo(leftX,leftY); markerCtx.lineTo(rightX,rightY); markerCtx.closePath();
+  markerCtx.fill();
+}
+window.turtleReset = () => {
+  turtleCtx.clearRect(0,0,320,320);
+  markerCtx.clearRect(0,0,320,320);
+  document.getElementById('turtleBgWrap').style.background = '#ffffff';
+};
+window.turtleLine = (x1,y1,x2,y2,colourJson,width) => {
+  hideTurtleHint();
+  const c = JSON.parse(colourJson);
+  turtleCtx.strokeStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
+  turtleCtx.lineWidth = width || 2;
+  turtleCtx.lineCap = 'round';
+  turtleCtx.beginPath();
+  turtleCtx.moveTo(toCX(x1), toCY(y1));
+  turtleCtx.lineTo(toCX(x2), toCY(y2));
+  turtleCtx.stroke();
+};
+window.turtleMarker = (x,y,heading) => { hideTurtleHint(); drawMarker(x,y,heading); };
+window.turtleText = (x,y,text,colourJson) => {
+  hideTurtleHint();
+  const c = JSON.parse(colourJson);
+  turtleCtx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
+  turtleCtx.font = '13px "IBM Plex Sans", sans-serif';
+  turtleCtx.fillText(text, toCX(x), toCY(y));
+};
+window.turtleBg = (colourJson) => {
+  const c = JSON.parse(colourJson);
+  document.getElementById('turtleBgWrap').style.background = `rgb(${c[0]},${c[1]},${c[2]})`;
+};
+document.getElementById('clearCanvasBtn').addEventListener('click', () => {
+  window.turtleReset();
+  document.getElementById('turtleHint').style.display = 'flex';
+});
+
+/* ---- console + input() ---- */
+const consoleEl = document.getElementById('consoleOutput');
+function logToConsole(text, cls){
+  if (consoleEl.querySelector('.sys') && consoleEl.children.length === 1 && consoleEl.textContent.includes('will appear here')){
+    consoleEl.innerHTML = '';
+  }
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = text + '\n';
+  consoleEl.appendChild(span);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+  while (consoleEl.childNodes.length > 500) consoleEl.removeChild(consoleEl.firstChild);
+}
+document.getElementById('clearConsoleBtn').addEventListener('click', () => { consoleEl.innerHTML = ''; });
+
+window.__pendingInputCancel = null;
+window.jsPrompt = (promptText) => new Promise((resolve, reject) => {
+  if (consoleEl.querySelector('.sys') && consoleEl.textContent.includes('will appear here')){ consoleEl.innerHTML = ''; }
+  const row = document.createElement('div');
+  row.className = 'termInputRow';
+  row.innerHTML = `<span class="prompt"></span><input type="text" autocomplete="off" spellcheck="false">`;
+  row.querySelector('.prompt').textContent = promptText;
+  consoleEl.appendChild(row);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+  const input = row.querySelector('input');
+  input.focus();
+  window.__pendingInputCancel = () => { row.remove(); reject(new Error('stopped')); window.__pendingInputCancel = null; };
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      const val = input.value;
+      row.remove();
+      logToConsole(promptText + val);
+      window.__pendingInputCancel = null;
+      resolve(val);
+    }
+  });
+});
+
+/* ======================================================================
+   3. Lesson content
+   ====================================================================== */
+const LESSONS = [
+{
+  id:'overview', title:'Overview', ideasTitle:'',
+  intro:`<h2>Welcome to Python</h2>
+  <p>Python is one of the most widely used programming languages in the world &mdash; it runs websites, powers data
+  science and AI, and (handily for us) is exactly what runs on the Raspberry Pi and Sense HAT you'll use in the next
+  lesson. It's also one of the most beginner-friendly languages that exists, which makes it a great place to start
+  whether you've written code before or never touched it.</p>
+  <p>This page runs <strong>real Python</strong> right in your browser &mdash; not a simulation of Python, the actual
+  language &mdash; using something called Pyodide. Every example below is editable, and the <b>Run</b> button
+  actually executes what you type. There's nothing to install.</p>
+  <h3>How this lesson is organised</h3>
+  <ul class="plain">
+    <li>Each step introduces one or two new ideas, with short examples you can run and change</li>
+    <li>Several steps draw pictures using <b>turtle graphics</b> on the canvas to the right &mdash; a fun, visual way to see your code's effect immediately</li>
+    <li>By the end, you'll combine everything into a small project, and be ready for the ideas the Sense HAT lesson builds on: variables, loops, conditionals and functions</li>
+  </ul>
+  <div class="note"><b>New to coding entirely?</b> That's completely fine &mdash; nothing here assumes you've seen
+  code before. If you've coded a little already, feel free to skim the early steps and slow down once things get
+  new to you.</div>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(1)">Start with Hello, Python! &#8594;</button></div>`,
+  examples:[], ideas:[],
+},
+{
+  id:'hello', title:'Hello, Python!',
+  intro:`<h2>1. Hello, Python!</h2>
+  <p>The very first thing most programmers ever write is a program that displays a message. In Python, that's done
+  with <code>print()</code>:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">print("Hello, world!")</td></tr></table>
+  <p>Whatever you put between the quotes is called a <b>string</b> &mdash; Python's word for a piece of text. You can
+  print as many lines as you like, one <code>print()</code> per line.</p>
+  <h3>A couple of Python quirks worth knowing early</h3>
+  <ul class="plain">
+    <li><b>Indentation matters.</b> Python uses spaces at the start of a line to show which code belongs together, instead of curly braces like some other languages. You'll see this properly in the Decisions and Loops steps.</li>
+    <li><b>Comments</b> start with <code>#</code> and are ignored when the program runs &mdash; they're just notes for humans reading the code.</li>
+    <li>Python is <b>case-sensitive</b>: <code>print</code> works, <code>Print</code> does not.</li>
+  </ul>
+  <p>Try the examples below, then edit the text and press <b>Run</b> again.</p>`,
+  examples:[
+    { name:'Say hello', code:
+`print("Hello, world!")
+print("Let's learn some Python.")` },
+    { name:'Comments', code:
+`# This line is a comment - Python ignores it completely
+print("This line actually runs.")
+
+# Try adding your own comment below this line, then a print() statement
+
+` },
+    { name:'Multiple lines, one program', code:
+`print("Line one")
+print("Line two")
+print("Line three")
+print()  # print() with nothing in it just prints a blank line
+print("There was a blank line above this one")` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Write a program that prints your name, your favourite subject, and one fact about yourself &mdash; three separate <code>print()</code> lines.',
+    'Try deleting the closing quote from a string and press Run. What kind of error does Python give you?',
+    'Add a comment above one of your <code>print()</code> lines explaining what it does.',
+  ],
+},
+{
+  id:'variables', title:'Variables & data types',
+  intro:`<h2>2. Variables &amp; data types</h2>
+  <p>A <b>variable</b> is a name that stores a value so you can use it later. Creating one in Python is as simple as
+  writing a name, an equals sign, and a value:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">age = 15<br>name = "Jordan"</td></tr></table>
+  <p>Python figures out the <b>data type</b> automatically from the value you give it. The four you'll use constantly are:</p>
+  <table class="paramTable">
+    <tr><th>Type</th><th>Example</th><th>What it's for</th></tr>
+    <tr><td><code>int</code></td><td><code>15</code></td><td>Whole numbers</td></tr>
+    <tr><td><code>float</code></td><td><code>3.14</code></td><td>Numbers with a decimal point</td></tr>
+    <tr><td><code>str</code></td><td><code>"Jordan"</code></td><td>Text (short for "string"), always in quotes</td></tr>
+    <tr><td><code>bool</code></td><td><code>True</code> / <code>False</code></td><td>Yes/no, on/off values</td></tr>
+  </table>
+  <p>You can check any value's type with the built-in <code>type()</code> function, and you can change a variable's
+  value at any time just by assigning it again.</p>
+  <div class="note"><b>Naming variables:</b> names can contain letters, numbers and underscores, can't start with a
+  number, and are case-sensitive (<code>score</code> and <code>Score</code> are different variables). Pick names
+  that describe what they hold &mdash; <code>score</code> is much clearer than <code>x</code>.</div>`,
+  examples:[
+    { name:'Creating variables', code:
+`name = "Jordan"
+age = 15
+height_m = 1.68
+is_student = True
+
+print(name)
+print(age)
+print(height_m)
+print(is_student)` },
+    { name:'Checking types', code:
+`name = "Jordan"
+age = 15
+height_m = 1.68
+is_student = True
+
+print(type(name))
+print(type(age))
+print(type(height_m))
+print(type(is_student))` },
+    { name:'Variables can change', code:
+`score = 0
+print(score)
+
+score = score + 10
+print(score)
+
+score = score + 10
+print(score)` },
+    { name:'Draw a square (turtle + variables)', code:
+`import turtle
+
+side_length = 100
+
+turtle.forward(side_length)
+turtle.right(90)
+turtle.forward(side_length)
+turtle.right(90)
+turtle.forward(side_length)
+turtle.right(90)
+turtle.forward(side_length)
+turtle.right(90)` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Make three variables for a fictional video game character: <code>name</code>, <code>health</code>, and <code>is_alive</code>. Print all three.',
+    'In the square example, change <code>side_length</code> to a much bigger or smaller number and re-run.',
+    'What happens if you write <code>3name = "test"</code>? Try it and read the error carefully.',
+  ],
+},
+{
+  id:'numbers', title:'Numbers & strings',
+  intro:`<h2>3. Numbers &amp; strings</h2>
+  <p>Python supports the maths operators you'd expect, plus a couple of useful extras:</p>
+  <table class="paramTable">
+    <tr><th>Operator</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td><code>+ - * /</code></td><td>Add, subtract, multiply, divide</td><td><code>7 / 2</code> &rarr; <code>3.5</code></td></tr>
+    <tr><td><code>//</code></td><td>Integer (whole-number) division</td><td><code>7 // 2</code> &rarr; <code>3</code></td></tr>
+    <tr><td><code>%</code></td><td>Remainder ("modulo")</td><td><code>7 % 2</code> &rarr; <code>1</code></td></tr>
+    <tr><td><code>**</code></td><td>Power (exponent)</td><td><code>2 ** 3</code> &rarr; <code>8</code></td></tr>
+  </table>
+  <p>Python follows the normal order of operations (multiplication/division before addition/subtraction), and
+  brackets work exactly like in maths class.</p>
+  <h3>Joining text and numbers together</h3>
+  <p>You can't directly join a string and a number with <code>+</code> &mdash; Python will complain. The cleanest
+  fix is an <b>f-string</b>: put an <code>f</code> right before the opening quote, then wrap any variable in curly
+  braces <code>{ }</code> inside the string.</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">age = 15<br>print(f"You are {age} years old")</td></tr></table>`,
+  examples:[
+    { name:'Maths operators', code:
+`print(10 + 3)
+print(10 - 3)
+print(10 * 3)
+print(10 / 3)
+print(10 // 3)
+print(10 % 3)
+print(10 ** 2)` },
+    { name:'Order of operations', code:
+`print(2 + 3 * 4)
+print((2 + 3) * 4)` },
+    { name:'f-strings', code:
+`name = "Jordan"
+age = 15
+favourite_number = 7
+
+print(f"Hi, I'm {name}.")
+print(f"I am {age} years old.")
+print(f"My favourite number is {favourite_number}, and doubled it's {favourite_number * 2}.")` },
+    { name:'len() and string basics', code:
+`word = "Python"
+
+print(len(word))       # how many characters
+print(word.upper())    # PYTHON
+print(word.lower())    # python
+print(word[0])         # first character
+print(word[-1])        # last character` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Use an f-string to print a short sentence combining two variables of your choice.',
+    'Predict the result of <code>17 % 5</code> before running it, then check.',
+    'What does <code>word[0:3]</code> print for <code>word = "Python"</code>? Try it &mdash; this is called slicing.',
+  ],
+},
+{
+  id:'input', title:'Getting input',
+  intro:`<h2>4. Getting input</h2>
+  <p>So far our programs always do the same thing. <code>input()</code> lets a program ask the person using it a
+  question and wait for an answer &mdash; this is what makes a program feel interactive.</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">name = input("What's your name? ")<br>print(f"Hello, {name}!")</td></tr></table>
+  <div class="note"><b>Important:</b> <code>input()</code> always hands back a <b>string</b>, even if the person
+  types a number. If you want to do maths with an answer, you need to convert it first with <code>int()</code> or
+  <code>float()</code>.</div>
+  <p>Run the first example below, then look for the input box that appears in the console panel underneath the
+  editor &mdash; type an answer there and press Enter.</p>`,
+  examples:[
+    { name:'Ask a question', code:
+`name = input("What's your name? ")
+print(f"Nice to meet you, {name}!")` },
+    { name:'Input is always text', code:
+`favourite_number = input("Pick a number: ")
+print(type(favourite_number))
+print(favourite_number + favourite_number)   # joins the text together, doesn't add!` },
+    { name:'Converting input to do maths', code:
+`age_text = input("How old are you? ")
+age = int(age_text)
+
+next_year = age + 1
+print(f"Next year you'll be {next_year}.")` },
+    { name:'A tiny greeting program', code:
+`name = input("What's your name? ")
+city = input("What city are you from? ")
+age = int(input("How old are you? "))
+
+print(f"Hi {name} from {city}!")
+print(f"In 10 years you'll be {age + 10}.")` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Write a program that asks for two numbers and prints their sum &mdash; remember to convert both with <code>int()</code>.',
+    'What error do you get if you forget to convert with <code>int()</code> before adding two answers? Try it on purpose.',
+    'Ask the user for their favourite colour and print a sentence using it with an f-string.',
+  ],
+},
+{
+  id:'decisions', title:'Making decisions',
+  intro:`<h2>5. Making decisions</h2>
+  <p>Programs get powerful once they can react differently depending on a value. Python does this with
+  <code>if</code>, <code>elif</code> (short for "else if"), and <code>else</code>:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">age = 15<br>if age >= 18:<br>&nbsp;&nbsp;&nbsp;&nbsp;print("You can vote")<br>else:<br>&nbsp;&nbsp;&nbsp;&nbsp;print("Not yet")</td></tr></table>
+  <p>Notice the <b>indentation</b> (the four spaces before <code>print</code>) &mdash; that's what tells Python which
+  lines belong inside the <code>if</code>. This is exactly the "indentation matters" rule from step 1.</p>
+  <table class="paramTable">
+    <tr><th>Comparison</th><th>Meaning</th></tr>
+    <tr><td><code>==</code></td><td>equal to (note: two equals signs, not one)</td></tr>
+    <tr><td><code>!=</code></td><td>not equal to</td></tr>
+    <tr><td><code>&gt; &lt; &gt;= &lt;=</code></td><td>greater/less than (or equal to)</td></tr>
+  </table>
+  <p>You can also combine conditions with <code>and</code>, <code>or</code>, and <code>not</code>.</p>`,
+  examples:[
+    { name:'Simple if/else', code:
+`age = 15
+
+if age >= 18:
+    print("You can vote")
+else:
+    print("Not yet")
+
+print("This line always runs, no matter what")` },
+    { name:'if / elif / else', code:
+`score = int(input("Enter a test score (0-100): "))
+
+if score >= 90:
+    print("Grade: A")
+elif score >= 80:
+    print("Grade: B")
+elif score >= 70:
+    print("Grade: C")
+else:
+    print("Keep practising!")` },
+    { name:'Combining conditions', code:
+`age = int(input("How old are you? "))
+has_ticket = input("Do you have a ticket? (yes/no): ")
+
+if age >= 13 and has_ticket == "yes":
+    print("Welcome in!")
+else:
+    print("Sorry, you can't enter.")` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Write a program that asks for a number and prints whether it\'s positive, negative, or zero.',
+    'Change <code>and</code> to <code>or</code> in the ticket example &mdash; how does the behaviour change?',
+    'Add a fourth grade band (like a D) to the score example.',
+  ],
+},
+{
+  id:'loops', title:'Loops',
+  intro:`<h2>6. Loops</h2>
+  <p>Loops let you repeat code without copy-pasting it. Python has two kinds.</p>
+  <h3>for loops &mdash; repeat a known number of times</h3>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">for i in range(5):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</td></tr></table>
+  <p><code>range(5)</code> counts <code>0, 1, 2, 3, 4</code> &mdash; five numbers starting at zero. This is by far the
+  most common way to repeat something a set number of times in Python.</p>
+  <h3>while loops &mdash; repeat until something changes</h3>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">count = 0<br>while count &lt; 5:<br>&nbsp;&nbsp;&nbsp;&nbsp;print(count)<br>&nbsp;&nbsp;&nbsp;&nbsp;count = count + 1</td></tr></table>
+  <div class="note"><b>Careful:</b> if a <code>while</code> loop's condition never becomes false, it will run
+  forever &mdash; this is called an infinite loop. This page has a <b>Stop</b> button for exactly that reason: if
+  your program seems stuck, press it.</div>
+  <p>Loops and turtle graphics make a great pair &mdash; drawing a square used to take four repeated blocks of code;
+  now it takes four lines.</p>`,
+  examples:[
+    { name:'Counting with for', code:
+`for i in range(5):
+    print(i)` },
+    { name:'A while loop', code:
+`count = 0
+while count < 5:
+    print(count)
+    count = count + 1
+
+print("Done!")` },
+    { name:'Square with a for loop', code:
+`import turtle
+
+for i in range(4):
+    turtle.forward(100)
+    turtle.right(90)` },
+    { name:'Star (change the numbers!)', code:
+`import turtle
+
+turtle.color("purple")
+for i in range(5):
+    turtle.forward(150)
+    turtle.right(144)` },
+    { name:'Loop over a range with a step', code:
+`for number in range(0, 20, 5):
+    print(number)` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Change the star example\'s <code>range(5)</code> and angle to draw a hexagon (6 sides) instead &mdash; what angle do you need?',
+    'Use a <code>for</code> loop to print the 5-times table from 1 to 12.',
+    'Write a <code>while</code> loop that keeps asking "Do you want to quit? (yes/no)" until the answer is "yes".',
+  ],
+},
+{
+  id:'lists', title:'Lists',
+  intro:`<h2>7. Lists</h2>
+  <p>A <b>list</b> stores many values in one variable, in order. Create one with square brackets:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">colours = ["red", "green", "blue"]</td></tr></table>
+  <p>Just like strings, list items are numbered from <b>0</b>, and you can loop straight over a list with
+  <code>for</code> without needing <code>range()</code> at all.</p>
+  <table class="paramTable">
+    <tr><th>Operation</th><th>Example</th></tr>
+    <tr><td>Get an item</td><td><code>colours[0]</code> &rarr; <code>"red"</code></td></tr>
+    <tr><td>How many items</td><td><code>len(colours)</code> &rarr; <code>3</code></td></tr>
+    <tr><td>Add an item</td><td><code>colours.append("yellow")</code></td></tr>
+    <tr><td>Loop over every item</td><td><code>for c in colours:</code></td></tr>
+  </table>
+  <h3>Dictionaries: looking things up by name</h3>
+  <p>A list finds things by position (<code>0</code>, <code>1</code>, <code>2</code>&hellip;). A
+  <b>dictionary</b> instead finds things by a name you choose, called a <b>key</b>. Create one with curly braces,
+  as a set of <code>key: value</code> pairs:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">student = {"name": "Jordan", "age": 15}<br>print(student["name"])</td></tr></table>
+  <p>Instead of a numeric index, you look up a value using its key in square brackets &mdash; <code>student["name"]</code>
+  rather than <code>student[0]</code>. You'll see this constantly in the Sense HAT lab: sensor readings like
+  orientation come back as a dictionary, read with e.g. <code>orientation["pitch"]</code>.</p>
+  <div class="note"><b>Tuples:</b> you'll also see values grouped with round brackets instead of square ones, like
+  <code>(255, 0, 0)</code> for a colour &mdash; that's called a <b>tuple</b>. It behaves like a list (you can index
+  it the same way, <code>colour[0]</code>), but once created it can't be changed.</div>`,
+  examples:[
+    { name:'Creating and indexing a list', code:
+`colours = ["red", "green", "blue"]
+
+print(colours)
+print(colours[0])
+print(colours[2])
+print(len(colours))` },
+    { name:'Looping over a list', code:
+`fruits = ["apple", "banana", "mango", "kiwi"]
+
+for fruit in fruits:
+    print(f"I like {fruit}")` },
+    { name:'Building a list with append', code:
+`high_scores = []
+
+high_scores.append(120)
+high_scores.append(98)
+high_scores.append(150)
+
+print(high_scores)
+print(f"Best score: {max(high_scores)}")` },
+    { name:'A list of colours, drawn with turtle', code:
+`import turtle
+
+colours = ["red", "orange", "yellow", "green", "blue", "purple"]
+
+for c in colours:
+    turtle.color(c)
+    turtle.forward(80)
+    turtle.right(60)` },
+    { name:'Dictionaries: look up by name', code:
+`student = {"name": "Jordan", "age": 15, "favourite_subject": "Computer Science"}
+
+print(student["name"])
+print(student["age"])
+print(student["favourite_subject"])
+
+student["age"] = 16   # dictionaries can be updated, just like variables
+print(student["age"])` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Make a list of your five favourite songs or games, then print each one with a loop.',
+    'Use <code>.append()</code> to add three numbers a user types in with <code>input()</code>, then print the list.',
+    'Look up what <code>sorted()</code> does to a list of numbers and try it.',
+    'Make a dictionary describing a video game character (<code>name</code>, <code>health</code>, <code>level</code>), then print each value using its key.',
+  ],
+},
+{
+  id:'functions', title:'Functions',
+  intro:`<h2>8. Functions</h2>
+  <p>A <b>function</b> is a named, reusable block of code. You've already been using functions the whole time &mdash;
+  <code>print()</code>, <code>len()</code> and <code>input()</code> are all functions Python provides. Now you'll
+  write your own with <code>def</code>:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">def greet(name):<br>&nbsp;&nbsp;&nbsp;&nbsp;print(f"Hello, {name}!")<br><br>greet("Jordan")<br>greet("Sam")</td></tr></table>
+  <p>The value in the brackets (<code>name</code>) is called a <b>parameter</b> &mdash; a placeholder for whatever
+  gets passed in when the function is called. A function can also <code>return</code> a value back to whoever called
+  it, instead of (or as well as) printing something.</p>
+  <div class="note"><b>Why bother?</b> Functions let you write a block of logic once and reuse it as many times as
+  you like with different inputs &mdash; exactly like <code>turtle.forward()</code> is a function someone else
+  wrote that you've been reusing this whole lesson.</div>`,
+  examples:[
+    { name:'A simple function', code:
+`def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Jordan")
+greet("Sam")
+greet("Priya")` },
+    { name:'Returning a value', code:
+`def square(number):
+    return number * number
+
+result = square(5)
+print(result)
+print(square(9))` },
+    { name:'A function with two parameters', code:
+`def add(a, b):
+    return a + b
+
+print(add(3, 4))
+print(add(10, -2))` },
+    { name:'A drawing function (turtle)', code:
+`import turtle
+
+def draw_square(size):
+    for i in range(4):
+        turtle.forward(size)
+        turtle.right(90)
+
+draw_square(50)
+turtle.penup()
+turtle.goto(-80, -80)
+turtle.pendown()
+draw_square(100)` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Write a function <code>is_even(number)</code> that returns <code>True</code> or <code>False</code>.',
+    'Add a third parameter to <code>draw_square</code> for colour, and use <code>turtle.color()</code> inside it.',
+    'Write a function that takes someone\'s test score and returns their letter grade &mdash; reuse your logic from the Decisions step.',
+  ],
+},
+{
+  id:'project', title:'Mini project',
+  intro:`<h2>9. Mini project: Number Guessing Game</h2>
+  <p>Time to combine everything: variables, input, conditionals, and a loop &mdash; plus one new tool. Below is a
+  working number-guessing game &mdash; read through it, run it, then make it your own.</p>
+  <p>The one new piece is Python's <code>random</code> module, which isn't built in like <code>print()</code> but
+  comes bundled with Python, ready to <code>import</code>. Its <code>randint(a, b)</code> function returns a random
+  whole number between <code>a</code> and <code>b</code>, inclusive of both ends:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">import random<br>secret_number = random.randint(1, 20)   # a whole number from 1 to 20</td></tr></table>
+  <p>Here's the plan in plain English before you look at the code:</p>
+  <ol>
+    <li>Pick a random secret number in a range</li>
+    <li>Keep asking the player to guess it</li>
+    <li>After each guess, say "too high", "too low", or "correct!"</li>
+    <li>Stop the loop once they get it right, and report how many guesses it took</li>
+  </ol>`,
+  examples:[
+    { name:'Number guessing game', code:
+`import random
+
+secret_number = random.randint(1, 20)
+guesses = 0
+guessed_correctly = False
+
+print("I'm thinking of a number between 1 and 20!")
+
+while not guessed_correctly:
+    guess = int(input("Your guess: "))
+    guesses = guesses + 1
+
+    if guess < secret_number:
+        print("Too low!")
+    elif guess > secret_number:
+        print("Too high!")
+    else:
+        print(f"Correct! You got it in {guesses} guesses.")
+        guessed_correctly = True` },
+    { name:'Mad Libs generator', code:
+`adjective = input("Give me an adjective: ")
+noun = input("Give me a noun: ")
+verb = input("Give me a verb ending in -ing: ")
+place = input("Give me a place: ")
+
+print()
+print(f"On a {adjective} morning, my {noun} started {verb} all the way to {place}.")` },
+  ],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Add a maximum number of guesses (say, 6) to the guessing game &mdash; end the game with a "you lose" message if they run out.',
+    'Make the Mad Libs generator ask for two more words and add them into the story.',
+    'Combine the two: turn the Mad Libs story into a turtle drawing that writes the finished sentence on the canvas using <code>turtle.write()</code>.',
+  ],
+},
+{
+  id:'whatnext', title:'What next?',
+  intro:`<h2>What next?</h2>
+  <p>You now have the core toolkit almost every Python program is built from: variables, strings and numbers,
+  conditionals, loops, lists and functions. That's exactly what you'll need for the Sense HAT lesson next &mdash;
+  it uses variables for colours, tuples and dictionaries for sensor readings, <code>while</code> loops to keep
+  checking sensors, <code>if</code>/<code>elif</code>/<code>else</code> to react to them, and functions you call
+  with parameters (like <code>sense.show_message(msg, scroll_speed=0.05)</code>) constantly.</p>
+  <ul class="plain">
+    <li>If anything in steps 1&ndash;8 still feels shaky, it's worth revisiting before moving on &mdash; everything after this builds directly on it.</li>
+    <li>Try combining ideas across steps: a function that uses a loop, or a loop that uses an if/else inside it.</li>
+    <li>When you get to the Sense HAT lab, notice how often you recognise the shapes of code from this lesson.</li>
+  </ul>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(0)">&#8592; Back to overview</button></div>`,
+  examples:[], ideasTitle:'', ideas:[],
+},
+];
+
+/* ======================================================================
+   4. Nav + lesson rendering
+   ====================================================================== */
+let activeLessonIndex = 0;
+let activeExampleIndex = 0;
+
+function renderNav(){
+  const nav = document.getElementById('lessonNav');
+  nav.innerHTML = '<div class="navlabel">LESSON STEPS</div>';
+  let stepNum = 0;
+  LESSONS.forEach((lesson, i) => {
+    const b = document.createElement('button');
+    b.className = 'navbtn' + (i === activeLessonIndex ? ' active' : '');
+    const isStep = lesson.examples && lesson.examples.length;
+    const label = isStep ? String(++stepNum) : (lesson.id === 'overview' ? '\u2605' : '\u2192');
+    b.innerHTML = `<span class="n">${label}</span><span>${lesson.title}</span>`;
+    b.addEventListener('click', () => selectLesson(i));
+    nav.appendChild(b);
+  });
+}
+function selectLesson(i){
+  activeLessonIndex = i; activeExampleIndex = 0;
+  renderNav(); renderLesson();
+}
+function renderLesson(){
+  const lesson = LESSONS[activeLessonIndex];
+  document.getElementById('lessonIntro').innerHTML = lesson.intro;
+
+  const hasExamples = !!(lesson.examples && lesson.examples.length);
+  document.getElementById('exampleBarCard').style.display = hasExamples ? '' : 'none';
+  document.getElementById('editorCardEl').style.display = hasExamples ? '' : 'none';
+  document.getElementById('consoleWrap').style.display = hasExamples ? '' : 'none';
+
+  if (hasExamples){
+    const sel = document.getElementById('exampleSelect');
+    sel.innerHTML = '';
+    lesson.examples.forEach((ex,i) => {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = ex.name;
+      sel.appendChild(opt);
+    });
+    sel.value = activeExampleIndex;
+    sel.onchange = () => { activeExampleIndex = parseInt(sel.value,10); loadExampleIntoEditor(); };
+    loadExampleIntoEditor();
+  }
+
+  const hasIdeas = !!(lesson.ideas && lesson.ideas.length);
+  document.getElementById('ideasBox').style.display = hasIdeas ? '' : 'none';
+  if (hasIdeas){
+    document.getElementById('ideasBox').querySelector('h3').innerHTML = '&#9733; ' + (lesson.ideasTitle || 'Try it yourself');
+    const ul = document.getElementById('ideasList');
+    ul.innerHTML = '';
+    lesson.ideas.forEach(txt => { const li = document.createElement('li'); li.innerHTML = txt; ul.appendChild(li); });
+  }
+}
+function loadExampleIntoEditor(){
+  const lesson = LESSONS[activeLessonIndex];
+  const ex = lesson.examples[activeExampleIndex];
+  document.getElementById('codeEditor').value = ex.code;
+  document.getElementById('fileName').textContent = lesson.id + '_' + (activeExampleIndex+1) + '.py';
+}
+document.getElementById('resetBtn').addEventListener('click', loadExampleIntoEditor);
+
+document.getElementById('codeEditor').addEventListener('keydown', (e) => {
+  if (e.key === 'Tab'){
+    e.preventDefault();
+    const ta = e.target;
+    const start = ta.selectionStart, end = ta.selectionEnd;
+    ta.value = ta.value.slice(0,start) + '    ' + ta.value.slice(end);
+    ta.selectionStart = ta.selectionEnd = start + 4;
+  }
+});
+
+/* ======================================================================
+   5. Source transforms (cooperative sleep / loops / input)
+   ====================================================================== */
+function injectYields(code){
+  return code.replace(/while\s+[^\n:]*:\s*\n([ \t]+)/g, (m, indent) => m + 'await __yield__()\n' + indent);
+}
+function awaitBefore(code, pattern){
+  return code.replace(pattern, function(match){
+    const offset = arguments[arguments.length - 2];
+    const str = arguments[arguments.length - 1];
+    const before = str.slice(Math.max(0, offset-6), offset);
+    if (/await\s*$/.test(before)) return match;
+    return 'await ' + match;
+  });
+}
+function transformCode(code){
+  let out = injectYields(code);
+  out = awaitBefore(out, /\b((?:time\.)?sleep)\(/g);
+  out = awaitBefore(out, /\b(input)\(/g);
+  return out;
+}
+
+/* ======================================================================
+   6. Pyodide setup + run/stop
+   ====================================================================== */
+let pyodide = null;
+let running = false;
+
+function setStatus(text, cls){
+  const el = document.getElementById('status');
+  el.textContent = text; el.className = cls || '';
+}
+
+async function initPyodide(){
+  try{
+    pyodide = await loadPyodide();
+    pyodide.setStdout({ batched: (s) => logToConsole(s) });
+    pyodide.setStderr({ batched: (s) => logToConsole(s, 'err') });
+    pyodide.FS.writeFile('/turtle.py', TURTLE_SRC);
+    pyodide.runPython("import sys\nif '/' not in sys.path: sys.path.insert(0, '/')\n");
+    await pyodide.runPythonAsync(SETUP_SRC);
+    document.getElementById('loadOverlay').classList.add('hidden');
+    document.getElementById('runBtn').disabled = false;
+    setStatus('ready', 'ok');
+  } catch(err){
+    document.getElementById('loadOverlay').innerHTML =
+      '<div style="color:#ff6b6b; font-family:IBM Plex Mono, monospace; max-width:420px; text-align:center;">'+
+      "Couldn't start the Python engine.<br><br><small style=\"color:#93a6c2;\">"+
+      'This usually means the browser blocked a script from cdn.jsdelivr.net. Try a different network/browser.</small></div>';
+    console.error(err);
+  }
+}
+
+async function runCode(){
+  if (!pyodide || running) return;
+  running = true;
+  window.stopRequested = false;
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('stopBtn').disabled = false;
+  setStatus('running\u2026', 'busy');
+  consoleEl.innerHTML = '';
+  window.turtleReset();
+  document.getElementById('turtleHint').style.display = 'flex';
+
+  const raw = document.getElementById('codeEditor').value;
+  const code = transformCode(raw);
+  // Fresh turtle every Run: drop the cached module so position/heading/pen don't carry over from the last program
+  pyodide.runPython("import sys\nsys.modules.pop('turtle', None)\n");
+
+  try{
+    const ns = pyodide.globals.get('dict')();
+    ns.set('__name__', '__main__');
+    try{
+      await pyodide.runPythonAsync(code, { globals: ns });
+      setStatus('finished', 'ok');
+      logToConsole('\u2713 Program finished.', 'ok');
+    } finally {
+      ns.destroy();
+    }
+  } catch(err){
+    const msg = (err && err.message) ? err.message : String(err);
+    if (msg.includes('KeyboardInterrupt')){
+      setStatus('stopped', 'err');
+      logToConsole('\u23f9 Stopped.', 'sys');
+    } else {
+      setStatus('error', 'err');
+      logToConsole(msg, 'err');
+    }
+  } finally {
+    running = false;
+    document.getElementById('runBtn').disabled = false;
+    document.getElementById('stopBtn').disabled = true;
+  }
+}
+function stopCode(){
+  window.stopRequested = true;
+  if (window.__pendingInputCancel) window.__pendingInputCancel();
+}
+document.getElementById('runBtn').addEventListener('click', runCode);
+document.getElementById('stopBtn').addEventListener('click', stopCode);
+
+/* ======================================================================
+   7. Boot
+   ====================================================================== */
+renderNav();
+renderLesson();
+initPyodide();
+</script>
+</body>
+</html>

@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction to the Terminal &mdash; pi-top [4] Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#11161a;
+    --panel:#171d22;
+    --panel2:#1d252b;
+    --border:#2b363e;
+    --border-soft:#212a31;
+    --text:#eaf1f6;
+    --muted:#93a7b6;
+    --muted-dim:#5f7381;
+    --green:#3ddc97;
+    --green-dim:#215c46;
+    --blue:#5aa9ff;
+    --amber:#ffb454;
+    --danger:#ff6b6b;
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans:'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    --display:'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 750px at 12% -8%, #14261f 0%, transparent 60%),
+      radial-gradient(900px 650px at 108% 6%, #101c2c 0%, transparent 55%),
+      var(--bg);
+    color:var(--text); font-family:var(--sans); min-height:100vh;
+  }
+  a{color:var(--blue);}
+
+  header{
+    padding:22px clamp(16px,3vw,40px) 16px; border-bottom:1px solid var(--border-soft);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .badge{
+    width:44px; height:44px; border-radius:10px; flex:none;
+    background:linear-gradient(155deg,#1c2b25,#0d1512);
+    border:1px solid var(--border); position:relative;
+  }
+  .badge::before{
+    content:''; position:absolute; left:8px; right:8px; top:9px; height:10px;
+    background:#0a0f0d; border:1px solid #2a3a33; border-radius:2px;
+  }
+  .badge::after{
+    content:''; position:absolute; left:8px; right:8px; bottom:8px; height:5px;
+    background:var(--green); border-radius:2px; opacity:.8;
+  }
+  header h1{font-family:var(--display); font-size:1.32rem; margin:0; font-weight:700;}
+  header p{margin:2px 0 0; color:var(--muted); font-size:.87rem;}
+  header .tagline{margin-left:auto; text-align:right; color:var(--muted-dim); font-size:.76rem; max-width:300px; line-height:1.45;}
+
+  .layout{
+    display:grid; grid-template-columns:200px minmax(0,1fr) 400px;
+    gap:18px; padding:18px clamp(16px,3vw,40px) 44px; align-items:start;
+  }
+  @media (max-width:1140px){ .layout{grid-template-columns:1fr;} }
+
+  nav#lessonNav{
+    position:sticky; top:16px; display:flex; flex-direction:column; gap:6px;
+    background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:10px;
+  }
+  nav#lessonNav .navlabel{font-family:var(--mono); font-size:.68rem; color:var(--muted-dim); padding:6px 8px 2px;}
+  .navbtn{
+    display:flex; align-items:baseline; gap:8px; text-align:left; background:transparent;
+    border:1px solid transparent; color:var(--muted); padding:9px 10px; border-radius:8px; cursor:pointer;
+    font-family:var(--sans); font-size:.85rem; line-height:1.25; width:100%;
+  }
+  .navbtn .n{font-family:var(--mono); font-size:.72rem; color:var(--muted-dim); flex:none;}
+  .navbtn:hover{background:var(--panel2); color:var(--text);}
+  .navbtn.active{background:#152621; border-color:var(--border); color:var(--text);}
+  .navbtn.active .n{color:var(--green);}
+
+  section#lessonPanel{min-width:0; display:flex; flex-direction:column; gap:16px;}
+  .card{background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:18px 20px;}
+  #lessonIntro h2{font-family:var(--display); font-size:1.22rem; margin:0 0 10px;}
+  #lessonIntro h3{font-family:var(--display); font-size:1rem; margin:20px 0 8px; color:var(--text);}
+  #lessonIntro p{color:var(--muted); font-size:.92rem; line-height:1.62; margin:0 0 12px;}
+  #lessonIntro p:last-child{margin-bottom:0;}
+  #lessonIntro code{
+    background:#0c1215; border:1px solid var(--border-soft); border-radius:4px; padding:1px 6px;
+    font-family:var(--mono); font-size:.84em; color:var(--green);
+  }
+  #lessonIntro ol, #lessonIntro ul.plain{color:var(--muted); font-size:.92rem; line-height:1.65; margin:0 0 12px; padding-left:20px;}
+  #lessonIntro li{margin-bottom:6px;}
+  #lessonIntro strong{color:var(--text);}
+
+  table.paramTable{width:100%; border-collapse:collapse; margin:6px 0 16px; font-size:.85rem;}
+  table.paramTable th,table.paramTable td{border:1px solid var(--border-soft); padding:8px 10px; text-align:left; vertical-align:top;}
+  table.paramTable th{background:var(--panel2); color:var(--green); font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.4px; font-weight:500;}
+  table.paramTable td{color:var(--muted);}
+  table.paramTable td code{white-space:nowrap;}
+
+  .note{background:#122019; border-left:3px solid var(--green); border-radius:0 8px 8px 0; padding:10px 14px; margin:12px 0; font-size:.85rem; color:var(--muted); line-height:1.55;}
+  .note b{color:var(--green);}
+  .diagram{display:flex; justify-content:center; margin:14px 0; background:#0c1215; border:1px solid var(--border-soft); border-radius:10px; padding:14px;}
+  .diagram svg{max-width:100%; height:auto;}
+  .diagram figcaption{text-align:center; color:var(--muted-dim); font-size:.72rem; font-family:var(--mono); margin-top:6px;}
+  .skillTags{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 14px;}
+  .skillTags span{background:var(--panel2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:.72rem; padding:4px 9px; border-radius:20px;}
+  .ctaRow{margin-top:14px;}
+  button.cta{background:var(--green); color:#08201a; border:none; border-radius:8px; padding:10px 18px; font-weight:600; font-size:.86rem; cursor:pointer; font-family:var(--sans);}
+  button.cta:hover{filter:brightness(1.08);}
+
+  #ideasBox h3{font-family:var(--display); font-size:.95rem; margin:0 0 8px; color:var(--blue); display:flex; align-items:center; gap:8px;}
+  #ideasBox ul{margin:0; padding-left:18px; color:var(--muted); font-size:.86rem; line-height:1.65;}
+
+  /* ===================== device panel ===================== */
+  aside#devicePanel{display:flex; flex-direction:column; gap:14px; position:sticky; top:16px;}
+  .chassis{
+    background:linear-gradient(180deg,#20262b,#161b1f); border:1px solid #313d44; border-radius:16px;
+    padding:16px; position:relative;
+  }
+  .chassis .hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .chassis .hdr .t{font-family:var(--mono); font-size:.68rem; color:var(--muted-dim); letter-spacing:.4px;}
+  .powerBtn{
+    width:26px; height:26px; border-radius:50%; border:2px solid #4a5a63; background:#242c31;
+    color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.7rem;
+  }
+  .powerBtn.on{border-color:var(--green); color:var(--green);}
+
+  .miniscreenRow{display:flex; align-items:center; justify-content:center; gap:10px;}
+  .msBtnCol{display:flex; flex-direction:column; gap:10px;}
+  button.msBtn{
+    width:34px; height:34px; border-radius:50%; background:#242c31; border:1px solid #3a464d;
+    color:var(--muted); font-size:.85rem; cursor:pointer;
+  }
+  button.msBtn:hover{border-color:var(--green); color:var(--green);}
+  button.msBtn:active{transform:scale(.94);}
+  #miniscreenCanvas{
+    background:#000; border:6px solid #05070a; border-radius:4px; image-rendering:pixelated;
+    box-shadow:inset 0 0 12px #000;
+  }
+  .msCaption{text-align:center; font-family:var(--mono); font-size:.66rem; color:var(--muted-dim); margin-top:8px;}
+
+  .checkList{display:flex; flex-direction:column; gap:8px; margin-top:4px;}
+  .checkItem{
+    display:flex; align-items:center; gap:8px; padding:8px 10px;
+    background:var(--panel2); border:1px solid var(--border); border-radius:8px; font-size:.76rem; color:var(--muted);
+  }
+  .checkItem.done{border-color:var(--green); background:#152621; color:var(--green);}
+  .checkItem .tick{font-size:.9rem; flex:none;}
+  button.checkBtn{
+    width:100%; margin-top:10px; background:var(--green); color:#08201a; border:none;
+    font-family:var(--sans); font-weight:600; font-size:.78rem; padding:9px; border-radius:7px; cursor:pointer;
+  }
+  button.checkBtn:hover{filter:brightness(1.06);}
+  button.resetGame{
+    width:100%; margin-top:8px; background:transparent; border:1px solid var(--border); color:var(--muted);
+    font-family:var(--mono); font-size:.7rem; padding:7px; border-radius:7px; cursor:pointer;
+  }
+  button.resetGame:hover{border-color:var(--danger); color:var(--danger);}
+
+  .screenShell{
+    margin-top:14px; background:#05070a; border-radius:10px; padding:8px; border:1px solid #262f35;
+  }
+  .screenInner{
+    background:#dfe6ec; border-radius:6px; overflow:hidden; min-height:360px; position:relative;
+    font-family:var(--sans); display:flex; flex-direction:column;
+  }
+  .screenInner.off{background:#000;}
+  .offMsg{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#445; font-family:var(--mono); font-size:.78rem; text-align:center; padding:20px;
+  }
+  .taskbar{
+    background:#e7e7e7; border-bottom:1px solid #c9c9c9; display:flex; align-items:center; gap:4px;
+    padding:4px 8px; height:32px; flex:none;
+  }
+  .tbBtn{
+    display:flex; align-items:center; gap:5px; background:transparent; border:none; cursor:pointer;
+    padding:4px 8px; border-radius:4px; font-size:.72rem; color:#222; font-family:var(--sans);
+  }
+  .tbBtn:hover{background:#d5d5d5;}
+  .tbIcon{width:15px; height:15px; border-radius:3px; display:inline-block;}
+  .taskbar .spacer{flex:1;}
+  .trayItem{font-family:var(--mono); font-size:.68rem; color:#333; padding:0 6px;}
+  .desktopArea{
+    flex:1; background:
+      radial-gradient(circle at 30% 20%, #b9d4e8 0%, transparent 55%),
+      linear-gradient(160deg,#8fb6d6,#5f88ab);
+    position:relative; overflow:hidden; min-height:320px;
+  }
+  .menuPanel{
+    position:absolute; left:6px; top:6px; width:190px; background:#f3f3f3; border:1px solid #b8b8b8;
+    border-radius:6px; box-shadow:0 8px 22px rgba(0,0,0,.35); font-size:.74rem; overflow:hidden; z-index:20;
+  }
+  .menuPanel .mi{padding:7px 12px; color:#222; cursor:pointer;}
+  .menuPanel .mi:hover{background:var(--green); color:#08201a;}
+  .menuPanel .mcat{padding:6px 12px; font-family:var(--mono); font-size:.62rem; color:#888; background:#e8e8e8;}
+
+  .win{
+    position:absolute; background:#f4f6f8; border:1px solid #9aa5ad; border-radius:8px;
+    box-shadow:0 10px 26px rgba(0,0,0,.4); display:flex; flex-direction:column; overflow:hidden; z-index:10;
+  }
+  .winTitle{
+    background:linear-gradient(180deg,#3a4147,#2b3136); color:#eee; font-size:.72rem; padding:6px 10px;
+    display:flex; align-items:center; gap:6px; font-family:var(--sans); flex:none;
+  }
+  .winTitle .x{margin-left:auto; cursor:pointer; opacity:.75; padding:0 4px;}
+  .winTitle .x:hover{opacity:1; color:var(--danger);}
+  .winBody{flex:1; overflow:auto; font-size:.78rem;}
+
+  /* file manager */
+  .fmWrap{display:flex; height:100%;}
+  .fmSide{width:110px; background:#eceff1; border-right:1px solid #d3d7da; padding:8px 0; flex:none;}
+  .fmSide div{padding:6px 12px; font-size:.72rem; color:#333; cursor:pointer;}
+  .fmSide div:hover, .fmSide div.active{background:var(--green); color:#08201a;}
+  .fmMain{flex:1; padding:10px; overflow:auto;}
+  .fmPath{font-family:var(--mono); font-size:.68rem; color:#667; margin-bottom:8px;}
+  .fmGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(70px,1fr)); gap:10px;}
+  .fmItem{text-align:center; cursor:pointer; padding:6px; border-radius:6px; font-size:.68rem; color:#333;}
+  .fmItem:hover{background:#dbeee5;}
+  .fmIcon{font-size:1.5rem; display:block; margin-bottom:2px;}
+
+  /* terminal */
+  .termWrap{background:#0c0f0c; color:#c9f7d8; font-family:var(--mono); font-size:.78rem; height:100%; padding:8px 10px; overflow:auto; position:relative;}
+  .termLine{white-space:pre-wrap; line-height:1.5;}
+  .termLine .prompt{color:var(--green);}
+  .termLine .err{color:#ff9d9d;}
+  .termInputRow{display:flex; gap:6px;}
+  .termInputRow input{
+    flex:1; background:transparent; border:none; outline:none; color:#eafff0; font-family:var(--mono); font-size:.78rem;
+  }
+  .rcOverlay{
+    position:absolute; inset:8px; background:#0033aa; color:#fff; font-family:var(--mono); font-size:.74rem;
+    padding:10px; overflow:auto; border:2px solid #cfd8ea;
+  }
+  .rcTitle{background:#c0c0c0; color:#000; text-align:center; padding:4px; margin:-10px -10px 10px;}
+  .rcItem{padding:3px 8px; cursor:pointer;}
+  .rcItem.sel{background:#c0c0c0; color:#0033aa;}
+  .rcDesc{border-top:1px solid #6a8; margin-top:8px; padding-top:8px; color:#dfe;}
+
+  /* settings window */
+  .setTabs{display:flex; border-bottom:1px solid #d3d7da; background:#eceff1;}
+  .setTab{padding:8px 14px; font-size:.72rem; cursor:pointer; color:#444;}
+  .setTab.active{background:#f4f6f8; color:#08201a; border-bottom:2px solid var(--green); font-weight:600;}
+  .setBody{padding:14px;}
+  .setRow{display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e5e8ea; font-size:.76rem; color:#333;}
+  .setRow input[type=text]{font-family:var(--mono); font-size:.75rem; padding:4px 6px; border:1px solid #ccc; border-radius:4px; width:140px;}
+  .toggle{width:38px; height:20px; border-radius:12px; background:#c7ccd0; position:relative; cursor:pointer; flex:none;}
+  .toggle.on{background:var(--green);}
+  .toggle::after{content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s;}
+  .toggle.on::after{left:20px;}
+
+  footer{text-align:center; color:var(--muted-dim); font-size:.74rem; padding:10px 20px 30px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge"></div>
+  <div>
+    <h1>Introduction to the Terminal</h1>
+    <p>Learn to control your pi-top [4] by typing instead of clicking &mdash; the essential skill before the ghost hunt.</p>
+  </div>
+  <div class="tagline">A gentle, hands-on first look at the command line. Finish this before the Pac-Man Terminal Treasure Hunt.</div>
+</header>
+
+<div class="layout">
+
+  <nav id="lessonNav"></nav>
+
+  <section id="lessonPanel">
+    <div class="card" id="lessonIntro"></div>
+    <div class="card" id="ideasBox">
+      <h3>&#9733; Try it yourself</h3>
+      <ul id="ideasList"></ul>
+    </div>
+  </section>
+
+  <aside id="devicePanel">
+    <div class="chassis">
+      <div class="hdr">
+        <span class="t">PI-TOP [4] MINISCREEN</span>
+        <button class="powerBtn on" id="powerBtn" title="Power">&#9099;</button>
+      </div>
+      <div class="miniscreenRow">
+        <div class="msBtnCol">
+          <button class="msBtn" id="msUp" title="Up">&#9650;</button>
+          <button class="msBtn" id="msDown" title="Down">&#9660;</button>
+        </div>
+        <canvas id="miniscreenCanvas" width="128" height="64" style="width:192px;height:96px;"></canvas>
+        <div class="msBtnCol">
+          <button class="msBtn" id="msCancel" title="Cancel">&#10005;</button>
+          <button class="msBtn" id="msSelect" title="Select">&#9679;</button>
+        </div>
+      </div>
+      <div class="msCaption">128&times;64 OLED &middot; &#9650;&#9660; cycle &middot; &#9679; select &middot; &#10005; back</div>
+
+      <div class="hdr" style="margin-top:14px;"><span class="t">CHALLENGE CHECKLIST</span></div>
+      <div class="checkList" id="checkList"></div>
+      <button class="checkBtn" id="checkBtn">Check my work</button>
+      <button class="resetGame" id="resetGameBtn">&#8635; Reset the practice files</button>
+
+      <div class="screenShell">
+        <div class="screenInner" id="screenInner">
+          <div class="taskbar" id="taskbar">
+            <button class="tbBtn" id="menuBtn"><span class="tbIcon" style="background:#c8262a;"></span>Menu</button>
+            <button class="tbBtn" id="openFileManager">&#128193; File Manager</button>
+            <button class="tbBtn" id="openTerminal">&#9000; Terminal</button>
+            <div class="spacer"></div>
+            <span class="trayItem" id="trayNet">&#128246; pi-top.local</span>
+            <span class="trayItem" id="trayBatt">&#128267; 100%</span>
+            <span class="trayItem" id="trayClock">00:00</span>
+          </div>
+          <div class="desktopArea" id="desktopArea"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<footer>Runs entirely in your browser &middot; nothing typed here touches a real device &middot; safe for a classroom projector</footer>
+
+<script>
+/* ======================================================================
+   0. Shared device state
+   ====================================================================== */
+const deviceState = {
+  power: true,
+  battery: 76,
+  charging: true,
+  hostname: 'pi-top',
+  ip: '192.168.1.42',
+};
+
+/* ======================================================================
+   0b. The practice challenge checklist
+   ====================================================================== */
+const CHALLENGE_ITEMS = [
+  { id:'made', label:'Documents/project_notes.txt exists', check: () => {
+      const d = resolveDir(['home','pi','Documents']);
+      return !!(d && d.children['project_notes.txt'] && d.children['project_notes.txt'].type === 'file');
+    }},
+  { id:'cleaned', label:'MyFirstProject folder has been tidied away', check: () => {
+      const home = resolveDir(['home','pi']);
+      // only counts once the folder has actually existed (otherwise it would be 'done' before the student starts)
+      return !!(projectEverMade && home && !home.children['MyFirstProject']);
+    }},
+];
+let challengeState = {};
+let projectEverMade = false;
+
+function renderChecklist(){
+  const list = document.getElementById('checkList');
+  list.innerHTML = '';
+  CHALLENGE_ITEMS.forEach(item => {
+    const done = !!challengeState[item.id];
+    const row = document.createElement('div');
+    row.className = 'checkItem' + (done ? ' done' : '');
+    row.innerHTML = `<span class="tick">${done ? '\u2705' : '\u2b1c'}</span><span>${item.label}</span>`;
+    list.appendChild(row);
+  });
+}
+function runChecklist(){
+  CHALLENGE_ITEMS.forEach(item => { challengeState[item.id] = item.check(); });
+  renderChecklist();
+}
+
+/* ======================================================================
+   1. Virtual filesystem for the File Manager + Terminal
+   ====================================================================== */
+function dir(children){ return {type:'dir', children}; }
+function file(content){ return {type:'file', content}; }
+
+function buildFreshFS(){
+  return dir({
+    home: dir({
+      pi: dir({
+        Desktop: dir({}),
+        Documents: dir({
+          'welcome.txt': file('Welcome to the terminal!\n\nIf you can read this, cat is working perfectly.\nTry editing me, moving me, or copying me somewhere else.\n'),
+          'shopping_list.txt': file('- USB-C cable\n- Bag of crisps\n- A slightly better mouse\n'),
+        }),
+        Downloads: dir({}),
+        Pictures: dir({}),
+        Templates: dir({}),
+        Music: dir({}),
+        python_games: dir({
+          'tetris.py': file('# a sample game that ships with Raspberry Pi OS\nprint("Imagine a falling block game here!")\n'),
+          'README.txt': file('This folder comes with Raspberry Pi OS by default, full of sample Python games.\n'),
+        }),
+      })
+    })
+  });
+}
+let FS = buildFreshFS();
+
+let cwd = ['home','pi']; // current path as array of names from root
+
+function resolveDir(path){
+  let node = FS;
+  for (const part of path){
+    if (!node.children || !node.children[part] || node.children[part].type !== 'dir') return null;
+    node = node.children[part];
+  }
+  return node;
+}
+function pathString(path){ return '/' + path.join('/'); }
+function homeShort(path){
+  const s = pathString(path);
+  return s === '/home/pi' ? '~' : (s.startsWith('/home/pi/') ? '~/' + s.slice(9) : s);
+}
+
+/* ======================================================================
+   2. Miniscreen renderer (canvas, monochrome look)
+   ====================================================================== */
+const msCanvas = document.getElementById('miniscreenCanvas');
+const msCtx = msCanvas.getContext('2d');
+let msScreens = ['battery','network','progress'];
+let msIndex = 0;
+
+function msDrawText(lines, opts){
+  msCtx.fillStyle = '#000'; msCtx.fillRect(0,0,128,64);
+  if (!deviceState.power){ return; }
+  msCtx.fillStyle = '#fff';
+  msCtx.font = (opts && opts.big ? '12px' : '10px') + ' "IBM Plex Mono", monospace';
+  let y = 14;
+  lines.forEach((l,i) => { msCtx.fillText(l, 4, y); y += (opts && opts.big ? 16 : 13); });
+}
+
+function renderMiniscreen(){
+  if (!deviceState.power){ msDrawText([]); return; }
+  const screen = msScreens[msIndex];
+  let lines = [];
+  if (screen === 'battery'){
+    lines = ['BATTERY', deviceState.battery + '%  ' + (deviceState.charging ? '(charging)' : '(on battery)')];
+  } else if (screen === 'network'){
+    lines = ['NETWORK', deviceState.hostname + '.local', deviceState.ip];
+  } else if (screen === 'progress'){
+    const n = Object.keys(challengeState).filter(k => challengeState[k]).length;
+    lines = ['CHALLENGE', n + ' / ' + CHALLENGE_ITEMS.length + ' complete', n === CHALLENGE_ITEMS.length ? 'nice work!' : ''];
+  }
+  msDrawText(lines);
+}
+
+document.getElementById('msUp').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  msIndex = (msIndex + msScreens.length - 1) % msScreens.length;
+  renderMiniscreen();
+});
+document.getElementById('msDown').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  msIndex = (msIndex + 1) % msScreens.length;
+  renderMiniscreen();
+});
+document.getElementById('msCancel').addEventListener('click', () => {});
+document.getElementById('msSelect').addEventListener('click', () => {});
+
+/* ======================================================================
+   3. Power button
+   ====================================================================== */
+function setPower(on){
+  deviceState.power = on;
+  const btn = document.getElementById('powerBtn');
+  const screen = document.getElementById('screenInner');
+  btn.classList.toggle('on', on);
+  if (on){
+    screen.classList.remove('off');
+    screen.querySelector('.offMsg') && screen.querySelector('.offMsg').remove();
+    msIndex = 0;
+    renderMiniscreen();
+    updateTray();
+  } else {
+    screen.classList.add('off');
+    closeAllWindows();
+    document.getElementById('desktopArea').innerHTML = '';
+    const div = document.createElement('div');
+    div.className = 'offMsg';
+    div.textContent = 'Powered off \u2014 press the power button above to start pi-top [4]';
+    screen.appendChild(div);
+    renderMiniscreen();
+  }
+}
+document.getElementById('powerBtn').addEventListener('click', () => setPower(!deviceState.power));
+
+/* ======================================================================
+   4. Desktop: taskbar, menu, windows
+   ====================================================================== */
+const desktopArea = document.getElementById('desktopArea');
+let winZ = 10;
+let openWins = {};
+
+function updateTray(){
+  document.getElementById('trayBatt').textContent = '\ud83d\udd0b ' + deviceState.battery + '%';
+  document.getElementById('trayNet').textContent = '\ud83d\udcf6 ' + deviceState.hostname + '.local';
+  const d = new Date();
+  document.getElementById('trayClock').textContent = d.toTimeString().slice(0,5);
+}
+setInterval(updateTray, 1000 * 20);
+updateTray();
+
+function closeAllWindows(){
+  Object.keys(openWins).forEach(id => { if (openWins[id]) openWins[id].remove(); });
+  openWins = {};
+  const mp = document.querySelector('.menuPanel'); if (mp) mp.remove();
+}
+
+function makeWindow(id, title, x, y, w, h, bodyBuilder){
+  if (!deviceState.power) return;
+  if (openWins[id]){ openWins[id].remove(); }
+  const win = document.createElement('div');
+  win.className = 'win';
+  win.style.left = x+'px'; win.style.top = y+'px'; win.style.width = w+'px'; win.style.height = h+'px';
+  win.style.zIndex = ++winZ;
+  win.innerHTML = `<div class="winTitle"><span>${title}</span><span class="x" data-close="${id}">\u2715</span></div><div class="winBody"></div>`;
+  win.querySelector('.x').addEventListener('click', () => { win.remove(); openWins[id] = null; });
+  win.addEventListener('mousedown', () => { win.style.zIndex = ++winZ; });
+  desktopArea.appendChild(win);
+  bodyBuilder(win.querySelector('.winBody'));
+  openWins[id] = win;
+  return win;
+}
+
+/* ---- File Manager ---- */
+function openFileManager(startPath){
+  makeWindow('files', 'File Manager', 30, 20, 360, 280, (body) => {
+    let path = startPath ? startPath.slice() : ['home','pi'];
+    let showHidden = false;
+    body.innerHTML = `
+      <div class="fmWrap">
+        <div class="fmSide">
+          <div data-p="home,pi">Home</div>
+          <div data-p="home,pi,Desktop">Desktop</div>
+          <div data-p="home,pi,Documents">Documents</div>
+          <div data-p="home,pi,Downloads">Downloads</div>
+          <div data-p="home,pi,Pictures">Pictures</div>
+          <div data-p="home,pi,Templates">Templates</div>
+          <div data-p="home,pi,Music">Music</div>
+          <div data-p="home,pi,python_games">python_games</div>
+        </div>
+        <div class="fmMain">
+          <div class="fmPath"></div>
+          <label style="display:flex;align-items:center;gap:5px;font-size:.66rem;color:#667;margin-bottom:6px;">
+            <input type="checkbox" id="fmShowHidden"> Show hidden files
+          </label>
+          <div class="fmGrid"></div>
+        </div>
+      </div>`;
+    const grid = body.querySelector('.fmGrid');
+    const pathEl = body.querySelector('.fmPath');
+    const sideItems = body.querySelectorAll('.fmSide div');
+    body.querySelector('#fmShowHidden').addEventListener('change', (e) => { showHidden = e.target.checked; render(); });
+    function render(){
+      const node = resolveDir(path);
+      pathEl.textContent = homeShort(path);
+      grid.innerHTML = '';
+      sideItems.forEach(el => el.classList.toggle('active', el.dataset.p === path.join(',')));
+      if (!node){ grid.textContent = 'Not found'; return; }
+      Object.keys(node.children).forEach(name => {
+        if (name.startsWith('.') && !showHidden) return;
+        const child = node.children[name];
+        const item = document.createElement('div');
+        item.className = 'fmItem';
+        item.innerHTML = `<span class="fmIcon">${child.type==='dir' ? '\ud83d\udcc1' : '\ud83d\udcc4'}</span>${name}`;
+        item.addEventListener('dblclick', () => {
+          if (child.type === 'dir'){ path = path.concat([name]); render(); }
+          else { openTextEditor(name, child.content); }
+        });
+        grid.appendChild(item);
+      });
+      if (grid.children.length === 0){
+        grid.innerHTML = '<div style="color:#889; font-size:.7rem; padding:8px;">This folder is empty</div>';
+      }
+    }
+    sideItems.forEach(el => el.addEventListener('click', () => { path = el.dataset.p.split(','); render(); }));
+    render();
+  });
+}
+document.getElementById('openFileManager').addEventListener('click', () => openFileManager());
+
+/* ---- Text Editor ---- */
+function openTextEditor(name, content){
+  makeWindow('editor', 'Text Editor \u2014 ' + (name || 'Untitled'), 90, 60, 320, 220, (body) => {
+    body.innerHTML = `<textarea style="width:100%;height:calc(100% - 30px);border:none;outline:none;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:.76rem;resize:none;"></textarea>
+      <div style="padding:6px 8px;border-top:1px solid #e3e6e8;display:flex;justify-content:flex-end;">
+        <button style="font-size:.72rem;padding:4px 10px;border-radius:5px;border:1px solid #cfd4d7;background:#eef2f0;cursor:pointer;" id="saveBtn">Save</button>
+      </div>`;
+    body.querySelector('textarea').value = content || '';
+    body.querySelector('#saveBtn').addEventListener('click', () => {
+      const b = body.querySelector('#saveBtn');
+      b.textContent = 'Saved (simulated) \u2713';
+      setTimeout(() => b.textContent = 'Save', 1400);
+    });
+  });
+}
+document.getElementById('openTerminal').addEventListener('click', () => openTerminal());
+
+/* ---- Menu ---- */
+document.getElementById('menuBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const existing = document.querySelector('.menuPanel');
+  if (existing){ existing.remove(); return; }
+  if (!deviceState.power) return;
+  const menu = document.createElement('div');
+  menu.className = 'menuPanel';
+  menu.innerHTML = `
+    <div class="mcat">Programming</div>
+    <div class="mi" data-act="editor">Text Editor</div>
+    <div class="mcat">Accessories</div>
+    <div class="mi" data-act="files">File Manager</div>
+    <div class="mi" data-act="terminal">Terminal</div>
+  `;
+  desktopArea.appendChild(menu);
+  menu.querySelectorAll('.mi').forEach(mi => mi.addEventListener('click', () => {
+    const act = mi.dataset.act;
+    if (act === 'editor') openTextEditor(null, '');
+    if (act === 'files') openFileManager();
+    if (act === 'terminal') openTerminal();
+    menu.remove();
+  }));
+});
+document.addEventListener('click', () => { const m = document.querySelector('.menuPanel'); if (m) m.remove(); });
+
+/* ======================================================================
+   5. Terminal (real command parsing against the virtual filesystem)
+   ====================================================================== */
+const PINOUT = `+-----+-----+---------+------+---+---Pi 4---+---+------+---------+-----+-----+
+| BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
++-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
+|     |     |    3.3v |      |   |  1 || 2  |   |      | 5v      |     |     |
+|   2 |   8 |   SDA.1 |   IN | 1 |  3 || 4  |   |      | 5v      |     |     |
+|   3 |   9 |   SCL.1 |   IN | 1 |  5 || 6  |   |      | 0v      |     |     |
+|   4 |   7 | GPIO. 7 |   IN | 1 |  7 || 8  | 1 | ALT0 | TxD     |  15 |  14 |
+|     |     |      0v |      |   |  9 || 10 | 1 | ALT0 | RxD     |  16 |  15 |
+|  17 |   0 | GPIO. 0 |   IN | 0 | 11 || 12 | 0 | IN   | GPIO. 1 |   1 |  18 |
+|  27 |   2 | GPIO. 2 |   IN | 0 | 13 || 14 |   |      | 0v      |     |     |
+|  22 |   3 | GPIO. 3 |   IN | 0 | 15 || 16 | 0 | IN   | GPIO. 4 |   4 |  23 |
+|     |     |    3.3v |      |   | 17 || 18 | 0 | IN   | GPIO. 5 |   5 |  24 |
+|  10 |  12 |    MOSI |   IN | 0 | 19 || 20 |   |      | 0v      |     |     |
+|   9 |  13 |    MISO |   IN | 0 | 21 || 22 | 0 | IN   | GPIO. 6 |   6 |  25 |
+|  11 |  14 |    SCLK |   IN | 0 | 23 || 24 | 1 | IN   | CE0     |  10 |   8 |
+|     |     |      0v |      |   | 25 || 26 | 1 | IN   | CE1     |  11 |   7 |
++-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
+Miniscreen buttons use BCM GPIO 5, 6, 12 & 13. Plate ports are on the bottom.`;
+
+function openTerminal(){
+  makeWindow('terminal', 'Terminal', 130, 40, 400, 280, (body) => {
+    body.innerHTML = `<div class="termWrap" id="termWrap"></div>`;
+    const wrap = body.querySelector('#termWrap');
+    let localCwd = cwd.slice();
+    let history = [];
+    let historyPos = -1;
+
+    function prompt(){ return `pi@${deviceState.hostname}:${homeShort(localCwd)}$ `; }
+    function println(text, cls){
+      const div = document.createElement('div');
+      div.className = 'termLine' + (cls ? ' ' + cls : '');
+      div.textContent = text;
+      wrap.appendChild(div);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+    function newInputRow(){
+      const row = document.createElement('div');
+      row.className = 'termInputRow';
+      row.innerHTML = `<span class="prompt"></span><input type="text" autocomplete="off" spellcheck="false">`;
+      row.querySelector('.prompt').textContent = prompt();
+      wrap.appendChild(row);
+      const input = row.querySelector('input');
+      input.focus();
+      wrap.scrollTop = wrap.scrollHeight;
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter'){
+          const val = input.value;
+          row.remove();
+          println(prompt() + val);
+          if (val.trim()){ history.push(val); }
+          historyPos = history.length;
+          runCommand(val.trim());
+          { const h = resolveDir(['home','pi']); if (h && h.children['MyFirstProject']) projectEverMade = true; }
+          newInputRow();
+        } else if (e.key === 'ArrowUp'){
+          e.preventDefault();
+          if (historyPos > 0){ historyPos--; input.value = history[historyPos]; }
+        } else if (e.key === 'ArrowDown'){
+          e.preventDefault();
+          if (historyPos < history.length - 1){ historyPos++; input.value = history[historyPos]; }
+          else { historyPos = history.length; input.value = ''; }
+        } else if (e.key === 'Tab'){
+          e.preventDefault();
+          doTabComplete(input);
+        }
+      });
+    }
+
+    function doTabComplete(input){
+      const val = input.value;
+      const parts = val.split(' ');
+      const token = parts[parts.length - 1];
+      // Support paths: "Documents/wel" completes inside Documents; "~/Desk" inside home
+      const slash = token.lastIndexOf('/');
+      const dirPart = slash >= 0 ? token.slice(0, slash + 1) : '';
+      const partial = slash >= 0 ? token.slice(slash + 1) : token;
+      const node = dirPart ? resolveDir(resolvePath(dirPart)) : resolveDir(localCwd);
+      if (!node || node.type !== 'dir') return;
+      const candidates = Object.keys(node.children).filter(n => n.startsWith(partial) && (partial.startsWith('.') || !n.startsWith('.')));
+      if (candidates.length === 1){
+        const isDir = node.children[candidates[0]].type === 'dir';
+        parts[parts.length - 1] = dirPart + candidates[0] + (isDir ? '/' : '');
+        input.value = parts.join(' ');
+      } else if (candidates.length > 1){
+        println(prompt() + val);
+        println(candidates.map(c => node.children[c].type === 'dir' ? c + '/' : c).join('  '));
+      }
+    }
+
+    function walk(node, pathArr, cb){
+      Object.keys(node.children).forEach(name => {
+        const child = node.children[name];
+        cb(pathArr.concat([name]), name, child);
+        if (child.type === 'dir') walk(child, pathArr.concat([name]), cb);
+      });
+    }
+
+    function getRef(argPath){
+      const full = resolvePath(argPath);
+      const name = full[full.length - 1];
+      const parentPath = full.slice(0, -1);
+      const parentNode = resolveDir(parentPath);
+      const node = parentNode ? parentNode.children[name] : undefined;
+      return { parentNode, name, node, full };
+    }
+
+    // Like bash, expand * and ? in unquoted arguments BEFORE the command runs
+    function expandGlobs(cmd, list){
+      if (!['cat','cp','mv','rm','rmdir'].includes(cmd)) return list;
+      const out = [];
+      list.forEach(a => {
+        if (!/[*?]/.test(a) || /["']/.test(a)){ out.push(a); return; }
+        const slash = a.lastIndexOf('/');
+        const dirPart = slash >= 0 ? a.slice(0, slash + 1) : '';
+        const pat = slash >= 0 ? a.slice(slash + 1) : a;
+        const dnode = dirPart ? resolveDir(resolvePath(dirPart)) : resolveDir(localCwd);
+        if (!dnode || dnode.type !== 'dir'){ out.push(a); return; }
+        const re = new RegExp('^' + pat.replace(/[.+^${}()|[\]\\]/g,'\\$&').replace(/\*/g,'.*').replace(/\?/g,'.') + '$');
+        const hits = Object.keys(dnode.children).filter(n => re.test(n) && (pat.startsWith('.') || !n.startsWith('.')));
+        if (hits.length === 0) out.push(a); else hits.forEach(n => out.push(dirPart + n));
+      });
+      return out;
+    }
+
+    function runCommand(cmdline){
+      if (!cmdline) return;
+      const allParts = cmdline.split(/\s+/);
+      const cmd = allParts[0];
+      const rawArgs = allParts.slice(1);
+      const flags = rawArgs.filter(a => a.startsWith('-'));
+      const args = expandGlobs(cmd, rawArgs.filter(a => !a.startsWith('-')));
+      switch(cmd){
+        case 'help':
+          println('Commands: ls (-a), cd, pwd, cat, mkdir, touch, cp, mv, rm, rmdir, clear, whoami, hostname, date, echo, pinout, exit');
+          println('Tips: Tab completes file/folder names, Up/Down arrows recall previous commands.');
+          break;
+        case 'ls': {
+          const target = args[0] ? resolvePath(args[0]) : localCwd;
+          const node = resolveDir(target);
+          if (!node){ println(`ls: cannot access '${args[0]}': No such file or directory`, 'err'); break; }
+          const showHidden = flags.includes('-a') || flags.includes('-la') || flags.includes('-al');
+          const names = Object.keys(node.children)
+            .filter(n => showHidden || !n.startsWith('.'))
+            .map(n => node.children[n].type === 'dir' ? n + '/' : n);
+          println(names.join('  ') || '');
+          break;
+        }
+        case 'cd': {
+          const target = args[0] ? resolvePath(args[0]) : ['home','pi'];
+          const node = resolveDir(target);
+          if (!node){ println(`bash: cd: ${args[0]}: No such file or directory`, 'err'); break; }
+          localCwd = target;
+          break;
+        }
+        case 'pwd':
+          println(pathString(localCwd));
+          break;
+        case 'cat': {
+          if (!args[0]){ println('usage: cat <file>', 'err'); break; }
+          args.forEach(ap => {
+            const ref = getRef(ap);
+            if (!ref.node){ println(`cat: ${ap}: No such file or directory`, 'err'); }
+            else if (ref.node.type === 'dir'){ println(`cat: ${ap}: Is a directory`, 'err'); }
+            else { println(ref.node.content); }
+          });
+          break;
+        }
+        case 'mkdir': {
+          if (!args[0]){ println('usage: mkdir <name>', 'err'); break; }
+          const ref = getRef(args[0]);
+          if (!ref.parentNode){ println(`mkdir: cannot create directory '${args[0]}': No such file or directory`, 'err'); break; }
+          if (ref.node){ println(`mkdir: cannot create directory '${args[0]}': File exists`, 'err'); }
+          else { ref.parentNode.children[ref.name] = dir({}); }
+          break;
+        }
+        case 'touch': {
+          if (!args[0]){ println('usage: touch <name>', 'err'); break; }
+          const ref = getRef(args[0]);
+          if (!ref.parentNode){ println(`touch: cannot touch '${args[0]}': No such file or directory`, 'err'); break; }
+          if (!ref.node) ref.parentNode.children[ref.name] = file('');
+          break;
+        }
+        case 'cp': {
+          if (args.length < 2){ println('usage: cp <source> <destination>', 'err'); break; }
+          const dest = args[args.length - 1], srcs = args.slice(0, -1);
+          const dstDirNode = resolveDir(resolvePath(dest));
+          const destIsDir = !!(dstDirNode && dstDirNode.type === 'dir');
+          if (srcs.length > 1 && !destIsDir){ println(`cp: target '${dest}' is not a directory`, 'err'); break; }
+          srcs.forEach(sp => {
+            const src = getRef(sp);
+            if (!src.node){ println(`cp: cannot stat '${sp}': No such file or directory`, 'err'); return; }
+            if (src.node.type === 'dir'){ println(`cp: -r not specified; omitting directory '${sp}'`, 'err'); return; }
+            let destParent, destName;
+            if (destIsDir){ destParent = dstDirNode; destName = src.name; }
+            else { const d = getRef(dest); destParent = d.parentNode; destName = d.name; }
+            if (!destParent || !destName){ println(`cp: cannot create regular file '${dest}': No such file or directory`, 'err'); return; }
+            destParent.children[destName] = file(src.node.content);
+          });
+          break;
+        }
+        case 'mv': {
+          if (args.length < 2){ println('usage: mv <source> <destination>', 'err'); break; }
+          const dest = args[args.length - 1], srcs = args.slice(0, -1);
+          const dstDirNode = resolveDir(resolvePath(dest));
+          const destIsDir = !!(dstDirNode && dstDirNode.type === 'dir');
+          if (srcs.length > 1 && !destIsDir){ println(`mv: target '${dest}' is not a directory`, 'err'); break; }
+          srcs.forEach(sp => {
+            const src = getRef(sp);
+            if (!src.node){ println(`mv: cannot stat '${sp}': No such file or directory`, 'err'); return; }
+            let destParent, destName;
+            if (destIsDir){ destParent = dstDirNode; destName = src.name; }
+            else { const d = getRef(dest); destParent = d.parentNode; destName = d.name; }
+            if (!destParent || !destName){ println(`mv: cannot move to '${dest}': No such file or directory`, 'err'); return; }
+            if (destParent.children[destName] === src.node) return;
+            destParent.children[destName] = src.node;
+            delete src.parentNode.children[src.name];
+          });
+          break;
+        }
+        case 'rm': {
+          if (!args[0]){ println('usage: rm <name>', 'err'); break; }
+          // Several names and paths work: rm a.txt b.txt, rm Documents/old.txt, rm ../old.txt, rm *.txt
+          args.forEach(ap => {
+            const ref = getRef(ap);
+            if (!ref.node){ println(`rm: cannot remove '${ap}': No such file or directory`, 'err'); return; }
+            if (ref.node.type === 'dir'){ println(`rm: cannot remove '${ap}': Is a directory`, 'err'); return; }
+            delete ref.parentNode.children[ref.name];
+          });
+          break;
+        }
+        case 'rmdir': {
+          if (!args[0]){ println('usage: rmdir <folder>', 'err'); break; }
+          const ref = getRef(args[0]);
+          if (!ref.node){ println(`rmdir: failed to remove '${args[0]}': No such file or directory`, 'err'); break; }
+          if (ref.node.type !== 'dir'){ println(`rmdir: failed to remove '${args[0]}': Not a directory`, 'err'); break; }
+          if (Object.keys(ref.node.children).length > 0){ println(`rmdir: failed to remove '${args[0]}': Directory not empty`, 'err'); break; }
+          delete ref.parentNode.children[ref.name];
+          break;
+        }
+        case 'clear':
+          wrap.innerHTML = '';
+          break;
+        case 'whoami':
+          println('pi');
+          break;
+        case 'hostname':
+          println(deviceState.hostname);
+          break;
+        case 'date':
+          println(new Date().toString());
+          break;
+        case 'echo':
+          println(rawArgs.join(' '));
+          break;
+        case 'pinout':
+          println(PINOUT);
+          break;
+        case 'python3':
+          println('This simulator focuses on the shell. Try the Intro to Python Interactive Lab for real in-browser Python!');
+          break;
+        case 'exit':
+          println('logout');
+          setTimeout(() => { const w = openWins['terminal']; if (w) w.remove(); openWins['terminal'] = null; }, 200);
+          break;
+        default:
+          println(`bash: ${cmd}: command not found`, 'err');
+      }
+    }
+    function resolvePath(p){
+      if (p === '' ) return ['home','pi'];
+      let base = p.startsWith('/') ? [] : localCwd.slice();
+      p.split('/').filter(Boolean).forEach(seg => {
+        if (seg === '.') { /* stay */ }
+        else if (seg === '..') { base.pop(); }
+        else if (seg === '~') { base = ['home','pi']; }
+        else { base.push(seg); }
+      });
+      return base;
+    }
+
+    println('Welcome! Type "help" to see the available commands.');
+    newInputRow();
+  });
+}
+
+/* ======================================================================
+   6. Reset practice files / checklist
+   ====================================================================== */
+function resetGame(){
+  FS = buildFreshFS();
+  cwd = ['home','pi'];
+  challengeState = {};
+  projectEverMade = false;
+  closeAllWindows();
+  renderChecklist();
+  openTerminal();
+}
+document.getElementById('resetGameBtn').addEventListener('click', resetGame);
+document.getElementById('checkBtn').addEventListener('click', runChecklist);
+
+/* ======================================================================
+   7. Lesson content
+   ====================================================================== */
+
+const LESSONS = [
+{
+  id:'overview', title:'Overview', ideasTitle:'',
+  intro:`<h2>Before you start</h2>
+  <p>So far you've controlled your pi-top [4] by clicking icons and menus. There's a second way to control any
+  Linux computer &mdash; including the one inside your pi-top &mdash; that's faster, more precise, and unlocks
+  things the mouse can't do at all: <strong>the terminal</strong>.</p>
+  <p>The terminal is a window where you type instructions, one line at a time, and the computer carries them out
+  immediately. Those instructions are called <strong>commands</strong>, and typing them is often called using the
+  <strong>command line</strong>.</p>
+  <div class="note"><b>Why bother, if clicking works fine?</b> Once you know a handful of commands, doing things
+  by typing is often quicker than hunting through menus &mdash; and almost every real Raspberry Pi project,
+  tutorial, and piece of professional software documentation assumes you're comfortable in a terminal. It's also
+  the only way to do some things, like seeing hidden files or automating repetitive tasks.</p>
+  <p>This lesson builds up your command-line toolkit one piece at a time using a simulated pi-top [4] terminal on
+  the right. By the end, you'll be ready for the Pac-Man Terminal Treasure Hunt, which uses everything covered
+  here.</p>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(1)">Open your first terminal &#8594;</button></div>`,
+  ideas:[],
+},
+{
+  id:'prompt', title:'The terminal & the prompt',
+  intro:`<h2>1. The terminal &amp; the prompt</h2>
+  <p>A terminal window is already open on the right. The line waiting for you to type into is called the
+  <strong>prompt</strong>, and it always tells you three things:</p>
+  <table class="paramTable">
+    <tr><th>Part</th><th>Meaning</th></tr>
+    <tr><td><code>pi</code></td><td>Who you're logged in as (your username)</td></tr>
+    <tr><td><code>pi-top</code></td><td>The computer's name (its <em>hostname</em>)</td></tr>
+    <tr><td><code>~</code></td><td>Where you currently are (<code>~</code> means your home folder)</td></tr>
+    <tr><td><code>$</code></td><td>Just means "ready for a command" (a <code>#</code> instead would mean you're a superuser &mdash; more power, more danger)</td></tr>
+  </table>
+  <p>To run a command: type it, then press <kbd>Enter</kbd>. The computer runs it immediately and shows you the
+  result (if any) before giving you a fresh prompt.</p>
+  <div class="note"><b>Try it:</b> type <code>whoami</code> and press Enter. Then try <code>hostname</code>, then
+  <code>date</code>. Each one asks the computer a simple question and prints the answer.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Type something that isn\'t a real command, like <code>banana</code>, and press Enter. Read the error message carefully &mdash; it\'s telling you exactly what went wrong.',
+    'Type <code>echo Hello there</code> &mdash; <code>echo</code> simply repeats back whatever you type after it.',
+    'Notice the prompt reappears after every command, whether it succeeded or not. It\'s always waiting for your next instruction.',
+  ],
+},
+{
+  id:'whereami', title:'Where am I?',
+  intro:`<h2>2. Where am I?</h2>
+  <p>Every terminal session starts somewhere &mdash; usually your <b>home folder</b>. Two commands help you get
+  your bearings:</p>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>pwd</code></td><td><b>P</b>rint <b>w</b>orking <b>d</b>irectory &mdash; shows the full path of where you are right now</td></tr>
+    <tr><td><code>ls</code></td><td><b>L</b>i<b>s</b>t &mdash; shows the files and folders in your current location</td></tr>
+  </table>
+  <p>A "directory" is just another word for a folder. Your home directory is shown as <code>/home/pi</code> in full,
+  or <code>~</code> for short &mdash; you'll see <code>~</code> constantly, including in your own prompt.</p>
+  <div class="note"><b>Try it:</b> type <code>pwd</code>, then <code>ls</code>. You should see the same folders
+  you'd find by opening the File Manager: Desktop, Documents, Downloads, Pictures, and a few others.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Compare what <code>ls</code> shows you with what the File Manager shows for the same folder &mdash; they should always match, since they\'re looking at the exact same files.',
+    'What do you think <code>python_games</code> is? (It\'s a folder that ships with Raspberry Pi OS by default, full of sample games.)',
+  ],
+},
+{
+  id:'moving', title:'Moving around',
+  intro:`<h2>3. Moving around</h2>
+  <p><code>cd</code> (<b>c</b>hange <b>d</b>irectory) moves you into a folder. Combined with <code>pwd</code> and
+  <code>ls</code>, you can now navigate anywhere without touching a mouse.</p>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>cd Documents</code></td><td>Move into the Documents folder (relative to where you are now)</td></tr>
+    <tr><td><code>cd ..</code></td><td>Move <em>up</em> one level, to the parent folder</td></tr>
+    <tr><td><code>cd</code> or <code>cd ~</code></td><td>Jump straight back to your home folder from anywhere</td></tr>
+    <tr><td><code>cd /home/pi/Music</code></td><td>An <b>absolute path</b> &mdash; starts with <code>/</code>, and works from anywhere</td></tr>
+  </table>
+  <p>Paths that don't start with <code>/</code> (like <code>Documents</code>) are <b>relative</b> &mdash; they're
+  interpreted starting from wherever you currently are, so the same command can mean different things depending on
+  your location.</p>
+  <div class="note"><b>Try it:</b> type <code>cd Documents</code>, then <code>pwd</code> to confirm you moved, then
+  <code>ls</code> to see what's inside. Type <code>cd ..</code> to come back out.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Navigate into <code>Pictures</code>, back out with <code>cd ..</code>, then straight into <code>python_games</code>.',
+    'Try <code>cd Nonsense</code> (a folder that doesn\'t exist) and read the error.',
+    'From deep inside a folder, type <code>cd</code> on its own to jump straight home in one move.',
+  ],
+},
+{
+  id:'making', title:'Making files & folders',
+  intro:`<h2>4. Making files &amp; folders</h2>
+  <p>Two commands create new things:</p>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>mkdir name</code></td><td><b>m</b>a<b>k</b>e <b>dir</b>ectory &mdash; creates a new, empty folder</td></tr>
+    <tr><td><code>touch name.txt</code></td><td>Creates a new, empty file (or updates an existing one)</td></tr>
+  </table>
+  <p>These are the two building blocks behind every folder structure you've ever seen &mdash; every project you
+  organise from now on can be set up this way instead of right-clicking "New Folder".</p>
+  <div class="note"><b>Try it:</b> from your home folder, type <code>mkdir MyFirstProject</code>, then
+  <code>cd MyFirstProject</code>, then <code>touch notes.txt</code>, then <code>ls</code> to confirm it's there.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Create a folder called <code>Practice</code>, and inside it, three empty files using three separate <code>touch</code> commands.',
+    'What happens if you <code>mkdir</code> a folder with a name that already exists? Try it and read the error.',
+    'Open the File Manager and confirm your new folder and files actually appear there too.',
+  ],
+},
+{
+  id:'viewing', title:'Viewing files',
+  intro:`<h2>5. Viewing files</h2>
+  <p><code>cat</code> prints a text file's entire contents straight into the terminal &mdash; the fastest way to
+  peek inside a file without opening a whole editor window.</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">cat filename.txt</td></tr></table>
+  <div class="note"><b>Try it:</b> <code>cd</code> into <b>Documents</b> and type <code>cat welcome.txt</code>, then
+  <code>cat shopping_list.txt</code>.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Try <code>cat</code> on a folder name instead of a file, like <code>cat Desktop</code> &mdash; what does the error tell you?',
+    'Try <code>cat</code> on a file that doesn\'t exist, and compare that error message to the folder one above. They\'re different for a reason.',
+    'Open <code>welcome.txt</code> in the Text Editor too, and confirm it shows the exact same content <code>cat</code> did.',
+  ],
+},
+{
+  id:'copymove', title:'Copying & moving',
+  intro:`<h2>6. Copying &amp; moving</h2>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>cp source destination</code></td><td><b>C</b>o<b>p</b>y &mdash; the original stays put, and a duplicate is created</td></tr>
+    <tr><td><code>mv source destination</code></td><td><b>M</b>o<b>v</b>e &mdash; the original is relocated (no duplicate)</td></tr>
+  </table>
+  <p>Both commands can also <b>rename</b> something, since renaming is really just "moving to a new name in the
+  same place":</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">mv notes.txt final_notes.txt</td></tr></table>
+  <p>If the destination you give is an existing folder, the file is placed inside it (keeping its original name)
+  rather than renamed.</p>
+  <div class="note"><b>Try it:</b> from your home folder, <code>cp Documents/welcome.txt Desktop</code> &mdash; this
+  copies the file into Desktop, leaving the original in Documents untouched. Confirm with <code>ls Desktop</code>
+  and <code>ls Documents</code>.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Copy <code>shopping_list.txt</code> into <code>Pictures</code>, then check it still also exists in Documents.',
+    'Use <code>mv</code> to rename a file you created earlier to something more descriptive.',
+    'Move a file from one folder directly into another (not via your current folder) using a full path in one command.',
+  ],
+},
+{
+  id:'deleting', title:'Deleting things',
+  intro:`<h2>7. Deleting things safely</h2>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>rm filename</code></td><td><b>r</b>e<b>m</b>ove a file, permanently</td></tr>
+    <tr><td><code>rmdir foldername</code></td><td>Remove a folder, but <em>only if it's completely empty</em></td></tr>
+  </table>
+  <div class="note"><b>Be careful:</b> unlike deleting a file in a File Manager, <code>rm</code> does not ask "are
+  you sure?" and there's no recycle bin to rescue it from &mdash; the file is simply gone. Always double-check
+  <em>which file, in which folder</em> before pressing Enter.</div>
+  <p><code>rmdir</code> deliberately refuses to remove a folder that still has something inside it &mdash; a small
+  safety net that stops you from accidentally deleting a folder full of files you forgot were there.</p>
+  <div class="note"><b>Try it:</b> delete one of the practice files you made earlier with <code>rm</code>, then try
+  <code>rmdir</code> on a folder that still has files in it and read the error, then empty it out and
+  <code>rmdir</code> it again.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Create a throwaway folder with one file inside, then work out the two-step process to remove both the file and the now-empty folder.',
+    'Why do you think <code>rm</code> works instantly on a full or empty file, but <code>rmdir</code> refuses on a non-empty folder? What could go wrong if it didn\'t?',
+  ],
+},
+{
+  id:'shortcuts', title:'Shortcuts & getting unstuck',
+  intro:`<h2>8. Shortcuts &amp; getting unstuck</h2>
+  <p>A few features make the terminal dramatically faster once they become second nature.</p>
+  <h3>Tab completion</h3>
+  <p>Start typing a file or folder name, then press <kbd>Tab</kbd>. If only one thing matches what you've typed so
+  far, the terminal finishes it for you. This saves typing and &mdash; just as usefully &mdash; if <b>nothing</b>
+  completes, it's an early warning you've mistyped something or you're in the wrong folder.</p>
+  <h3>Command history</h3>
+  <p>Press the <kbd>&uarr;</kbd> (up arrow) to bring back your previous command without retyping it &mdash;
+  keep pressing it to go further back, and <kbd>&darr;</kbd> to come forward again. Extremely useful for repeating
+  or slightly tweaking something you just ran.</p>
+  <h3>Wildcards</h3>
+  <p>An asterisk <code>*</code> means "match anything", letting one command act on many files at once:</p>
+  <table class="paramTable"><tr><td style="font-family:'IBM Plex Mono';font-size:.82rem;color:#dbe6f7;">rm *.txt</td></tr></table>
+  <p>This removes <em>every</em> file ending in <code>.txt</code> in the current folder. Powerful, but worth
+  double-checking your current folder with <code>pwd</code> before using it.</p>
+  <h3>Reading error messages</h3>
+  <p>Error messages might look intimidating, but they're almost always literal: <code>No such file or directory</code>
+  means exactly that &mdash; check your spelling and your current folder with <code>pwd</code>/<code>ls</code>.
+  <code>command not found</code> means the word you typed isn't a real command &mdash; check for typos.</p>
+  <p>Finally, <code>clear</code> wipes the terminal window if it's getting cluttered &mdash; it doesn't undo
+  anything, it just tidies the screen.</p>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Type <code>cd Doc</code> then press Tab before hitting Enter &mdash; watch it complete to <code>Documents/</code>.',
+    'Run a few different commands, then press the up arrow repeatedly to scroll back through all of them.',
+    'Create three files called <code>a.txt</code>, <code>b.txt</code> and <code>c.txt</code>, then remove all three in one command using a wildcard.',
+  ],
+},
+{
+  id:'challenge', title:'Mini challenge',
+  intro:`<h2>9. Mini challenge: build your project folder</h2>
+  <p>Time to combine everything from this lesson. Using <b>only the terminal</b> (no File Manager!), starting from
+  your home folder:</p>
+  <ol>
+    <li>Create a new folder called <code>MyFirstProject</code></li>
+    <li>Move into it, and create a file called <code>notes.txt</code></li>
+    <li>Move that file into <b>Documents</b>, renaming it to <code>project_notes.txt</code> in the same step</li>
+    <li>Move back out and remove the now-empty <code>MyFirstProject</code> folder</li>
+  </ol>
+  <p>Use the <b>Challenge Checklist</b> panel on the right to check your progress at any point &mdash; press
+  <b>Check my work</b> once you think you're done.</p>
+  <div class="note"><b>Stuck on step 3?</b> Remember: <code>mv</code> can rename and relocate a file in a single
+  command &mdash; the destination doesn't have to keep the original name.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Try to complete the whole challenge using the fewest possible commands.',
+    'Once it\'s checked off, click "Reset the practice files" and try to beat your own command count on a second attempt.',
+    'Could you have done step 3 as two separate commands (move, then rename) instead of one? Try it both ways.',
+  ],
+},
+{
+  id:'whatnext', title:'What next?',
+  intro:`<h2>What next?</h2>
+  <p>You now have a genuinely useful command-line toolkit: <code>pwd</code>, <code>ls</code>, <code>cd</code>,
+  <code>mkdir</code>, <code>touch</code>, <code>cat</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>,
+  <code>rmdir</code>, tab completion, command history, and wildcards. That's most of what you'll use day to day on
+  any Linux computer.</p>
+  <ul class="plain">
+    <li>Next up: the <b>Pac-Man Terminal Treasure Hunt</b> puts every one of these commands to use hunting down seven ghosts hidden as files across your pi-top.</li>
+    <li>It also introduces two new commands built for exactly that kind of hunt: <code>ls -a</code> for hidden files, and <code>find</code> for searching through folders automatically.</li>
+    <li>If anything in this lesson still feels shaky, it's worth another pass through the practice challenge before moving on &mdash; the ghost hunt assumes all of this is comfortable already.</li>
+  </ul>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(0)">&#8592; Back to overview</button></div>`,
+  examples:[], ideasTitle:'', ideas:[],
+},
+];
+
+/* ======================================================================
+   8. Nav + lesson rendering
+   ====================================================================== */
+let activeLessonIndex = 0;
+function renderNav(){
+  const nav = document.getElementById('lessonNav');
+  nav.innerHTML = '<div class="navlabel">LESSON STEPS</div>';
+  let stepNum = 0;
+  LESSONS.forEach((lesson, i) => {
+    const b = document.createElement('button');
+    b.className = 'navbtn' + (i === activeLessonIndex ? ' active' : '');
+    const isStep = !['overview','whatnext'].includes(lesson.id);
+    const label = isStep ? String(++stepNum) : (lesson.id === 'overview' ? '\u2605' : '\u2192');
+    b.innerHTML = `<span class="n">${label}</span><span>${lesson.title}</span>`;
+    b.addEventListener('click', () => selectLesson(i));
+    nav.appendChild(b);
+  });
+}
+function selectLesson(i){ activeLessonIndex = i; renderNav(); renderLesson(); }
+function renderLesson(){
+  const lesson = LESSONS[activeLessonIndex];
+  document.getElementById('lessonIntro').innerHTML = lesson.intro;
+  const hasIdeas = !!(lesson.ideas && lesson.ideas.length);
+  document.getElementById('ideasBox').style.display = hasIdeas ? '' : 'none';
+  if (hasIdeas){
+    document.getElementById('ideasBox').querySelector('h3').innerHTML = '&#9733; ' + (lesson.ideasTitle || 'Try it yourself');
+    const ul = document.getElementById('ideasList');
+    ul.innerHTML = '';
+    lesson.ideas.forEach(txt => { const li = document.createElement('li'); li.innerHTML = txt; ul.appendChild(li); });
+  }
+}
+
+/* ======================================================================
+   9. Boot
+   ====================================================================== */
+renderNav();
+renderLesson();
+renderChecklist();
+updateTray();
+openTerminal();
+</script>
+</body>
+</html>

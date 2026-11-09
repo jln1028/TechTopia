@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechTopia Physical Computing Quiz</title>
+  <style>
+    :root {
+      --bg1:#eef8ff; --bg2:#f7fffb; --ink:#14243a; --muted:#5b6b7b; --card:#ffffff;
+      --line:#dbe6ef; --dark:#0f172a; --accent:#2563eb; --good:#166534; --good-bg:#dcfce7;
+      --bad:#991b1b; --bad-bg:#fee2e2; --shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; font-family:Inter, Arial, Helvetica, sans-serif; color:var(--ink);
+      background:linear-gradient(135deg,var(--bg1),#fff 42%,var(--bg2)); line-height:1.5;
+    }
+    .container { max-width:1100px; margin:0 auto; padding:24px; }
+    .hero {
+      background:linear-gradient(135deg,#0f172a,#11324a 55%,#134e4a);
+      color:white; border-radius:30px; padding:32px; box-shadow:var(--shadow); margin-bottom:22px;
+    }
+    .pill {
+      display:inline-block; background:rgba(255,255,255,.12); padding:8px 14px;
+      border-radius:999px; font-size:14px; margin-bottom:14px;
+    }
+    h1 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; margin:0 0 12px; }
+    .hero p { max-width:820px; color:#dbe7f2; margin:0; font-size:1.05rem; }
+    .toolbar {
+      display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+      background:var(--card); border:1px solid var(--line); border-radius:24px; padding:18px;
+      box-shadow:var(--shadow); margin-bottom:18px;
+    }
+    .toolbar-left { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .btn {
+      border:none; background:var(--dark); color:white; padding:12px 18px; border-radius:14px;
+      font-weight:700; cursor:pointer;
+    }
+    .btn.secondary { background:white; color:var(--ink); border:1px solid var(--line); }
+    .scorebox { font-weight:700; color:var(--ink); }
+    .quiz-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .question-card {
+      background:var(--card); border:1px solid var(--line); border-radius:24px;
+      padding:20px; box-shadow:var(--shadow);
+    }
+    .question-number {
+      display:inline-block; font-size:13px; font-weight:700; color:var(--accent);
+      background:#eaf2ff; border-radius:999px; padding:6px 10px; margin-bottom:10px;
+    }
+    .question-card h3 { margin:0 0 14px; font-size:1.12rem; }
+    .options { display:grid; gap:10px; }
+    .option {
+      display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line);
+      border-radius:16px; padding:12px 14px; cursor:pointer; transition:.15s ease; background:#fff;
+    }
+    .option:hover { background:#f8fbff; border-color:#c9d9ea; }
+    .option input { margin-top:4px; }
+    .feedback { margin-top:14px; border-radius:16px; padding:12px 14px; font-size:.96rem; }
+    .feedback.correct { background:var(--good-bg); color:var(--good); }
+    .feedback.incorrect { background:var(--bad-bg); color:var(--bad); }
+    .summary {
+      margin-top:20px; background:var(--card); border:1px solid var(--line);
+      border-radius:24px; padding:22px; box-shadow:var(--shadow);
+    }
+    .summary h2 { margin-top:0; }
+    .small { color:var(--muted); font-size:.95rem; }
+    @media (max-width: 900px) { .quiz-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="pill">TechTopia • Interactive Quiz</div>
+      <h1>Physical Computing Quiz</h1>
+      <p>Test your understanding of the pi-top [4], the Foundation Plate, coding constructs, sensors, outputs, and the projects from the TechTopia physical computing activities.</p>
+    </section>
+
+    <section class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn" id="gradeBtn">Check My Answers</button>
+        <button class="btn secondary" id="resetBtn">Reset Quiz</button>
+      </div>
+      <div class="scorebox" id="scoreBox">Score: Not graded yet</div>
+    </section>
+
+    <section class="quiz-grid">
+      
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 1</div>
+      <h3>What is physical computing?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q1" value="0"><span>Writing code that only prints text to a screen</span></label><label class="option"><input type="radio" name="q1" value="1"><span>Using code to interact with hardware, sensors, and outputs</span></label><label class="option"><input type="radio" name="q1" value="2"><span>Repairing computer parts without programming</span></label><label class="option"><input type="radio" name="q1" value="3"><span>Using the internet to find code examples</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>Physical computing connects software to real-world devices like LEDs, buttons, buzzers, and sensors.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="2">
+      <div class="question-number">Question 2</div>
+      <h3>Which device is the main hardware platform used in this TechTopia activity?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q2" value="0"><span>Arduino Uno</span></label><label class="option"><input type="radio" name="q2" value="1"><span>micro:bit</span></label><label class="option"><input type="radio" name="q2" value="2"><span>pi-top [4]</span></label><label class="option"><input type="radio" name="q2" value="3"><span>Chromebook</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>The activities are built around the pi-top [4] and the pi-top Foundation Plate.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 3</div>
+      <h3>Which Python library is used in these activities to control hardware?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q3" value="0"><span>pygame</span></label><label class="option"><input type="radio" name="q3" value="1"><span>pitop</span></label><label class="option"><input type="radio" name="q3" value="2"><span>numpy</span></label><label class="option"><input type="radio" name="q3" value="3"><span>tkinter</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>The activities use the pi-top Python SDK, imported with statements like from pitop import LED.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 4</div>
+      <h3>Which type of port would you typically use for an LED in these activities?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q4" value="0"><span>Analog port such as A1</span></label><label class="option"><input type="radio" name="q4" value="1"><span>Digital port such as D2</span></label><label class="option"><input type="radio" name="q4" value="2"><span>USB port</span></label><label class="option"><input type="radio" name="q4" value="3"><span>HDMI port</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>LEDs in these lessons are connected to digital ports like D2.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 5</div>
+      <h3>Which type of port would you use for a light sensor in these activities?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q5" value="0"><span>Digital port such as D3</span></label><label class="option"><input type="radio" name="q5" value="1"><span>Analog port such as A1</span></label><label class="option"><input type="radio" name="q5" value="2"><span>HDMI port</span></label><label class="option"><input type="radio" name="q5" value="3"><span>Ethernet port</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>Light, sound, and potentiometer sensors are read as analog values on ports like A1, A2, and A3.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 6</div>
+      <h3>What does this line of code do? led = LED(&quot;D2&quot;)</h3>
+      <div class="options"><label class="option"><input type="radio" name="q6" value="0"><span>It turns the LED on immediately</span></label><label class="option"><input type="radio" name="q6" value="1"><span>It stores an LED object connected to port D2 in a variable</span></label><label class="option"><input type="radio" name="q6" value="2"><span>It renames the pi-top</span></label><label class="option"><input type="radio" name="q6" value="3"><span>It checks whether D2 is broken</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>This creates an LED object for the LED connected to D2 and stores it in the variable led.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="2">
+      <div class="question-number">Question 7</div>
+      <h3>What is the purpose of sleep(1) in a Python program?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q7" value="0"><span>It saves the file</span></label><label class="option"><input type="radio" name="q7" value="1"><span>It repeats a loop forever</span></label><label class="option"><input type="radio" name="q7" value="2"><span>It pauses the program for 1 second</span></label><label class="option"><input type="radio" name="q7" value="3"><span>It clears the screen</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>sleep(1) pauses the program for one second.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="0">
+      <div class="question-number">Question 8</div>
+      <h3>Which coding construct repeats a block of code over and over?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q8" value="0"><span>A loop</span></label><label class="option"><input type="radio" name="q8" value="1"><span>A string</span></label><label class="option"><input type="radio" name="q8" value="2"><span>A comment</span></label><label class="option"><input type="radio" name="q8" value="3"><span>An import</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>A loop, such as while True:, repeats code continuously.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 9</div>
+      <h3>What does while True: usually mean in these projects?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q9" value="0"><span>Run the block once</span></label><label class="option"><input type="radio" name="q9" value="1"><span>Run the block forever until the program is stopped</span></label><label class="option"><input type="radio" name="q9" value="2"><span>Run the block only if a sensor is connected</span></label><label class="option"><input type="radio" name="q9" value="3"><span>Ignore the indented lines below it</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>while True: creates an infinite loop so the system keeps running.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 10</div>
+      <h3>Why is indentation important in Python?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q10" value="0"><span>It changes the font size</span></label><label class="option"><input type="radio" name="q10" value="1"><span>It shows which code belongs inside a block</span></label><label class="option"><input type="radio" name="q10" value="2"><span>It makes the program run faster</span></label><label class="option"><input type="radio" name="q10" value="3"><span>It adds comments automatically</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>Indented lines are part of loops, conditionals, and functions in Python.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="2">
+      <div class="question-number">Question 11</div>
+      <h3>What is a digital input example from these activities?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q11" value="0"><span>A potentiometer</span></label><label class="option"><input type="radio" name="q11" value="1"><span>A light sensor</span></label><label class="option"><input type="radio" name="q11" value="2"><span>A button press</span></label><label class="option"><input type="radio" name="q11" value="3"><span>A sound level reading</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>A button is treated as a digital input: pressed or not pressed.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="3">
+      <div class="question-number">Question 12</div>
+      <h3>What is an analog input example from these activities?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q12" value="0"><span>An LED</span></label><label class="option"><input type="radio" name="q12" value="1"><span>A buzzer</span></label><label class="option"><input type="radio" name="q12" value="2"><span>A button</span></label><label class="option"><input type="radio" name="q12" value="3"><span>A potentiometer</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>A potentiometer gives a changing value across a range, so it is an analog input.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 13</div>
+      <h3>In the automatic night light project, what is a threshold?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q13" value="0"><span>A file name for the program</span></label><label class="option"><input type="radio" name="q13" value="1"><span>A cut-off value used to decide when the LED turns on or off</span></label><label class="option"><input type="radio" name="q13" value="2"><span>The maximum number of LEDs allowed</span></label><label class="option"><input type="radio" name="q13" value="3"><span>A type of sensor cable</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>A threshold is the value the program compares against to make a decision.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="2">
+      <div class="question-number">Question 14</div>
+      <h3>What does an if statement allow a program to do?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q14" value="0"><span>Import a library</span></label><label class="option"><input type="radio" name="q14" value="1"><span>Repeat forever</span></label><label class="option"><input type="radio" name="q14" value="2"><span>Make a decision based on a condition</span></label><label class="option"><input type="radio" name="q14" value="3"><span>Turn all sensors off</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>if statements let programs respond differently depending on conditions.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 15</div>
+      <h3>Which operator means &#x27;greater than&#x27; in Python?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q15" value="0"><span>&lt;</span></label><label class="option"><input type="radio" name="q15" value="1"><span>&gt;</span></label><label class="option"><input type="radio" name="q15" value="2"><span>=</span></label><label class="option"><input type="radio" name="q15" value="3"><span>!=</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>The &gt; operator checks whether one value is greater than another.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="0">
+      <div class="question-number">Question 16</div>
+      <h3>Why might a program use print(&quot;Light level:&quot;, level) while testing?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q16" value="0"><span>To help debug by showing sensor values</span></label><label class="option"><input type="radio" name="q16" value="1"><span>To save battery power</span></label><label class="option"><input type="radio" name="q16" value="2"><span>To make the LED brighter</span></label><label class="option"><input type="radio" name="q16" value="3"><span>To convert analog values into digital values</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>print() helps students observe values and debug their programs.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 17</div>
+      <h3>What is the main purpose of a buzzer in these activities?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q17" value="0"><span>To measure temperature</span></label><label class="option"><input type="radio" name="q17" value="1"><span>To provide sound output or an alert</span></label><label class="option"><input type="radio" name="q17" value="2"><span>To store Python files</span></label><label class="option"><input type="radio" name="q17" value="3"><span>To increase internet speed</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>A buzzer is an output device that provides sound feedback or alerts.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="0">
+      <div class="question-number">Question 18</div>
+      <h3>What does event-driven programming mean in the button/LED activity?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q18" value="0"><span>The code responds when something happens, like a button press</span></label><label class="option"><input type="radio" name="q18" value="1"><span>The code only runs at lunchtime</span></label><label class="option"><input type="radio" name="q18" value="2"><span>The code cannot use sensors</span></label><label class="option"><input type="radio" name="q18" value="3"><span>The code deletes itself after running</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>Event-driven code responds to events such as button presses and releases.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 19</div>
+      <h3>In the smart alarm project, what does using AND logic mean?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q19" value="0"><span>Only one of the conditions must be true</span></label><label class="option"><input type="radio" name="q19" value="1"><span>Both conditions must be true at the same time</span></label><label class="option"><input type="radio" name="q19" value="2"><span>The program ignores both sensors</span></label><label class="option"><input type="radio" name="q19" value="3"><span>The program repeats forever</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>AND logic means both conditions must be true before the action happens.</div>
+      </div>
+    </section>
+    
+    <section class="question-card" data-answer="1">
+      <div class="question-number">Question 20</div>
+      <h3>What is a good reason to give a Python file a clear name like glow_in_the_dark.py?</h3>
+      <div class="options"><label class="option"><input type="radio" name="q20" value="0"><span>It makes the code shorter</span></label><label class="option"><input type="radio" name="q20" value="1"><span>It helps describe what the program does</span></label><label class="option"><input type="radio" name="q20" value="2"><span>It automatically fixes bugs</span></label><label class="option"><input type="radio" name="q20" value="3"><span>It changes digital ports to analog ports</span></label></div>
+      <div class="feedback" hidden>
+        <strong class="feedback-label"></strong>
+        <div>Clear file names help you and your teacher know what the program does.</div>
+      </div>
+    </section>
+    
+    </section>
+
+    <section class="summary">
+      <h2>Before You Submit</h2>
+      <p class="small">Make sure each question has one answer selected. When you click <strong>Check My Answers</strong>, you will see your score and an explanation for every question.</p>
+    </section>
+  </div>
+
+  <script>
+    const gradeBtn = document.getElementById('gradeBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const scoreBox = document.getElementById('scoreBox');
+    const cards = [...document.querySelectorAll('.question-card')];
+
+    function gradeQuiz() {
+      let correct = 0;
+      let answered = 0;
+
+      cards.forEach((card) => {
+        const answer = Number(card.dataset.answer);
+        const selected = card.querySelector('input[type="radio"]:checked');
+        const feedback = card.querySelector('.feedback');
+        const label = card.querySelector('.feedback-label');
+
+        if (selected) {
+          answered += 1;
+          if (Number(selected.value) === answer) {
+            correct += 1;
+            feedback.hidden = false;
+            feedback.className = 'feedback correct';
+            label.textContent = 'Correct. ';
+          } else {
+            feedback.hidden = false;
+            feedback.className = 'feedback incorrect';
+            label.textContent = 'Not quite. ';
+          }
+        } else {
+          feedback.hidden = false;
+          feedback.className = 'feedback incorrect';
+          label.textContent = 'No answer selected. ';
+        }
+      });
+
+      const pct = Math.round((correct / 20) * 100);
+      scoreBox.textContent = `Score: ${correct} / 20 (${pct}%) • Answered: ${answered} / 20`;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+      cards.forEach(card => {
+        card.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+        const feedback = card.querySelector('.feedback');
+        feedback.hidden = true;
+        feedback.className = 'feedback';
+      });
+      scoreBox.textContent = 'Score: Not graded yet';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    gradeBtn.addEventListener('click', gradeQuiz);
+    resetBtn.addEventListener('click', resetQuiz);
+  </script>
+</body>
+</html>

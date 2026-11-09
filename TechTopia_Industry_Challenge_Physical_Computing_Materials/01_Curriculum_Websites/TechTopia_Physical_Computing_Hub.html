@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechTopia | pi-top Physical Computing Hub</title>
+  <style>
+    :root{
+      --bg1:#eef8ff;
+      --bg2:#f7fffb;
+      --ink:#132238;
+      --muted:#546579;
+      --card:#ffffff;
+      --line:#dbe6ef;
+      --brand:#0f766e;
+      --brand2:#2563eb;
+      --accent:#f59e0b;
+      --dark:#0f172a;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color:var(--ink);
+      background:linear-gradient(135deg,var(--bg1),#fff 40%,var(--bg2));
+      line-height:1.5;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:24px}
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:20px;
+      margin-bottom:24px;
+    }
+    .panel{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:32px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hero-main{
+      background:linear-gradient(135deg,#0f172a,#11324a 50%,#134e4a);
+      color:white;
+      padding:32px;
+      position:relative;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      font-size:14px;
+    }
+    h1{font-size: clamp(2.2rem, 4vw, 4rem); line-height:1.05; margin:16px 0 10px}
+    h2{font-size:1.75rem; margin:0 0 8px}
+    h3{margin:0 0 8px}
+    p{margin:0 0 10px}
+    .sub{color:#d8e5ef; max-width:760px; font-size:1.05rem}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:22px;
+    }
+    .mini{
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:20px;
+      padding:14px;
+    }
+    .mini .label{color:#cbd5e1;font-size:13px}
+    .mini .value{font-weight:700;margin-top:4px}
+    .quick{
+      padding:24px;
+    }
+    .check{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px 14px; border:1px solid var(--line); border-radius:16px;
+      margin-bottom:10px; background:#fff;
+    }
+    .check input{margin-top:4px}
+    .tabs{
+      display:flex; flex-wrap:wrap; gap:10px; margin:6px 0 22px;
+    }
+    .tab-btn{
+      border:1px solid var(--line); background:white; border-radius:16px;
+      padding:12px 16px; font-weight:600; cursor:pointer;
+    }
+    .tab-btn.active{background:var(--dark); color:white; border-color:var(--dark)}
+    .tab{display:none}
+    .tab.active{display:block}
+    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+    .card{
+      background:var(--card); border:1px solid var(--line); border-radius:28px;
+      box-shadow:var(--shadow); padding:22px;
+    }
+    .searchbar{
+      width:100%; padding:14px 16px; border:1px solid var(--line);
+      border-radius:16px; font-size:16px;
+    }
+    .activity{
+      margin-bottom:16px; overflow:hidden;
+    }
+    .activity-header{
+      display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+      cursor:pointer;
+    }
+    .activity-title{
+      display:flex; gap:14px; align-items:flex-start;
+    }
+    .iconbox{
+      width:46px; height:46px; border-radius:16px; background:var(--dark);
+      color:white; display:grid; place-items:center; font-size:22px; flex:none;
+    }
+    .badges{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px}
+    .badge{
+      display:inline-block; padding:5px 10px; border-radius:999px; font-size:12px; font-weight:700;
+    }
+    .b-level{background:#eef2ff; color:#4338ca}
+    .b-name{background:#dcfce7; color:#166534}
+    .activity-content{
+      display:none;
+      padding-top:18px;
+    }
+    .activity.open .activity-content{display:block}
+    .activity-grid{
+      display:grid; grid-template-columns:.85fr 1.15fr; gap:18px;
+    }
+    .small-card{
+      border:1px solid var(--line); border-radius:20px; padding:16px; margin-bottom:14px;
+      background:#fff;
+    }
+    pre{
+      margin:0; background:#0b1220; color:#e5eef9; padding:16px; border-radius:18px;
+      overflow:auto; font-size:14px;
+    }
+    code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    .challenge{
+      border:1px solid var(--line); border-radius:16px; padding:12px; margin-bottom:10px;
+    }
+    .tag{
+      display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--line);
+      background:#fafcff; margin:4px 6px 0 0; font-size:13px;
+    }
+    .name-grid, .glossary-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+    }
+    .footer-note{margin-top:24px}
+    .muted{color:var(--muted)}
+    .section-title{display:flex; align-items:flex-start; gap:12px; margin-bottom:16px}
+    .section-title .iconbox{width:40px;height:40px;font-size:18px;border-radius:14px}
+    .topia{
+      margin-top:18px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:24px;
+      background:rgba(255,255,255,.08);
+      padding:14px;
+    }
+    .topia svg{width:100%; height:auto; display:block}
+    .legend{font-size:13px; color:#d6e4ef; margin-top:8px}
+    @media (max-width: 980px){
+      .hero, .grid2, .grid3, .activity-grid, .name-grid, .glossary-grid{grid-template-columns:1fr}
+      .hero-grid{grid-template-columns:1fr}
+    }
+  
+    .construct-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .construct-card{border:1px solid var(--line);border-radius:20px;padding:16px;background:#fff}
+    .lesson-note{border-left:4px solid var(--brand2);padding:12px 14px;background:#f8fbff;border-radius:12px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="panel hero-main">
+        <div class="pill">💻 TechTopia • pi-top [4] Physical Computing Hub</div>
+        <h1>Welcome to <span style="color:#93c5fd">TechTopia</span></h1>
+        <p class="sub">
+          Physical computing means writing code that interacts with the real world. In TechTopia, students use a pi-top [4], the Foundation Plate, and Python to read sensors, detect button presses, light LEDs, sound buzzers, and build systems that solve real problems.
+        </p>
+        <div class="hero-grid">
+          <div class="mini"><div class="label">Inputs</div><div class="value">Buttons, light, sound, knobs</div></div>
+          <div class="mini"><div class="label">Outputs</div><div class="value">LEDs, buzzers, signal systems</div></div>
+          <div class="mini"><div class="label">Coding Tool</div><div class="value">Python + pitop SDK</div></div>
+        </div>
+
+        <div class="topia">
+          <svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TechTopia futuristic city graphic">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#60a5fa"/>
+                <stop offset="100%" stop-color="#34d399"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#0ea5e9" stop-opacity=".5"/>
+                <stop offset="100%" stop-color="#22c55e" stop-opacity=".05"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="760" height="240" rx="24" fill="url(#g2)"/>
+            <circle cx="92" cy="54" r="16" fill="#fbbf24"/>
+            <path d="M0 175 C 120 135, 210 200, 350 168 S 560 145, 760 178" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="3"/>
+            <path d="M0 190 C 110 160, 230 218, 370 187 S 585 164, 760 194" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+
+            <g transform="translate(30 52)">
+              <rect x="8" y="68" width="66" height="92" rx="8" fill="#163149"/>
+              <rect x="86" y="34" width="70" height="126" rx="8" fill="#173a58"/>
+              <rect x="168" y="90" width="46" height="70" rx="6" fill="#163149"/>
+              <rect x="226" y="54" width="86" height="106" rx="8" fill="#163a58"/>
+              <rect x="326" y="24" width="78" height="136" rx="8" fill="#1b4465"/>
+              <rect x="418" y="82" width="52" height="78" rx="7" fill="#163149"/>
+              <rect x="484" y="42" width="94" height="118" rx="8" fill="#173a58"/>
+              <rect x="592" y="66" width="58" height="94" rx="7" fill="#163149"/>
+              <rect x="664" y="20" width="34" height="140" rx="6" fill="#1b4465"/>
+
+              <g fill="#93c5fd">
+                <rect x="22" y="84" width="8" height="8"/><rect x="38" y="84" width="8" height="8"/><rect x="54" y="84" width="8" height="8"/>
+                <rect x="100" y="52" width="8" height="8"/><rect x="116" y="52" width="8" height="8"/><rect x="132" y="52" width="8" height="8"/>
+                <rect x="242" y="72" width="8" height="8"/><rect x="258" y="72" width="8" height="8"/><rect x="274" y="72" width="8" height="8"/>
+                <rect x="342" y="42" width="8" height="8"/><rect x="358" y="42" width="8" height="8"/><rect x="374" y="42" width="8" height="8"/>
+                <rect x="496" y="60" width="8" height="8"/><rect x="512" y="60" width="8" height="8"/><rect x="528" y="60" width="8" height="8"/>
+                <rect x="674" y="38" width="8" height="8"/>
+              </g>
+
+              <g stroke="url(#g1)" stroke-width="4" fill="none" opacity=".95">
+                <path d="M40 176 H720"/>
+                <path d="M72 176 V154 H132 V126 H191"/>
+                <path d="M191 126 V146 H271 V109 H364"/>
+                <path d="M364 109 V144 H443 V128 H531"/>
+                <path d="M531 128 V148 H619 V93 H681"/>
+              </g>
+
+              <g fill="#34d399">
+                <circle cx="72" cy="154" r="5"/><circle cx="132" cy="126" r="5"/><circle cx="191" cy="126" r="5"/>
+                <circle cx="271" cy="109" r="5"/><circle cx="364" cy="109" r="5"/><circle cx="443" cy="128" r="5"/>
+                <circle cx="531" cy="128" r="5"/><circle cx="619" cy="93" r="5"/><circle cx="681" cy="93" r="5"/>
+              </g>
+            </g>
+
+            <text x="30" y="215" fill="#e2f3ff" font-size="28" font-family="Arial, sans-serif" font-weight="700">TechTopia</text>
+            <text x="176" y="215" fill="#cbe7f9" font-size="16" font-family="Arial, sans-serif">Build the city with code, sensors, and ideas.</text>
+          </svg>
+          <div class="legend">Theme graphic: a connected future city powered by code, circuits, and creative problem-solving.</div>
+        </div>
+      </div>
+
+      <div class="panel quick">
+        <h3 style="font-size:1.4rem;margin-bottom:6px">Quick Start</h3>
+        <p class="muted">Use this checklist before you begin.</p>
+        <label class="check"><input type="checkbox"> <span>Connect the pi-top Foundation Plate.</span></label>
+        <label class="check"><input type="checkbox"> <span>Attach the correct components to the listed D or A ports.</span></label>
+        <label class="check"><input type="checkbox"> <span>Open your Python editor on the pi-top.</span></label>
+        <label class="check"><input type="checkbox"> <span>Save your file with a clear program name.</span></label>
+        <label class="check"><input type="checkbox"> <span>Run, test, debug, and improve.</span></label>
+      </div>
+    </section>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="activities">Activities</button>
+      <button class="tab-btn" data-tab="naming">Program Names</button>
+      <button class="tab-btn" data-tab="constructs">Coding Constructs</button>
+      <button class="tab-btn" data-tab="glossary">Glossary</button>
+    </div>
+
+    <section id="overview" class="tab active">
+      <div class="card">
+        <div class="section-title">
+          <div class="iconbox">📘</div>
+          <div>
+            <h2>Introduction to Physical Computing</h2>
+            <p class="muted">Start here before building your first project.</p>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="small-card">
+            <h3>What is physical computing?</h3>
+            <p>Physical computing is when software interacts with hardware. Instead of only printing text on a screen, your code can sense the environment and control real devices. With a pi-top [4], students can build systems that respond to light, sound, motion, and button presses.</p>
+          </div>
+          <div class="small-card">
+            <h3>Why use pi-top [4]?</h3>
+            <p>The Foundation Plate makes physical computing easier by using labeled ports like <code>D2</code> or <code>A1</code>. Students can focus on coding ideas such as input, output, events, loops, variables, and conditions without getting lost in raw GPIO pin numbers.</p>
+          </div>
+        </div>
+        <div class="grid3" style="margin-top:18px">
+          <div class="small-card">
+            <h3>Digital Ports</h3>
+            <p>Use ports like <code>D0</code> to <code>D7</code> for simple ON/OFF components such as LEDs, buttons, and buzzers.</p>
+          </div>
+          <div class="small-card">
+            <h3>Analog Ports</h3>
+            <p>Use ports like <code>A0</code> to <code>A3</code> for changing sensor values such as light level, sound level, and potentiometer position.</p>
+          </div>
+          <div class="small-card">
+            <h3>Python SDK</h3>
+            <p>Import ready-made classes from the <code>pitop</code> library so you can focus on solving problems and building projects.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div class="section-title">
+          <div class="iconbox">✅</div>
+          <div>
+            <h2>Core Ideas Check</h2>
+            <p class="muted">Click each statement after you can explain it to someone else.</p>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox"> <span>A digital output sends a simple ON/OFF signal to a component like an LED or buzzer.</span></label>
+        <label class="check"><input type="checkbox"> <span>A digital input reads a simple state like a button press.</span></label>
+        <label class="check"><input type="checkbox"> <span>An analog input measures a changing value, such as light, sound, or knob position.</span></label>
+        <label class="check"><input type="checkbox"> <span>Physical computing connects code to the real world through sensors and outputs.</span></label>
+        <label class="check"><input type="checkbox"> <span>The pi-top Foundation Plate uses named ports like D2 and A1 instead of raw GPIO pin numbers.</span></label>
+      </div>
+    </section>
+
+    <section id="activities" class="tab">
+      <div class="card">
+        <div class="section-title">
+          <div class="iconbox">🔎</div>
+          <div>
+            <h2>Project Library</h2>
+            <p class="muted">Search by concept, program name, or activity title.</p>
+          </div>
+        </div>
+        <input id="search" class="searchbar" placeholder="Search activities..." />
+      </div>
+
+      <div id="activity-list" style="margin-top:18px"></div>
+    </section>
+
+    <section id="naming" class="tab">
+      <div class="card">
+        <h2>Program Naming Guide</h2>
+        <p class="muted">Good file names help you and your teacher know what each program does.</p>
+        <div id="name-grid" class="name-grid" style="margin-top:16px"></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>Simple Naming Rules</h2>
+        <div class="grid2" style="margin-top:12px">
+          <div class="small-card">Use lowercase letters.</div>
+          <div class="small-card">Separate words with underscores.</div>
+          <div class="small-card">Choose names that describe what the program does.</div>
+          <div class="small-card">End Python files with <code>.py</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    
+    <section id="constructs" class="tab">
+      <div class="card">
+        <h2>Coding Constructs Explained</h2>
+        <p class="muted">Use this section to understand the Python building blocks that appear throughout the TechTopia projects.</p>
+        <div class="construct-grid" style="margin-top:16px">
+          <div class="construct-card">
+            <h3>Imports</h3>
+            <p><code>from pitop import LED</code> brings in code written by someone else so you can use a device class without building it from scratch.</p>
+            <div class="lesson-note"><strong>Why it matters:</strong> Imports let programmers reuse tools and focus on solving the problem.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Variables</h3>
+            <p><code>led = LED("D2")</code> stores a reference to the LED object in a variable named <code>led</code>.</p>
+            <div class="lesson-note"><strong>Why it matters:</strong> Variables make programs easier to read and reuse.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Strings</h3>
+            <p>Text inside quotes, such as <code>"D2"</code> or <code>"Button pressed!"</code>, is called a string.</p>
+            <div class="lesson-note"><strong>Why it matters:</strong> Strings are used for messages, labels, and port names.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Functions and Methods</h3>
+            <p><code>led.on()</code> calls a method. A method is a function attached to an object.</p>
+            <div class="lesson-note"><strong>Why it matters:</strong> Methods tell a component what to do, like turn on, turn off, blink, or beep.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Sequential Execution</h3>
+            <p>Python normally runs from top to bottom, one line at a time.</p>
+            <pre><code>led.on()
+sleep(1)
+led.off()</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> The order of lines changes the behavior of the system.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Loops</h3>
+            <p><code>while True:</code> repeats a block of code forever until the program is stopped.</p>
+            <pre><code>while True:
+    led.toggle()
+    sleep(1)</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Loops keep systems running continuously.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Indentation</h3>
+            <p>Indented lines belong to the block above them.</p>
+            <pre><code>while True:
+    button.wait_for_press()
+    led.toggle()</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> In Python, spaces are part of the syntax.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Conditionals</h3>
+            <p><code>if</code>, <code>else</code>, and sometimes <code>elif</code> allow programs to make decisions.</p>
+            <pre><code>if level &lt; THRESHOLD:
+    led.on()
+else:
+    led.off()</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Conditionals make programs responsive to sensor data.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Comparison Operators</h3>
+            <p>Operators like <code>&lt;</code>, <code>&gt;</code>, and <code>==</code> compare values.</p>
+            <div class="lesson-note"><strong>Example:</strong> <code>level &gt; THRESHOLD</code> checks whether the sound is loud enough.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Boolean Logic</h3>
+            <p>Boolean logic combines conditions using words like <code>and</code>, <code>or</code>, and <code>not</code>.</p>
+            <pre><code>if light_level &lt; LIGHT_THRESHOLD and sound_level &gt; SOUND_THRESHOLD:
+    buzzer.beep()</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> It helps students design smarter systems with multiple inputs.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Functions You Define</h3>
+            <p>You can create your own reusable function with <code>def</code>.</p>
+            <pre><code>def set_lights(r, a, g):
+    (red.on() if r else red.off())
+    (amber.on() if a else amber.off())
+    (green.on() if g else green.off())</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Functions reduce repetition and organize longer programs.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Parameters and Arguments</h3>
+            <p>In <code>sleep(1)</code>, the value <code>1</code> is an argument. It is passed into the function.</p>
+            <div class="lesson-note"><strong>Why it matters:</strong> Arguments let the same function do slightly different jobs.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Numbers and Math</h3>
+            <p>Programs often use math to scale sensor values.</p>
+            <pre><code>delay = 0.05 + (p / 999) * 0.95</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Math helps convert one range of values into another useful range.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Comments</h3>
+            <p>Anything after <code>#</code> on a line is a comment for humans, not the computer.</p>
+            <pre><code># optional buzzer
+buzzer = Buzzer("D0")</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Comments explain thinking and support debugging.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Event-Driven Programming</h3>
+            <p>Some programs wait for an event instead of checking in a loop every moment.</p>
+            <pre><code>button.when_pressed = led.on
+button.when_released = led.off</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Event-driven code can feel more responsive and elegant.</div>
+          </div>
+          <div class="construct-card">
+            <h3>Debug Printing</h3>
+            <p><code>print()</code> shows values while a program runs.</p>
+            <pre><code>print("Light level:", level)</code></pre>
+            <div class="lesson-note"><strong>Why it matters:</strong> Printing helps students observe what the program is thinking.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h2>Constructs Used in These Projects</h2>
+        <div class="grid2" style="margin-top:12px">
+          <div class="small-card">
+            <h3>Beginner Projects</h3>
+            <p>Imports, variables, strings, methods, sequential execution, and simple loops.</p>
+          </div>
+          <div class="small-card">
+            <h3>Intermediate Projects</h3>
+            <p>Conditionals, threshold values, event handlers, reusable functions, and analog readings.</p>
+          </div>
+          <div class="small-card">
+            <h3>Advanced Projects</h3>
+            <p>Boolean logic, cooldown counters, randomness, timing, and multi-sensor decision making.</p>
+          </div>
+          <div class="small-card">
+            <h3>Teacher Use</h3>
+            <p>This page can be used for mini-lessons, code annotation, or as a reference while students debug.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="glossary" class="tab">
+      <div class="card">
+        <h2>Glossary</h2>
+        <p class="muted">Helpful vocabulary for this unit.</p>
+        <div class="glossary-grid" style="margin-top:16px">
+          <div class="small-card"><h3>Input</h3><p>A signal or reading that comes into the computer from a sensor or button.</p></div>
+          <div class="small-card"><h3>Output</h3><p>A signal sent out from the computer to a device such as an LED or buzzer.</p></div>
+          <div class="small-card"><h3>Digital</h3><p>A simple state, usually ON/OFF or pressed/not pressed.</p></div>
+          <div class="small-card"><h3>Analog</h3><p>A changing value across a range, such as light level or knob position.</p></div>
+          <div class="small-card"><h3>SDK</h3><p>Software Development Kit. In this unit, it is the <code>pitop</code> Python library used to control hardware.</p></div>
+          <div class="small-card"><h3>Threshold</h3><p>A cut-off value used to decide when something should happen.</p></div>
+          <div class="small-card"><h3>Debounce</h3><p>A short delay that helps prevent one press or sound from being counted multiple times.</p></div>
+          <div class="small-card"><h3>Event</h3><p>Something that happens, like a button press, that your program can respond to.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="card footer-note">
+      <h2>Teacher Note</h2>
+      <p>This TechTopia site combines the core physical computing sequence and the optional sensor extensions into one student-friendly resource. Students can start with digital outputs and inputs, then move into event-driven programs, multi-step systems, and analog sensor projects.</p>
+    </div>
+  </div>
+
+  <script>
+    const activities = [
+      {
+        title:"1. LED Basics",
+        nickname:"First Light",
+        level:"Beginner",
+        icon:"💡",
+        goal:"Turn an LED on, off, and toggle it using the pi-top Python SDK.",
+        wiring:["LED → D2"],
+        concepts:["digital output","sequencing","basic Python"],
+        starterName:"first_light.py",
+        stretchName:"toggle_tricks.py",
+        code:`from time import sleep
+from pitop import LED
+
+led = LED("D2")
+
+led.on()
+sleep(1)
+led.off()
+sleep(1)
+led.toggle()`,
+        challenges:[
+          "Change the timing so the LED stays on for 2 seconds.",
+          "Add more on/off steps to create a pattern.",
+          "Explain what toggle() does in your own words."
+        ]
+      },
+      {
+        title:"2. Blinking LED",
+        nickname:"Beacon Blink",
+        level:"Beginner",
+        icon:"💡",
+        goal:"Make an LED flash continuously.",
+        wiring:["LED → D2"],
+        concepts:["repetition","timing","automation"],
+        starterName:"beacon_blink.py",
+        stretchName:"flash_pattern.py",
+        code:`from pitop import LED
+
+led = LED("D2")
+led.blink(on_time=1, off_time=1)`,
+        challenges:[
+          "Make the blink faster.",
+          "Make a short flash and a long pause.",
+          "Predict what will happen before you run the code."
+        ]
+      },
+      {
+        title:"3. Button Input",
+        nickname:"Push to Start",
+        level:"Beginner",
+        icon:"🔘",
+        goal:"Detect when a button is pressed.",
+        wiring:["Button → D5"],
+        concepts:["digital input","user interaction","events"],
+        starterName:"push_to_start.py",
+        stretchName:"button_reporter.py",
+        code:`from pitop import Button
+
+button = Button("D5")
+button.wait_for_press()
+print("Button pressed!")`,
+        challenges:[
+          "Change the printed message.",
+          "Ask a partner to predict when the message appears.",
+          "Add a second print statement before wait_for_press()."
+        ]
+      },
+      {
+        title:"4. Button + LED",
+        nickname:"Press and Glow",
+        level:"Beginner",
+        icon:"💡",
+        goal:"Use a button press to control an LED.",
+        wiring:["LED → D2","Button → D5"],
+        concepts:["input/output","cause and effect","simple control systems"],
+        starterName:"press_and_glow.py",
+        stretchName:"three_second_shine.py",
+        code:`from time import sleep
+from pitop import LED, Button
+
+led = LED("D2")
+button = Button("D5")
+
+button.wait_for_press()
+led.on()
+sleep(3)
+led.off()`,
+        challenges:[
+          "Keep the LED on for 5 seconds instead of 3.",
+          "Turn the LED on only after a message prints.",
+          "Describe the flow of the program step by step."
+        ]
+      },
+      {
+        title:"5. LED Toggle Switch",
+        nickname:"Tap Switch",
+        level:"Beginner",
+        icon:"🪄",
+        goal:"Make each button press toggle the LED state.",
+        wiring:["LED → D2","Button → D5"],
+        concepts:["loops","state change","debounce"],
+        starterName:"tap_switch.py",
+        stretchName:"smart_toggle.py",
+        code:`from time import sleep
+from pitop import LED, Button
+
+led = LED("D2")
+button = Button("D5")
+
+while True:
+    button.wait_for_press()
+    led.toggle()
+    sleep(0.25)`,
+        challenges:[
+          "Change the debounce delay.",
+          "Explain why the short sleep helps.",
+          "Add print statements to show LED changes."
+        ]
+      },
+      {
+        title:"6. Event-Driven LED",
+        nickname:"Hold to Glow",
+        level:"Intermediate",
+        icon:"⚡",
+        goal:"Turn an LED on while the button is held down.",
+        wiring:["LED → D2","Button → D5"],
+        concepts:["event-driven programming","callbacks","responsive systems"],
+        starterName:"hold_to_glow.py",
+        stretchName:"event_magic.py",
+        code:`from signal import pause
+from pitop import LED, Button
+
+led = LED("D2")
+button = Button("D5")
+
+button.when_pressed = led.on
+button.when_released = led.off
+
+pause()`,
+        challenges:[
+          "Replace led.on with a custom function.",
+          "Add print statements when the button is pressed and released.",
+          "Compare this with the wait_for_press() version."
+        ]
+      },
+      {
+        title:"7. Buzzer Basics",
+        nickname:"Buzz Alert",
+        level:"Intermediate",
+        icon:"🔔",
+        goal:"Control a buzzer using the pi-top SDK.",
+        wiring:["Buzzer → D0"],
+        concepts:["digital output","alerts","feedback"],
+        starterName:"buzz_alert.py",
+        stretchName:"beep_pattern.py",
+        code:`from time import sleep
+from pitop import Buzzer
+
+buzzer = Buzzer("D0")
+
+buzzer.on()
+sleep(1)
+buzzer.off()
+
+# Or use beep()
+# buzzer.beep(on_time=0.2, off_time=0.2)`,
+        challenges:[
+          "Create a repeating beep pattern.",
+          "Make a short alarm sound.",
+          "Decide when a buzzer is more useful than an LED."
+        ]
+      },
+      {
+        title:"8. Traffic Light System",
+        nickname:"Crosswalk Control",
+        level:"Intermediate",
+        icon:"🚦",
+        goal:"Build a traffic-light style system with three LEDs and a button.",
+        wiring:["Red LED → D1","Yellow LED → D2","Green LED → D3","Button → D5","Optional buzzer → D0"],
+        concepts:["systems thinking","sequencing","functions","real-world automation"],
+        starterName:"crosswalk_control.py",
+        stretchName:"safe_crossing_system.py",
+        code:`from time import sleep
+from pitop import LED, Button, Buzzer
+
+red = LED("D1")
+amber = LED("D2")
+green = LED("D3")
+button = Button("D5")
+buzzer = Buzzer("D0")
+
+def set_lights(r, a, g):
+    (red.on() if r else red.off())
+    (amber.on() if a else amber.off())
+    (green.on() if g else green.off())
+
+set_lights(False, False, True)
+
+while True:
+    button.wait_for_press()
+    set_lights(False, True, False)
+    sleep(1)
+    set_lights(True, False, False)
+    sleep(2)
+    buzzer.beep(on_time=0.1, off_time=0.1, n=10)
+    set_lights(False, False, True)
+    sleep(0.25)`,
+        challenges:[
+          "Add a longer red-light delay.",
+          "Only use the buzzer during the crossing phase.",
+          "Draw a flowchart before changing the code."
+        ]
+      },
+      {
+        title:"9. Potentiometer Control",
+        nickname:"Knob Navigator",
+        level:"Intermediate",
+        icon:"🎛️",
+        goal:"Use a potentiometer to control blink speed.",
+        wiring:["LED → D2","Potentiometer → A3"],
+        concepts:["analog input","mapping","variable control"],
+        starterName:"knob_navigator.py",
+        stretchName:"speed_dial_blink.py",
+        code:`from time import sleep
+from pitop import LED, Potentiometer
+
+led = LED("D2")
+knob = Potentiometer("A3")
+
+while True:
+    p = knob.position
+    delay = 0.05 + (p / 999) * 0.95
+    led.toggle()
+    sleep(delay)`,
+        challenges:[
+          "Print the knob value while it runs.",
+          "Change the delay range.",
+          "Explain what the formula does."
+        ]
+      },
+      {
+        title:"10. Automatic Night Light",
+        nickname:"Glow in the Dark",
+        level:"Intermediate",
+        icon:"🌙",
+        goal:"Turn on an LED when the room becomes dark.",
+        wiring:["LED → D2","Light Sensor → A1"],
+        concepts:["thresholds","sensors","automated response"],
+        starterName:"glow_in_the_dark.py",
+        stretchName:"auto_night_light.py",
+        code:`from time import sleep
+from pitop import LED, LightSensor
+
+led = LED("D2")
+light = LightSensor("A1")
+
+THRESHOLD = 400
+
+while True:
+    level = light.reading
+    print("Light level:", level)
+
+    if level < THRESHOLD:
+        led.on()
+    else:
+        led.off()
+
+    sleep(0.2)`,
+        challenges:[
+          "Find the best threshold for your classroom.",
+          "Test it with a flashlight.",
+          "Explain why every room might need a different threshold."
+        ]
+      },
+      {
+        title:"11. Sound-Activated Alarm",
+        nickname:"Clap Alert",
+        level:"Intermediate",
+        icon:"🔊",
+        goal:"Trigger a buzzer when sound gets loud enough.",
+        wiring:["Sound Sensor → A2","Buzzer → D0"],
+        concepts:["sensor thresholds","alerts","noise filtering"],
+        starterName:"clap_alert.py",
+        stretchName:"noise_alarm.py",
+        code:`from time import sleep
+from pitop import SoundSensor, Buzzer
+
+sound = SoundSensor("A2")
+buzzer = Buzzer("D0")
+
+THRESHOLD = 600
+
+while True:
+    level = sound.reading
+    print("Sound level:", level)
+
+    if level > THRESHOLD:
+        buzzer.beep(on_time=0.1, off_time=0.1, n=5)
+
+    sleep(0.1)`,
+        challenges:[
+          "Calibrate the threshold for a clap.",
+          "Compare quiet room and noisy room values.",
+          "Reduce false triggers."
+        ]
+      },
+      {
+        title:"12. Smart Alarm System",
+        nickname:"Night Watch",
+        level:"Advanced",
+        icon:"🛡️",
+        goal:"Use both a light sensor and sound sensor to create a two-condition alarm.",
+        wiring:["LED → D2","Buzzer → D0","Light Sensor → A1","Sound Sensor → A2"],
+        concepts:["Boolean logic","multi-sensor systems","real-world design"],
+        starterName:"night_watch.py",
+        stretchName:"intruder_guard.py",
+        code:`from time import sleep
+from pitop import LED, Buzzer, LightSensor, SoundSensor
+
+led = LED("D2")
+buzzer = Buzzer("D0")
+light = LightSensor("A1")
+sound = SoundSensor("A2")
+
+LIGHT_THRESHOLD = 400
+SOUND_THRESHOLD = 600
+
+while True:
+    light_level = light.reading
+    sound_level = sound.reading
+
+    if light_level < LIGHT_THRESHOLD and sound_level > SOUND_THRESHOLD:
+        led.on()
+        buzzer.beep(on_time=0.1, off_time=0.1, n=10)
+    else:
+        led.off()
+
+    sleep(0.2)`,
+        challenges:[
+          "Explain why AND is used instead of OR.",
+          "Change the program to use OR and test it.",
+          "Add printed sensor values for debugging."
+        ]
+      },
+      {
+        title:"13. Reaction Timer Game",
+        nickname:"Lightning Reflex",
+        level:"Advanced",
+        icon:"🎮",
+        goal:"Measure how quickly a player reacts to an LED turning on.",
+        wiring:["LED → D2","Button → D5"],
+        concepts:["randomness","timing","variables","game design"],
+        starterName:"lightning_reflex.py",
+        stretchName:"reaction_champion.py",
+        code:`from time import sleep, time
+import random
+from pitop import LED, Button
+
+led = LED("D2")
+button = Button("D5")
+
+while True:
+    wait_time = random.uniform(2, 5)
+    print("Get ready...")
+    sleep(wait_time)
+
+    led.on()
+    start = time()
+
+    button.wait_for_press()
+    reaction = time() - start
+
+    led.off()
+    print(f"Reaction time: {reaction:.3f} seconds")
+    sleep(2)`,
+        challenges:[
+          "Keep track of the best score.",
+          "Add a false-start rule.",
+          "Turn it into a class competition."
+        ]
+      },
+      {
+        title:"14. Clap-Controlled Light",
+        nickname:"Sound Switch",
+        level:"Advanced",
+        icon:"🎙️",
+        goal:"Toggle an LED when a loud sound is detected.",
+        wiring:["LED → D2","Sound Sensor → A2"],
+        concepts:["state","cooldown logic","sensor debouncing"],
+        starterName:"sound_switch.py",
+        stretchName:"clap_toggle.py",
+        code:`from time import sleep
+from pitop import LED, SoundSensor
+
+led = LED("D2")
+sound = SoundSensor("A2")
+
+THRESHOLD = 650
+cooldown = 0
+
+while True:
+    level = sound.reading
+
+    if level > THRESHOLD and cooldown == 0:
+        led.toggle()
+        print("Clap detected!")
+        cooldown = 10
+
+    if cooldown > 0:
+        cooldown -= 1
+
+    sleep(0.05)`,
+        challenges:[
+          "Adjust the cooldown value.",
+          "Reduce accidental triggers.",
+          "Describe how this is like button debounce."
+        ]
+      }
+    ];
+
+    
+    const constructMap = {
+      "1. LED Basics":["imports","variables","methods","sequential execution","sleep timing"],
+      "2. Blinking LED":["imports","variables","methods","function arguments"],
+      "3. Button Input":["imports","variables","methods","sequential execution"],
+      "4. Button + LED":["imports","variables","methods","sequential execution"],
+      "5. LED Toggle Switch":["while loop","methods","state change","debounce"],
+      "6. Event-Driven LED":["event-driven programming","callbacks","imports","methods"],
+      "7. Buzzer Basics":["imports","variables","methods","comments"],
+      "8. Traffic Light System":["functions","parameters","while loop","sequential execution","methods"],
+      "9. Potentiometer Control":["while loop","variables","math","analog input"],
+      "10. Automatic Night Light":["while loop","conditionals","comparison operators","thresholds","debug printing"],
+      "11. Sound-Activated Alarm":["while loop","conditionals","comparison operators","thresholds","methods"],
+      "12. Smart Alarm System":["while loop","conditionals","boolean logic","thresholds","multi-sensor input"],
+      "13. Reaction Timer Game":["imports","variables","randomness","timing","while loop"],
+      "14. Clap-Controlled Light":["while loop","conditionals","comparison operators","state","cooldown variable"]
+    };
+
+    const nameGrid = document.getElementById('name-grid');
+    const list = document.getElementById('activity-list');
+    const search = document.getElementById('search');
+
+    function renderNames(items){
+      nameGrid.innerHTML = items.map(a => `
+        <div class="small-card">
+          <h3>${a.nickname}</h3>
+          <p class="muted">${a.title}</p>
+          <p><strong>Starter:</strong> <code>${a.starterName}</code></p>
+          <p><strong>Stretch:</strong> <code>${a.stretchName}</code></p>
+        </div>
+      `).join('');
+    }
+
+    function renderActivities(items){
+      list.innerHTML = items.map((a, i) => `
+        <div class="card activity" data-index="${i}">
+          <div class="activity-header">
+            <div class="activity-title">
+              <div class="iconbox">${a.icon}</div>
+              <div>
+                <div class="badges">
+                  <span class="badge b-level">${a.level}</span>
+                  <span class="badge b-name">${a.nickname}</span>
+                </div>
+                <h3 style="margin-top:8px">${a.title}</h3>
+                <p class="muted">${a.goal}</p>
+              </div>
+            </div>
+            <button class="tab-btn toggle-btn" type="button">Open</button>
+          </div>
+          <div class="activity-content">
+            <div class="activity-grid">
+              <div>
+                <div class="small-card">
+                  <h3>Wiring</h3>
+                  ${a.wiring.map(w => `<div class="challenge">${w}</div>`).join('')}
+                </div>
+                <div class="small-card">
+                  <h3>Program Name Ideas</h3>
+                  <p><strong>Starter:</strong> <code>${a.starterName}</code></p>
+                  <p><strong>Stretch:</strong> <code>${a.stretchName}</code></p>
+                </div>
+                <div class="small-card">
+                  <h3>Concepts</h3>
+                  ${a.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+                </div>
+                <div class="small-card">
+                  <h3>Coding Constructs Used</h3>
+                  ${(constructMap[a.title] || []).map(c => `<span class="tag">${c}</span>`).join('')}
+                </div>
+              </div>
+              <div>
+                <div class="small-card">
+                  <h3>Python Code</h3>
+                  <p class="muted">Copy, run, then improve it.</p>
+                  <pre><code>${escapeHtml(a.code)}</code></pre>
+                </div>
+                <div class="small-card">
+                  <h3>Challenge Tasks</h3>
+                  ${a.challenges.map((c, idx) => `<div class="challenge"><strong>Challenge ${idx+1}:</strong> ${c}</div>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.activity .activity-header, .activity .toggle-btn').forEach(el => {
+        el.addEventListener('click', (e) => {
+          const card = e.currentTarget.closest('.activity');
+          card.classList.toggle('open');
+          const btn = card.querySelector('.toggle-btn');
+          btn.textContent = card.classList.contains('open') ? 'Close' : 'Open';
+        });
+      });
+    }
+
+    function escapeHtml(str){
+      return str
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;');
+    }
+
+    search.addEventListener('input', () => {
+      const q = search.value.toLowerCase().trim();
+      const filtered = activities.filter(a => [
+        a.title, a.nickname, a.goal, a.level, a.starterName, a.stretchName, ...a.concepts
+      ].join(' ').toLowerCase().includes(q));
+      renderActivities(filtered);
+    });
+
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    renderNames(activities);
+    renderActivities(activities);
+  </script>
+</body>
+</html>

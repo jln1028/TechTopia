@@ -1,0 +1,12 @@
+test_arrow_points_east_for_ninety (test_compass.CompassTests.test_arrow_points_east_for_ninety) ... ok
+test_arrow_points_north_for_zero (test_compass.CompassTests.test_arrow_points_north_for_zero) ... ok
+test_cardinal_boundaries (test_compass.CompassTests.test_cardinal_boundaries) ... ok
+test_frame_is_valid_rgb (test_compass.CompassTests.test_frame_is_valid_rgb) ... ok
+test_invalid_mode (test_compass.CompassTests.test_invalid_mode) ... ok
+test_joystick_mode_cycle (test_compass.CompassTests.test_joystick_mode_cycle) ... ok
+test_numeric_frames (test_compass.CompassTests.test_numeric_frames) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.002s
+
+OK

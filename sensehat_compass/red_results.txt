@@ -1,0 +1,18 @@
+test_compass (unittest.loader._FailedTest.test_compass) ... ERROR
+
+======================================================================
+ERROR: test_compass (unittest.loader._FailedTest.test_compass)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_compass
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+  File "/mnt/data/sensehat_compass/test_compass.py", line 2, in <module>
+    from compass_core import cardinal, arrow_pixels, numeric_frames, compass_frame
+ModuleNotFoundError: No module named 'compass_core'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

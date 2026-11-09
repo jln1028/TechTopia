@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Your pi-top [4] &mdash; Interactive Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#11161a;
+    --panel:#171d22;
+    --panel2:#1d252b;
+    --border:#2b363e;
+    --border-soft:#212a31;
+    --text:#eaf1f6;
+    --muted:#93a7b6;
+    --muted-dim:#5f7381;
+    --green:#3ddc97;
+    --green-dim:#215c46;
+    --blue:#5aa9ff;
+    --amber:#ffb454;
+    --danger:#ff6b6b;
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans:'IBM Plex Sans', -apple-system, Segoe UI, sans-serif;
+    --display:'Space Grotesk', var(--sans);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 750px at 12% -8%, #14261f 0%, transparent 60%),
+      radial-gradient(900px 650px at 108% 6%, #101c2c 0%, transparent 55%),
+      var(--bg);
+    color:var(--text); font-family:var(--sans); min-height:100vh;
+  }
+  a{color:var(--blue);}
+
+  header{
+    padding:22px clamp(16px,3vw,40px) 16px; border-bottom:1px solid var(--border-soft);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  }
+  .badge{
+    width:44px; height:44px; border-radius:10px; flex:none;
+    background:linear-gradient(155deg,#1c2b25,#0d1512);
+    border:1px solid var(--border); position:relative;
+  }
+  .badge::before{
+    content:''; position:absolute; left:8px; right:8px; top:9px; height:10px;
+    background:#0a0f0d; border:1px solid #2a3a33; border-radius:2px;
+  }
+  .badge::after{
+    content:''; position:absolute; left:8px; right:8px; bottom:8px; height:5px;
+    background:var(--green); border-radius:2px; opacity:.8;
+  }
+  header h1{font-family:var(--display); font-size:1.32rem; margin:0; font-weight:700;}
+  header p{margin:2px 0 0; color:var(--muted); font-size:.87rem;}
+  header .tagline{margin-left:auto; text-align:right; color:var(--muted-dim); font-size:.76rem; max-width:300px; line-height:1.45;}
+
+  .layout{
+    display:grid; grid-template-columns:200px minmax(0,1fr) 400px;
+    gap:18px; padding:18px clamp(16px,3vw,40px) 44px; align-items:start;
+  }
+  @media (max-width:1140px){ .layout{grid-template-columns:1fr;} }
+
+  nav#lessonNav{
+    position:sticky; top:16px; display:flex; flex-direction:column; gap:6px;
+    background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:10px;
+  }
+  nav#lessonNav .navlabel{font-family:var(--mono); font-size:.68rem; color:var(--muted-dim); padding:6px 8px 2px;}
+  .navbtn{
+    display:flex; align-items:baseline; gap:8px; text-align:left; background:transparent;
+    border:1px solid transparent; color:var(--muted); padding:9px 10px; border-radius:8px; cursor:pointer;
+    font-family:var(--sans); font-size:.85rem; line-height:1.25; width:100%;
+  }
+  .navbtn .n{font-family:var(--mono); font-size:.72rem; color:var(--muted-dim); flex:none;}
+  .navbtn:hover{background:var(--panel2); color:var(--text);}
+  .navbtn.active{background:#152621; border-color:var(--border); color:var(--text);}
+  .navbtn.active .n{color:var(--green);}
+
+  section#lessonPanel{min-width:0; display:flex; flex-direction:column; gap:16px;}
+  .card{background:var(--panel); border:1px solid var(--border-soft); border-radius:12px; padding:18px 20px;}
+  #lessonIntro h2{font-family:var(--display); font-size:1.22rem; margin:0 0 10px;}
+  #lessonIntro h3{font-family:var(--display); font-size:1rem; margin:20px 0 8px; color:var(--text);}
+  #lessonIntro p{color:var(--muted); font-size:.92rem; line-height:1.62; margin:0 0 12px;}
+  #lessonIntro p:last-child{margin-bottom:0;}
+  #lessonIntro code{
+    background:#0c1215; border:1px solid var(--border-soft); border-radius:4px; padding:1px 6px;
+    font-family:var(--mono); font-size:.84em; color:var(--green);
+  }
+  #lessonIntro ol, #lessonIntro ul.plain{color:var(--muted); font-size:.92rem; line-height:1.65; margin:0 0 12px; padding-left:20px;}
+  #lessonIntro li{margin-bottom:6px;}
+  #lessonIntro strong{color:var(--text);}
+
+  table.paramTable{width:100%; border-collapse:collapse; margin:6px 0 16px; font-size:.85rem;}
+  table.paramTable th,table.paramTable td{border:1px solid var(--border-soft); padding:8px 10px; text-align:left; vertical-align:top;}
+  table.paramTable th{background:var(--panel2); color:var(--green); font-family:var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.4px; font-weight:500;}
+  table.paramTable td{color:var(--muted);}
+  table.paramTable td code{white-space:nowrap;}
+
+  .note{background:#122019; border-left:3px solid var(--green); border-radius:0 8px 8px 0; padding:10px 14px; margin:12px 0; font-size:.85rem; color:var(--muted); line-height:1.55;}
+  .note b{color:var(--green);}
+  .diagram{display:flex; justify-content:center; margin:14px 0; background:#0c1215; border:1px solid var(--border-soft); border-radius:10px; padding:14px;}
+  .diagram svg{max-width:100%; height:auto;}
+  .diagram figcaption{text-align:center; color:var(--muted-dim); font-size:.72rem; font-family:var(--mono); margin-top:6px;}
+  .skillTags{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 14px;}
+  .skillTags span{background:var(--panel2); border:1px solid var(--border); color:var(--muted); font-family:var(--mono); font-size:.72rem; padding:4px 9px; border-radius:20px;}
+  .ctaRow{margin-top:14px;}
+  button.cta{background:var(--green); color:#08201a; border:none; border-radius:8px; padding:10px 18px; font-weight:600; font-size:.86rem; cursor:pointer; font-family:var(--sans);}
+  button.cta:hover{filter:brightness(1.08);}
+
+  #ideasBox h3{font-family:var(--display); font-size:.95rem; margin:0 0 8px; color:var(--blue); display:flex; align-items:center; gap:8px;}
+  #ideasBox ul{margin:0; padding-left:18px; color:var(--muted); font-size:.86rem; line-height:1.65;}
+
+  /* ===================== device panel ===================== */
+  aside#devicePanel{display:flex; flex-direction:column; gap:14px; position:sticky; top:16px;}
+  .chassis{
+    background:linear-gradient(180deg,#20262b,#161b1f); border:1px solid #313d44; border-radius:16px;
+    padding:16px; position:relative;
+  }
+  .chassis .hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .chassis .hdr .t{font-family:var(--mono); font-size:.68rem; color:var(--muted-dim); letter-spacing:.4px;}
+  .powerBtn{
+    width:26px; height:26px; border-radius:50%; border:2px solid #4a5a63; background:#242c31;
+    color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:.7rem;
+  }
+  .powerBtn.on{border-color:var(--green); color:var(--green);}
+
+  .miniscreenRow{display:flex; align-items:center; justify-content:center; gap:10px;}
+  .msBtnCol{display:flex; flex-direction:column; gap:10px;}
+  button.msBtn{
+    width:34px; height:34px; border-radius:50%; background:#242c31; border:1px solid #3a464d;
+    color:var(--muted); font-size:.85rem; cursor:pointer;
+  }
+  button.msBtn:hover{border-color:var(--green); color:var(--green);}
+  button.msBtn:active{transform:scale(.94);}
+  #miniscreenCanvas{
+    background:#000; border:6px solid #05070a; border-radius:4px; image-rendering:pixelated;
+    box-shadow:inset 0 0 12px #000;
+  }
+  .msCaption{text-align:center; font-family:var(--mono); font-size:.66rem; color:var(--muted-dim); margin-top:8px;}
+
+  .screenShell{
+    margin-top:14px; background:#05070a; border-radius:10px; padding:8px; border:1px solid #262f35;
+  }
+  .screenInner{
+    background:#dfe6ec; border-radius:6px; overflow:hidden; min-height:360px; position:relative;
+    font-family:var(--sans); display:flex; flex-direction:column;
+  }
+  .screenInner.off{background:#000;}
+  .offMsg{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:#445; font-family:var(--mono); font-size:.78rem; text-align:center; padding:20px;
+  }
+  .taskbar{
+    background:#e7e7e7; border-bottom:1px solid #c9c9c9; display:flex; align-items:center; gap:4px;
+    padding:4px 8px; height:32px; flex:none;
+  }
+  .tbBtn{
+    display:flex; align-items:center; gap:5px; background:transparent; border:none; cursor:pointer;
+    padding:4px 8px; border-radius:4px; font-size:.72rem; color:#222; font-family:var(--sans);
+  }
+  .tbBtn:hover{background:#d5d5d5;}
+  .tbIcon{width:15px; height:15px; border-radius:3px; display:inline-block;}
+  .taskbar .spacer{flex:1;}
+  .trayItem{font-family:var(--mono); font-size:.68rem; color:#333; padding:0 6px;}
+  .desktopArea{
+    flex:1; background:
+      radial-gradient(circle at 30% 20%, #b9d4e8 0%, transparent 55%),
+      linear-gradient(160deg,#8fb6d6,#5f88ab);
+    position:relative; overflow:hidden; min-height:320px;
+  }
+  .menuPanel{
+    position:absolute; left:6px; top:6px; width:190px; background:#f3f3f3; border:1px solid #b8b8b8;
+    border-radius:6px; box-shadow:0 8px 22px rgba(0,0,0,.35); font-size:.74rem; overflow:hidden; z-index:20;
+  }
+  .menuPanel .mi{padding:7px 12px; color:#222; cursor:pointer;}
+  .menuPanel .mi:hover{background:var(--green); color:#08201a;}
+  .menuPanel .mcat{padding:6px 12px; font-family:var(--mono); font-size:.62rem; color:#888; background:#e8e8e8;}
+
+  .win{
+    position:absolute; background:#f4f6f8; border:1px solid #9aa5ad; border-radius:8px;
+    box-shadow:0 10px 26px rgba(0,0,0,.4); display:flex; flex-direction:column; overflow:hidden; z-index:10;
+  }
+  .winTitle{
+    background:linear-gradient(180deg,#3a4147,#2b3136); color:#eee; font-size:.72rem; padding:6px 10px;
+    display:flex; align-items:center; gap:6px; font-family:var(--sans); flex:none;
+  }
+  .winTitle .x{margin-left:auto; cursor:pointer; opacity:.75; padding:0 4px;}
+  .winTitle .x:hover{opacity:1; color:var(--danger);}
+  .winBody{flex:1; overflow:auto; font-size:.78rem;}
+
+  /* file manager */
+  .fmWrap{display:flex; height:100%;}
+  .fmSide{width:110px; background:#eceff1; border-right:1px solid #d3d7da; padding:8px 0; flex:none;}
+  .fmSide div{padding:6px 12px; font-size:.72rem; color:#333; cursor:pointer;}
+  .fmSide div:hover, .fmSide div.active{background:var(--green); color:#08201a;}
+  .fmMain{flex:1; padding:10px; overflow:auto;}
+  .fmPath{font-family:var(--mono); font-size:.68rem; color:#667; margin-bottom:8px;}
+  .fmGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(70px,1fr)); gap:10px;}
+  .fmItem{text-align:center; cursor:pointer; padding:6px; border-radius:6px; font-size:.68rem; color:#333;}
+  .fmItem:hover{background:#dbeee5;}
+  .fmIcon{font-size:1.5rem; display:block; margin-bottom:2px;}
+
+  /* terminal */
+  .termWrap{background:#0c0f0c; color:#c9f7d8; font-family:var(--mono); font-size:.78rem; height:100%; padding:8px 10px; overflow:auto; position:relative;}
+  .termLine{white-space:pre-wrap; line-height:1.5;}
+  .termLine .prompt{color:var(--green);}
+  .termLine .err{color:#ff9d9d;}
+  .termInputRow{display:flex; gap:6px;}
+  .termInputRow input{
+    flex:1; background:transparent; border:none; outline:none; color:#eafff0; font-family:var(--mono); font-size:.78rem;
+  }
+  .rcOverlay{
+    position:absolute; inset:8px; background:#0033aa; color:#fff; font-family:var(--mono); font-size:.74rem;
+    padding:10px; overflow:auto; border:2px solid #cfd8ea;
+  }
+  .rcTitle{background:#c0c0c0; color:#000; text-align:center; padding:4px; margin:-10px -10px 10px;}
+  .rcItem{padding:3px 8px; cursor:pointer;}
+  .rcItem.sel{background:#c0c0c0; color:#0033aa;}
+  .rcDesc{border-top:1px solid #6a8; margin-top:8px; padding-top:8px; color:#dfe;}
+
+  /* settings window */
+  .setTabs{display:flex; border-bottom:1px solid #d3d7da; background:#eceff1;}
+  .setTab{padding:8px 14px; font-size:.72rem; cursor:pointer; color:#444;}
+  .setTab.active{background:#f4f6f8; color:#08201a; border-bottom:2px solid var(--green); font-weight:600;}
+  .setBody{padding:14px;}
+  .setRow{display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e5e8ea; font-size:.76rem; color:#333;}
+  .setRow input[type=text]{font-family:var(--mono); font-size:.75rem; padding:4px 6px; border:1px solid #ccc; border-radius:4px; width:140px;}
+  .toggle{width:38px; height:20px; border-radius:12px; background:#c7ccd0; position:relative; cursor:pointer; flex:none;}
+  .toggle.on{background:var(--green);}
+  .toggle::after{content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .15s;}
+  .toggle.on::after{left:20px;}
+
+  footer{text-align:center; color:var(--muted-dim); font-size:.74rem; padding:10px 20px 30px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge"></div>
+  <div>
+    <h1>Using Your pi-top [4]</h1>
+    <p>A browser simulation of the pi-top [4] miniscreen and desktop &mdash; adapted from Raspberry Pi's &ldquo;Using your Raspberry Pi&rdquo;.</p>
+  </div>
+  <div class="tagline">No pi-top required to follow along &mdash; try every button, menu and terminal command below, then repeat it on the real device.</div>
+</header>
+
+<div class="layout">
+
+  <nav id="lessonNav"></nav>
+
+  <section id="lessonPanel">
+    <div class="card" id="lessonIntro"></div>
+    <div class="card" id="ideasBox">
+      <h3>&#9733; Try it yourself</h3>
+      <ul id="ideasList"></ul>
+    </div>
+  </section>
+
+  <aside id="devicePanel">
+    <div class="chassis">
+      <div class="hdr">
+        <span class="t">PI-TOP [4] MINISCREEN</span>
+        <button class="powerBtn on" id="powerBtn" title="Power">&#9099;</button>
+      </div>
+      <div class="miniscreenRow">
+        <div class="msBtnCol">
+          <button class="msBtn" id="msUp" title="Up">&#9650;</button>
+          <button class="msBtn" id="msDown" title="Down">&#9660;</button>
+        </div>
+        <canvas id="miniscreenCanvas" width="128" height="64" style="width:192px;height:96px;"></canvas>
+        <div class="msBtnCol">
+          <button class="msBtn" id="msCancel" title="Cancel">&#10005;</button>
+          <button class="msBtn" id="msSelect" title="Select">&#9679;</button>
+        </div>
+      </div>
+      <div class="msCaption">128&times;64 OLED &middot; &#9650;&#9660; cycle &middot; &#9679; select &middot; &#10005; back</div>
+
+      <div class="screenShell">
+        <div class="screenInner" id="screenInner">
+          <div class="taskbar" id="taskbar">
+            <button class="tbBtn" id="menuBtn"><span class="tbIcon" style="background:#c8262a;"></span>Menu</button>
+            <button class="tbBtn" id="openFileManager">&#128193; File Manager</button>
+            <button class="tbBtn" id="openTerminal">&#9000; Terminal</button>
+            <div class="spacer"></div>
+            <span class="trayItem" id="trayNet">&#128246; pi-top.local</span>
+            <span class="trayItem" id="trayBatt">&#128267; 100%</span>
+            <span class="trayItem" id="trayClock">00:00</span>
+          </div>
+          <div class="desktopArea" id="desktopArea"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<footer>Runs entirely in your browser &middot; nothing typed here touches a real device &middot; safe for a classroom projector</footer>
+
+<script>
+/* ======================================================================
+   0. Shared device state
+   ====================================================================== */
+const deviceState = {
+  power: true,
+  battery: 76,
+  charging: true,
+  volume: 60,
+  ssh: false,
+  vnc: false,
+  i2c: false,
+  spi: true, // miniscreen itself uses SPI, so it ships enabled
+  hostname: 'pi-top',
+  ip: '192.168.1.42',
+  cpu: 18,
+};
+
+/* ======================================================================
+   1. Virtual filesystem for the File Manager + Terminal
+   ====================================================================== */
+function dir(children){ return {type:'dir', children}; }
+function file(content){ return {type:'file', content}; }
+
+const FS = dir({
+  home: dir({
+    pi: dir({
+      Desktop: dir({
+        'my_project.py': file('from pitop.miniscreen import Miniscreen\n\nms = Miniscreen()\nms.display_text("Hello pi-top!")\n')
+      }),
+      Documents: dir({
+        'notes.txt': file('Ideas for my next pi-top project:\n- Light-up dice using the Foundation Plate LEDs\n- Battery-powered weather logger\n- A miniscreen pet that reacts to the light sensor\n')
+      }),
+      Downloads: dir({}),
+      Pictures: dir({}),
+    })
+  })
+});
+
+let cwd = ['home','pi']; // current path as array of names from root
+
+function resolveDir(path){
+  let node = FS;
+  for (const part of path){
+    if (!node.children || !node.children[part] || node.children[part].type !== 'dir') return null;
+    node = node.children[part];
+  }
+  return node;
+}
+function pathString(path){ return '/' + path.join('/'); }
+function homeShort(path){
+  const s = pathString(path);
+  return s === '/home/pi' ? '~' : (s.startsWith('/home/pi/') ? '~/' + s.slice(9) : s);
+}
+
+/* ======================================================================
+   2. Miniscreen renderer (canvas, monochrome look)
+   ====================================================================== */
+const msCanvas = document.getElementById('miniscreenCanvas');
+const msCtx = msCanvas.getContext('2d');
+let msScreens = ['battery','network','cpu','volume','settings'];
+let msIndex = 0;
+let msMode = 'top'; // 'top' | 'settingsMenu'
+let msSettingsIndex = 0;
+const msSettingsItems = ['SSH', 'VNC', 'Shutdown'];
+
+function msDrawText(lines, opts){
+  msCtx.fillStyle = '#000'; msCtx.fillRect(0,0,128,64);
+  if (!deviceState.power){ return; }
+  msCtx.fillStyle = '#fff';
+  msCtx.font = (opts && opts.big ? '12px' : '10px') + ' "IBM Plex Mono", monospace';
+  let y = 14;
+  lines.forEach((l,i) => { msCtx.fillText(l, 4, y); y += (opts && opts.big ? 16 : 13); });
+}
+
+function renderMiniscreen(){
+  if (!deviceState.power){ msDrawText([]); return; }
+  if (msMode === 'settingsMenu'){
+    const lines = ['SETTINGS'];
+    msSettingsItems.forEach((it,i) => {
+      let state = '';
+      if (it === 'SSH') state = deviceState.ssh ? '[ON]' : '[off]';
+      if (it === 'VNC') state = deviceState.vnc ? '[ON]' : '[off]';
+      lines.push((i===msSettingsIndex ? '>' : ' ') + it + ' ' + state);
+    });
+    msDrawText(lines);
+    return;
+  }
+  const screen = msScreens[msIndex];
+  let lines = [];
+  if (screen === 'battery'){
+    lines = ['BATTERY', deviceState.battery + '%  ' + (deviceState.charging ? '(charging)' : '(on battery)')];
+  } else if (screen === 'network'){
+    lines = ['NETWORK', deviceState.hostname + '.local', deviceState.ip];
+  } else if (screen === 'cpu'){
+    lines = ['CPU LOAD', deviceState.cpu + '%', 'temp: ' + (40 + Math.round(deviceState.cpu/4)) + 'C'];
+  } else if (screen === 'volume'){
+    lines = ['VOLUME', deviceState.volume + '%'];
+  } else if (screen === 'settings'){
+    lines = ['SETTINGS', 'press \u25CF to open'];
+  }
+  msDrawText(lines);
+}
+
+document.getElementById('msUp').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  if (msMode === 'settingsMenu'){ msSettingsIndex = (msSettingsIndex + msSettingsItems.length - 1) % msSettingsItems.length; }
+  else { msIndex = (msIndex + msScreens.length - 1) % msScreens.length; }
+  renderMiniscreen();
+});
+document.getElementById('msDown').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  if (msMode === 'settingsMenu'){ msSettingsIndex = (msSettingsIndex + 1) % msSettingsItems.length; }
+  else { msIndex = (msIndex + 1) % msScreens.length; }
+  renderMiniscreen();
+});
+document.getElementById('msCancel').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  if (msMode === 'settingsMenu'){ msMode = 'top'; }
+  renderMiniscreen();
+});
+document.getElementById('msSelect').addEventListener('click', () => {
+  if (!deviceState.power) return;
+  if (msMode === 'top' && msScreens[msIndex] === 'settings'){
+    msMode = 'settingsMenu'; msSettingsIndex = 0;
+  } else if (msMode === 'settingsMenu'){
+    const item = msSettingsItems[msSettingsIndex];
+    if (item === 'SSH') deviceState.ssh = !deviceState.ssh;
+    if (item === 'VNC') deviceState.vnc = !deviceState.vnc;
+    if (item === 'Shutdown') { setPower(false); return; }
+  }
+  renderMiniscreen();
+  syncSettingsWindow();
+});
+
+/* ======================================================================
+   3. Power button
+   ====================================================================== */
+function setPower(on){
+  deviceState.power = on;
+  const btn = document.getElementById('powerBtn');
+  const screen = document.getElementById('screenInner');
+  btn.classList.toggle('on', on);
+  if (on){
+    screen.classList.remove('off');
+    screen.querySelector('.offMsg') && screen.querySelector('.offMsg').remove();
+    msMode = 'top'; msIndex = 0;
+    renderMiniscreen();
+    updateTray();
+  } else {
+    screen.classList.add('off');
+    closeAllWindows();
+    document.getElementById('desktopArea').innerHTML = '';
+    const div = document.createElement('div');
+    div.className = 'offMsg';
+    div.textContent = 'Powered off \u2014 press the power button above to start pi-top [4]';
+    screen.appendChild(div);
+    renderMiniscreen();
+  }
+}
+document.getElementById('powerBtn').addEventListener('click', () => setPower(!deviceState.power));
+
+/* ======================================================================
+   4. Desktop: taskbar, menu, windows
+   ====================================================================== */
+const desktopArea = document.getElementById('desktopArea');
+let winZ = 10;
+let openWins = {};
+
+function updateTray(){
+  document.getElementById('trayBatt').textContent = '\ud83d\udd0b ' + deviceState.battery + '%';
+  document.getElementById('trayNet').textContent = '\ud83d\udcf6 ' + deviceState.hostname + '.local';
+  const d = new Date();
+  document.getElementById('trayClock').textContent = d.toTimeString().slice(0,5);
+}
+setInterval(updateTray, 1000 * 20);
+updateTray();
+
+function closeAllWindows(){
+  Object.keys(openWins).forEach(id => { if (openWins[id]) openWins[id].remove(); });
+  openWins = {};
+  const mp = document.querySelector('.menuPanel'); if (mp) mp.remove();
+}
+
+function makeWindow(id, title, x, y, w, h, bodyBuilder){
+  if (!deviceState.power) return;
+  if (openWins[id]){ openWins[id].remove(); }
+  const win = document.createElement('div');
+  win.className = 'win';
+  win.style.left = x+'px'; win.style.top = y+'px'; win.style.width = w+'px'; win.style.height = h+'px';
+  win.style.zIndex = ++winZ;
+  win.innerHTML = `<div class="winTitle"><span>${title}</span><span class="x" data-close="${id}">\u2715</span></div><div class="winBody"></div>`;
+  win.querySelector('.x').addEventListener('click', () => { win.remove(); openWins[id] = null; });
+  win.addEventListener('mousedown', () => { win.style.zIndex = ++winZ; });
+  desktopArea.appendChild(win);
+  bodyBuilder(win.querySelector('.winBody'));
+  openWins[id] = win;
+  return win;
+}
+
+/* ---- File Manager ---- */
+function openFileManager(startPath){
+  makeWindow('files', 'File Manager', 30, 20, 340, 260, (body) => {
+    let path = startPath ? startPath.slice() : ['home','pi'];
+    body.innerHTML = `
+      <div class="fmWrap">
+        <div class="fmSide">
+          <div data-p="home,pi">Home</div>
+          <div data-p="home,pi,Desktop">Desktop</div>
+          <div data-p="home,pi,Documents">Documents</div>
+          <div data-p="home,pi,Downloads">Downloads</div>
+          <div data-p="home,pi,Pictures">Pictures</div>
+        </div>
+        <div class="fmMain">
+          <div class="fmPath"></div>
+          <div class="fmGrid"></div>
+        </div>
+      </div>`;
+    const grid = body.querySelector('.fmGrid');
+    const pathEl = body.querySelector('.fmPath');
+    const sideItems = body.querySelectorAll('.fmSide div');
+    function render(){
+      const node = resolveDir(path);
+      pathEl.textContent = homeShort(path);
+      grid.innerHTML = '';
+      sideItems.forEach(el => el.classList.toggle('active', el.dataset.p === path.join(',')));
+      if (!node){ grid.textContent = 'Not found'; return; }
+      Object.keys(node.children).forEach(name => {
+        const child = node.children[name];
+        const item = document.createElement('div');
+        item.className = 'fmItem';
+        item.innerHTML = `<span class="fmIcon">${child.type==='dir' ? '\ud83d\udcc1' : '\ud83d\udcc4'}</span>${name}`;
+        item.addEventListener('dblclick', () => {
+          if (child.type === 'dir'){ path = path.concat([name]); render(); }
+          else { openTextEditor(name, child.content); }
+        });
+        grid.appendChild(item);
+      });
+      if (Object.keys(node.children).length === 0){
+        grid.innerHTML = '<div style="color:#889; font-size:.7rem; padding:8px;">This folder is empty</div>';
+      }
+    }
+    sideItems.forEach(el => el.addEventListener('click', () => { path = el.dataset.p.split(','); render(); }));
+    render();
+  });
+}
+document.getElementById('openFileManager').addEventListener('click', () => openFileManager());
+
+/* ---- Text Editor ---- */
+function openTextEditor(name, content){
+  makeWindow('editor', 'Text Editor \u2014 ' + (name || 'Untitled'), 90, 60, 320, 220, (body) => {
+    body.innerHTML = `<textarea style="width:100%;height:calc(100% - 30px);border:none;outline:none;padding:8px;font-family:'IBM Plex Mono',monospace;font-size:.76rem;resize:none;"></textarea>
+      <div style="padding:6px 8px;border-top:1px solid #e3e6e8;display:flex;justify-content:flex-end;">
+        <button style="font-size:.72rem;padding:4px 10px;border-radius:5px;border:1px solid #cfd4d7;background:#eef2f0;cursor:pointer;" id="saveBtn">Save</button>
+      </div>`;
+    body.querySelector('textarea').value = content || '';
+    body.querySelector('#saveBtn').addEventListener('click', () => {
+      const b = body.querySelector('#saveBtn');
+      b.textContent = 'Saved (simulated) \u2713';
+      setTimeout(() => b.textContent = 'Save', 1400);
+    });
+  });
+}
+document.getElementById('openTerminal').addEventListener('click', () => openTerminal());
+
+/* ---- Menu ---- */
+document.getElementById('menuBtn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const existing = document.querySelector('.menuPanel');
+  if (existing){ existing.remove(); return; }
+  if (!deviceState.power) return;
+  const menu = document.createElement('div');
+  menu.className = 'menuPanel';
+  menu.innerHTML = `
+    <div class="mcat">Programming</div>
+    <div class="mi" data-act="editor">Text Editor</div>
+    <div class="mcat">Accessories</div>
+    <div class="mi" data-act="files">File Manager</div>
+    <div class="mi" data-act="terminal">Terminal</div>
+    <div class="mcat">Preferences</div>
+    <div class="mi" data-act="settings">Raspberry Pi Configuration</div>
+  `;
+  desktopArea.appendChild(menu);
+  menu.querySelectorAll('.mi').forEach(mi => mi.addEventListener('click', () => {
+    const act = mi.dataset.act;
+    if (act === 'editor') openTextEditor(null, '');
+    if (act === 'files') openFileManager();
+    if (act === 'terminal') openTerminal();
+    if (act === 'settings') openSettings();
+    menu.remove();
+  }));
+});
+document.addEventListener('click', () => { const m = document.querySelector('.menuPanel'); if (m) m.remove(); });
+
+/* ======================================================================
+   5. Terminal (real command parsing against the virtual filesystem)
+   ====================================================================== */
+const PINOUT = `+-----+-----+---------+------+---+---Pi 4---+---+------+---------+-----+-----+
+| BCM | wPi |   Name  | Mode | V | Physical | V | Mode | Name    | wPi | BCM |
++-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
+|     |     |    3.3v |      |   |  1 || 2  |   |      | 5v      |     |     |
+|   2 |   8 |   SDA.1 |   IN | 1 |  3 || 4  |   |      | 5v      |     |     |
+|   3 |   9 |   SCL.1 |   IN | 1 |  5 || 6  |   |      | 0v      |     |     |
+|   4 |   7 | GPIO. 7 |   IN | 1 |  7 || 8  | 1 | ALT0 | TxD     |  15 |  14 |
+|     |     |      0v |      |   |  9 || 10 | 1 | ALT0 | RxD     |  16 |  15 |
+|  17 |   0 | GPIO. 0 |   IN | 0 | 11 || 12 | 0 | IN   | GPIO. 1 |   1 |  18 |
+|  27 |   2 | GPIO. 2 |   IN | 0 | 13 || 14 |   |      | 0v      |     |     |
+|  22 |   3 | GPIO. 3 |   IN | 0 | 15 || 16 | 0 | IN   | GPIO. 4 |   4 |  23 |
+|     |     |    3.3v |      |   | 17 || 18 | 0 | IN   | GPIO. 5 |   5 |  24 |
+|  10 |  12 |    MOSI |   IN | 0 | 19 || 20 |   |      | 0v      |     |     |
+|   9 |  13 |    MISO |   IN | 0 | 21 || 22 | 0 | IN   | GPIO. 6 |   6 |  25 |
+|  11 |  14 |    SCLK |   IN | 0 | 23 || 24 | 1 | IN   | CE0     |  10 |   8 |
+|     |     |      0v |      |   | 25 || 26 | 1 | IN   | CE1     |  11 |   7 |
++-----+-----+---------+------+---+----++----+---+------+---------+-----+-----+
+Miniscreen buttons use BCM GPIO 5, 6, 12 & 13. Plate ports are on the bottom.`;
+
+function openTerminal(){
+  makeWindow('terminal', 'Terminal', 130, 40, 360, 250, (body) => {
+    body.innerHTML = `<div class="termWrap" id="termWrap"></div>`;
+    const wrap = body.querySelector('#termWrap');
+    let localCwd = cwd.slice();
+    let rcState = null; // raspi-config nav state
+
+    function prompt(){ return `pi@${deviceState.hostname}:${homeShort(localCwd)}$ `; }
+    function println(text, cls){
+      const div = document.createElement('div');
+      div.className = 'termLine' + (cls ? ' ' + cls : '');
+      div.textContent = text;
+      wrap.appendChild(div);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+    function printHTML(html){
+      const div = document.createElement('div');
+      div.className = 'termLine';
+      div.innerHTML = html;
+      wrap.appendChild(div);
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+    function newInputRow(){
+      const row = document.createElement('div');
+      row.className = 'termInputRow';
+      row.innerHTML = `<span class="prompt"></span><input type="text" autocomplete="off" spellcheck="false">`;
+      row.querySelector('.prompt').textContent = prompt();
+      wrap.appendChild(row);
+      const input = row.querySelector('input');
+      input.focus();
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter'){
+          const val = input.value;
+          row.remove();
+          println(prompt() + val);
+          if (rcState){ /* ignore raw input while in raspi-config */ }
+          else runCommand(val.trim());
+          if (!rcState) newInputRow();
+        }
+      });
+    }
+
+    const MENUS = {
+      main: { title:'Raspberry Pi Software Configuration Tool (raspi-config)', back:null, items:[
+        {label:'1 System Options', goto:'system'},
+        {label:'2 Display Options', goto:'display'},
+        {label:'3 Interface Options', goto:'interface'},
+        {label:'4 Localisation Options', goto:'localisation'},
+        {label:'5 About raspi-config', goto:'about'},
+        {label:'  <Finish>', action:'exit'},
+      ]},
+      system: { title:'System Options', back:'main', items:[
+        {label:'S1 Hostname', action:'hostname'},
+        {label:'S2 Password', action:'password'},
+        {label:'S3 Boot / Auto Login', action:'noop'},
+        {label:'  <Back>', goto:'main'},
+      ]},
+      interface: { title:'Interface Options', back:'main', items:[
+        {label:'I1 SSH', toggle:'ssh'},
+        {label:'I2 VNC', toggle:'vnc'},
+        {label:'I3 SPI', toggle:'spi'},
+        {label:'I4 I2C', toggle:'i2c'},
+        {label:'  <Back>', goto:'main'},
+      ]},
+      display: { title:'Display Options', back:'main', items:[
+        {label:'D1 Screen Blanking', action:'noop'},
+        {label:'  <Back>', goto:'main'},
+      ]},
+      localisation: { title:'Localisation Options', back:'main', items:[
+        {label:'L1 Locale', action:'noop'},
+        {label:'L2 Timezone', action:'noop'},
+        {label:'  <Back>', goto:'main'},
+      ]},
+      about: { title:'About raspi-config', back:'main', items:[
+        {label:'A simplified simulation of the real raspi-config tool.', action:'noop'},
+        {label:'  <Back>', goto:'main'},
+      ]},
+    };
+
+    function renderRC(){
+      let overlay = wrap.querySelector('.rcOverlay');
+      if (!overlay){ overlay = document.createElement('div'); overlay.className = 'rcOverlay'; wrap.appendChild(overlay); }
+      const menu = MENUS[rcState.menu];
+      const item = menu.items[rcState.sel];
+      let desc = '';
+      if (item.toggle) desc = deviceState[item.toggle] ? 'Currently ENABLED. Press Enter to disable.' : 'Currently disabled. Press Enter to enable.';
+      else if (item.action === 'hostname') desc = 'Current hostname: ' + deviceState.hostname + ' (edit not simulated here)';
+      else if (item.action === 'exit') desc = 'Exit raspi-config and return to the shell.';
+      else desc = 'Use \u2191/\u2193 and Enter. Not all options are simulated in this demo.';
+      overlay.innerHTML = `<div class="rcTitle">${menu.title}</div>` +
+        menu.items.map((it,i) => {
+          let extra = '';
+          if (it.toggle) extra = '  [' + (deviceState[it.toggle] ? 'ON' : 'off') + ']';
+          return `<div class="rcItem ${i===rcState.sel?'sel':''}" data-i="${i}">${it.label}${extra}</div>`;
+        }).join('') +
+        `<div class="rcDesc">${desc}<br><br>\u2191/\u2193 move &middot; Enter select &middot; Esc quit</div>`;
+      overlay.querySelectorAll('.rcItem').forEach(el => el.addEventListener('click', () => {
+        rcState.sel = parseInt(el.dataset.i,10); renderRC();
+      }));
+    }
+    function rcKeydown(e){
+      if (!rcState) return;
+      const menu = MENUS[rcState.menu];
+      if (e.key === 'ArrowUp'){ rcState.sel = (rcState.sel + menu.items.length - 1) % menu.items.length; renderRC(); e.preventDefault(); }
+      else if (e.key === 'ArrowDown'){ rcState.sel = (rcState.sel + 1) % menu.items.length; renderRC(); e.preventDefault(); }
+      else if (e.key === 'Escape'){ exitRC(); e.preventDefault(); }
+      else if (e.key === 'Enter'){
+        const item = menu.items[rcState.sel];
+        if (item.goto) { rcState.menu = item.goto; rcState.sel = 0; renderRC(); }
+        else if (item.toggle) { deviceState[item.toggle] = !deviceState[item.toggle]; renderRC(); syncSettingsWindow(); renderMiniscreen(); }
+        else if (item.action === 'exit') { exitRC(); }
+        else { renderRC(); }
+        e.preventDefault();
+      }
+    }
+    function exitRC(){
+      const overlay = wrap.querySelector('.rcOverlay');
+      if (overlay) overlay.remove();
+      window.removeEventListener('keydown', rcKeydown, true);
+      rcState = null;
+      newInputRow();
+    }
+    function enterRC(){
+      rcState = { menu:'main', sel:0 };
+      renderRC();
+      window.addEventListener('keydown', rcKeydown, true);
+    }
+
+    function runCommand(cmdline){
+      if (!cmdline) return;
+      const parts = cmdline.split(/\s+/);
+      const cmd = parts[0];
+      const args = parts.slice(1);
+      switch(cmd){
+        case 'help':
+          println('Commands: ls, cd, pwd, cat, mkdir, touch, rm, clear, whoami, hostname, date, echo, pinout, sudo raspi-config, exit');
+          break;
+        case 'ls': {
+          const target = args[0] ? resolvePath(args[0]) : localCwd;
+          const node = resolveDir(target);
+          if (!node){ println(`ls: cannot access '${args[0]}': No such file or directory`, 'err'); break; }
+          const names = Object.keys(node.children).map(n => node.children[n].type === 'dir' ? n + '/' : n);
+          println(names.join('  ') || '');
+          break;
+        }
+        case 'cd': {
+          const target = args[0] ? resolvePath(args[0]) : ['home','pi'];
+          const node = resolveDir(target);
+          if (!node){ println(`bash: cd: ${args[0]}: No such file or directory`, 'err'); break; }
+          localCwd = target;
+          break;
+        }
+        case 'pwd':
+          println(pathString(localCwd));
+          break;
+        case 'cat': {
+          if (!args[0]){ println('usage: cat <file>', 'err'); break; }
+          const node = resolveDir(localCwd);
+          const f = node && node.children[args[0]];
+          if (!f){ println(`cat: ${args[0]}: No such file or directory`, 'err'); }
+          else if (f.type === 'dir'){ println(`cat: ${args[0]}: Is a directory`, 'err'); }
+          else { println(f.content); }
+          break;
+        }
+        case 'mkdir': {
+          if (!args[0]){ println('usage: mkdir <name>', 'err'); break; }
+          const node = resolveDir(localCwd);
+          if (node.children[args[0]]){ println(`mkdir: cannot create directory '${args[0]}': File exists`, 'err'); }
+          else { node.children[args[0]] = dir({}); }
+          break;
+        }
+        case 'touch': {
+          if (!args[0]){ println('usage: touch <name>', 'err'); break; }
+          const node = resolveDir(localCwd);
+          if (!node.children[args[0]]) node.children[args[0]] = file('');
+          break;
+        }
+        case 'rm': {
+          if (!args[0]){ println('usage: rm <name>', 'err'); break; }
+          const node = resolveDir(localCwd);
+          const target = node && node.children[args[0]];
+          if (!target){ println(`rm: cannot remove '${args[0]}': No such file or directory`, 'err'); }
+          else if (target.type === 'dir'){ println(`rm: cannot remove '${args[0]}': Is a directory`, 'err'); }
+          else { delete node.children[args[0]]; }
+          break;
+        }
+        case 'clear':
+          wrap.innerHTML = '';
+          break;
+        case 'whoami':
+          println('pi');
+          break;
+        case 'hostname':
+          println(deviceState.hostname);
+          break;
+        case 'date':
+          println(new Date().toString());
+          break;
+        case 'echo':
+          println(args.join(' '));
+          break;
+        case 'pinout':
+          println(PINOUT);
+          break;
+        case 'raspi-config':
+          println("Script must be run as root. Try 'sudo raspi-config'", 'err');
+          break;
+        case 'sudo':
+          if (args.join(' ') === 'raspi-config'){ enterRC(); }
+          else { println(`sudo: ${args.join(' ')}: command not found`, 'err'); }
+          break;
+        case 'python3':
+          println('This simulator focuses on the shell. Try the Text Editor to write Python, or explore the Sense HAT Interactive Lab for real in-browser Python!');
+          break;
+        case 'exit':
+          println('logout');
+          setTimeout(() => { const w = openWins['terminal']; if (w) w.remove(); openWins['terminal'] = null; }, 200);
+          break;
+        default:
+          println(`bash: ${cmd}: command not found`, 'err');
+      }
+    }
+    function resolvePath(p){
+      if (p === '~' || p === '') return ['home','pi'];
+      if (p === '..') return localCwd.slice(0,-1);
+      if (p.startsWith('/')) return p.split('/').filter(Boolean);
+      return localCwd.concat(p.split('/').filter(Boolean));
+    }
+
+    println('pi-topOS (simulated) \u2014 type "help" to see available commands');
+    newInputRow();
+  });
+}
+
+/* ======================================================================
+   6. Settings window (Raspberry Pi Configuration GUI)
+   ====================================================================== */
+let settingsBodyRef = null;
+function openSettings(){
+  makeWindow('settings', 'Raspberry Pi Configuration', 60, 30, 340, 260, (body) => {
+    settingsBodyRef = body;
+    body.innerHTML = `
+      <div class="setTabs">
+        <div class="setTab active" data-t="system">System</div>
+        <div class="setTab" data-t="interfaces">Interfaces</div>
+        <div class="setTab" data-t="display">Display</div>
+      </div>
+      <div class="setBody"></div>`;
+    const tabs = body.querySelectorAll('.setTab');
+    const setBody = body.querySelector('.setBody');
+    function renderTab(t){
+      tabs.forEach(el => el.classList.toggle('active', el.dataset.t === t));
+      if (t === 'system'){
+        setBody.innerHTML = `
+          <div class="setRow"><span>Hostname</span><input type="text" id="hostInput" value="${deviceState.hostname}"></div>
+          <div class="setRow"><span>Password</span><input type="text" placeholder="new password" style="width:140px;"></div>
+          <div class="setRow"><span>Boot</span><span style="color:#667;font-size:.7rem;">To Desktop</span></div>`;
+        setBody.querySelector('#hostInput').addEventListener('change', (e) => {
+          deviceState.hostname = e.target.value || 'pi-top';
+          updateTray(); renderMiniscreen();
+        });
+      } else if (t === 'interfaces'){
+        setBody.innerHTML = ['ssh','vnc','i2c','spi'].map(k => `
+          <div class="setRow"><span>${k.toUpperCase()}</span><div class="toggle ${deviceState[k]?'on':''}" data-k="${k}"></div></div>
+        `).join('') + `<div style="color:#889;font-size:.68rem;margin-top:6px;">I2C and SPI are used by pi-top's Foundation/Expansion Plate sensors and the miniscreen.</div>`;
+        setBody.querySelectorAll('.toggle').forEach(t => t.addEventListener('click', () => {
+          const k = t.dataset.k; deviceState[k] = !deviceState[k];
+          t.classList.toggle('on', deviceState[k]);
+          renderMiniscreen();
+        }));
+      } else if (t === 'display'){
+        setBody.innerHTML = `<div class="setRow"><span>Screen Blanking</span><div class="toggle on"></div></div>
+          <div style="color:#889;font-size:.68rem;margin-top:6px;">Base pi-top [4] has no built-in main screen &mdash; this tab configures whatever monitor is connected via HDMI.</div>`;
+      }
+    }
+    tabs.forEach(el => el.addEventListener('click', () => renderTab(el.dataset.t)));
+    renderTab('system');
+  });
+}
+function syncSettingsWindow(){
+  if (openWins['settings'] && settingsBodyRef){
+    const active = settingsBodyRef.querySelector('.setTab.active');
+    if (active) active.click();
+  }
+}
+document.querySelector('#screenInner') && document.querySelector('#screenInner').addEventListener('click', (e) => {
+  // no-op placeholder to keep click-through consistent
+});
+
+/* ======================================================================
+   7. Lesson content
+   ====================================================================== */
+const PORTS_DIAGRAM = `
+<div class="diagram"><figure style="margin:0;">
+<svg viewBox="0 0 320 180" width="320">
+  <rect x="20" y="20" width="280" height="140" rx="10" fill="#1a2420" stroke="#33463c" stroke-width="2"/>
+  <text x="160" y="16" fill="#93a7b6" font-family="IBM Plex Mono" font-size="10" text-anchor="middle">FOUNDATION / EXPANSION PLATE</text>
+  ${['D0','D1','D2','D3'].map((l,i)=>`<circle cx="${45+i*22}" cy="45" r="9" fill="#3ddc97"/><text x="${45+i*22}" y="49" font-size="8" text-anchor="middle" fill="#08201a" font-family="IBM Plex Mono">${l}</text>`).join('')}
+  ${['A0','A1','A2','A3'].map((l,i)=>`<circle cx="${45+i*22}" cy="80" r="9" fill="#5aa9ff"/><text x="${45+i*22}" y="84" font-size="8" text-anchor="middle" fill="#08201a" font-family="IBM Plex Mono">${l}</text>`).join('')}
+  ${['I2C','I2C'].map((l,i)=>`<circle cx="${45+i*22}" cy="115" r="9" fill="#ffb454"/><text x="${45+i*22}" y="119" font-size="7" text-anchor="middle" fill="#08201a" font-family="IBM Plex Mono">${l}</text>`).join('')}
+  <text x="200" y="49" font-size="9" fill="#93a7b6" font-family="IBM Plex Mono">Digital: buttons, LEDs, buzzers</text>
+  <text x="200" y="84" font-size="9" fill="#93a7b6" font-family="IBM Plex Mono">Analog: light, sound, potentiometer</text>
+  <text x="200" y="119" font-size="9" fill="#93a7b6" font-family="IBM Plex Mono">I2C: Sense HAT-style sensors</text>
+</svg>
+<figcaption>A simplified view of the Foundation/Expansion Plate port layout</figcaption>
+</figure></div>`;
+
+const LESSONS = [
+{
+  id:'overview', title:'Overview', ideasTitle:'',
+  intro:`<h2>Before you start</h2>
+  <p>The <strong>pi-top [4]</strong> is a modular, battery-powered hub built around a genuine Raspberry Pi 4 board.
+  Everything you'd learn in the standard Raspberry Pi Foundation guide <em>"Using your Raspberry Pi"</em> still
+  applies &mdash; the desktop, file manager and terminal are the same Raspberry Pi OS you'd find on any Pi 4. This
+  version of the lesson calls out the extra bits that make a pi-top [4] different.</p>
+  <h3>What makes it different from a bare Raspberry Pi</h3>
+  <ul class="plain">
+    <li>A built-in <strong>5-hour battery</strong> with USB-C PD charging and safe automatic shutdown, so it can run untethered</li>
+    <li>A <strong>128&times;64 pixel OLED "miniscreen"</strong> on top, with four buttons, for at-a-glance status &mdash; handy since the base unit has no main screen of its own</li>
+    <li>A built-in speaker, heatsink and cooling fan</li>
+    <li>A magnetic <strong>Foundation Plate</strong> (or the more advanced <strong>Expansion Plate</strong>) that snaps onto the bottom for sensors, buttons, LEDs and motors, alongside full access to the standard 40-pin GPIO header</li>
+  </ul>
+  <div class="note"><b>No main screen by default:</b> the base pi-top [4] doesn't include its own monitor &mdash; you connect one over HDMI (or use the optional pi-top touch display) to see the desktop, exactly like any other Raspberry Pi. The simulator on the right shows both: the small miniscreen up top, and the connected display underneath.</div>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(1)">Start with the miniscreen &#8594;</button></div>`,
+  ideas:[],
+},
+{
+  id:'miniscreen', title:'The miniscreen',
+  intro:`<h2>1. Powering on &amp; the miniscreen</h2>
+  <p>Press the power button on the pi-top [4] hub to switch it on. Even before a monitor is connected, the small
+  OLED <strong>miniscreen</strong> on top comes to life: it's a 128&times;64 pixel display with four buttons, two
+  stacked on either side.</p>
+  <table class="paramTable">
+    <tr><th>Button</th><th>What it does</th></tr>
+    <tr><td>&#9650; / &#9660;</td><td>Cycle through information screens: battery, network, CPU, volume, settings</td></tr>
+    <tr><td>&#9679; (select)</td><td>Open the highlighted screen's actions, e.g. the Settings menu</td></tr>
+    <tr><td>&#10005; (cancel)</td><td>Go back, or leave a menu</td></tr>
+  </table>
+  <p>Out of the box, this lets you check your battery level, Wi-Fi/IP address, CPU load and speaker volume without
+  needing a monitor plugged in at all &mdash; useful when you've deployed some code and just want to confirm it's
+  running.</p>
+  <p>Try the simulator on the right: use &#9650;/&#9660; to cycle to the <b>Settings</b> screen, then press &#9679;
+  to open it and toggle SSH or VNC on and off &mdash; two ways of connecting to the pi-top remotely from another
+  computer, covered properly in the Settings &amp; configuration lesson later on. The same toggle is also reachable
+  from the desktop and the terminal.</p>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Cycle to the Battery screen and imagine what the number would do while charging versus running on battery.',
+    'Open Settings and turn SSH on, then check the Interfaces tab in Raspberry Pi Configuration (lesson 5) &mdash; does it show the same state?',
+    'On a real pi-top [4], the four miniscreen buttons are fully programmable from Python. What would you show on your own custom screen?',
+  ],
+},
+{
+  id:'desktop', title:'The desktop',
+  intro:`<h2>2. The desktop</h2>
+  <p>Once a monitor is connected (or in our simulator, always), the pi-top [4] boots into the same Raspberry Pi OS
+  desktop you'd see on any Raspberry Pi 4. A taskbar sits across the top: the Raspberry Pi menu button on the left,
+  quick-launch icons for File Manager and Terminal, and a system tray on the right showing network status, and
+  &mdash; specific to the pi-top &mdash; a battery indicator that mirrors the miniscreen.</p>
+  <p>Click the <b>Menu</b> button in the simulator to see the same categories you'd find on the real desktop:
+  <b>Programming</b>, <b>Accessories</b>, and <b>Preferences</b> (where Raspberry Pi Configuration lives).</p>
+  <div class="note"><b>Try it:</b> click <b>Menu &#8594; Accessories &#8594; File Manager</b> in the simulator, or
+  just use the taskbar shortcut &mdash; both open the same window.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Open the Text Editor from the menu and type a short note to yourself about pi-top [4].',
+    'Compare the battery percentage shown in the taskbar tray with the one on the miniscreen &mdash; they should always match.',
+  ],
+},
+{
+  id:'files', title:'File manager',
+  intro:`<h2>3. The file manager</h2>
+  <p>All the files on your pi-top, including anything you create, live under your home folder,
+  <code>/home/pi</code> (shown as <code>~</code> in the terminal). The File Manager gives you a visual way to browse
+  it: folders like <b>Desktop</b>, <b>Documents</b>, <b>Downloads</b> and <b>Pictures</b> sit inside it by default.</p>
+  <p>Double-click a folder to open it, or double-click a file to open it in the Text Editor.</p>
+  <div class="note"><b>Try it:</b> open the File Manager on the right and double-click into <b>Desktop</b>, then open
+  <code>my_project.py</code> to see a starter snippet that talks to the miniscreen using pi-top's own Python library.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Create a new folder for a project you\'re planning, using the terminal command from the next lesson.',
+    'Open <code>notes.txt</code> in Documents and add one more project idea of your own.',
+  ],
+},
+{
+  id:'terminal', title:'The terminal',
+  intro:`<h2>4. The terminal</h2>
+  <p>The terminal lets you control your pi-top by typing commands instead of clicking menus. It's used throughout
+  Raspberry Pi tutorials because it's precise and fast once you know a few basics.</p>
+  <table class="paramTable">
+    <tr><th>Command</th><th>Effect</th></tr>
+    <tr><td><code>ls</code></td><td>List files and folders in the current directory</td></tr>
+    <tr><td><code>cd &lt;folder&gt;</code></td><td>Change directory (<code>cd ..</code> goes up one level)</td></tr>
+    <tr><td><code>pwd</code></td><td>Print the current directory's full path</td></tr>
+    <tr><td><code>cat &lt;file&gt;</code></td><td>Print a file's contents</td></tr>
+    <tr><td><code>pinout</code></td><td>Show a labelled diagram of the 40-pin GPIO header</td></tr>
+    <tr><td><code>clear</code></td><td>Clear the terminal window</td></tr>
+  </table>
+  <p>On a pi-top [4], the same 40 GPIO pins reported by <code>pinout</code> are broken out along the top edge of the
+  device, and duplicated on the Foundation/Expansion Plate underneath &mdash; so this command is just as useful here
+  as on a bare Pi.</p>
+  <div class="note"><b>Try it:</b> open the terminal on the right and type <code>ls</code>, then
+  <code>cd Desktop</code>, then <code>ls</code> again, then <code>pinout</code>.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Use <code>mkdir</code> to create a new project folder, then <code>cd</code> into it.',
+    'Try <code>cat notes.txt</code> after moving into the Documents folder.',
+    'Type an unknown command like <code>dance</code> and see how the terminal reports the error.',
+  ],
+},
+{
+  id:'settings', title:'Settings & configuration',
+  intro:`<h2>5. Settings &amp; configuration</h2>
+  <p>Most system settings can be changed two ways: through the graphical <b>Raspberry Pi Configuration</b> app
+  (Menu &#8594; Preferences), or from the terminal with <code>sudo raspi-config</code>, which shows the same options
+  as a keyboard-driven blue menu.</p>
+  <p>The <b>Interfaces</b> tab matters more on a pi-top than on a bare Pi: the Foundation and Expansion Plates talk
+  to the Raspberry Pi over <b>I2C</b>, and the miniscreen itself uses <b>SPI</b> &mdash; both need to be enabled for
+  those features to work (SPI is already on by default so the miniscreen works out of the box).</p>
+  <div class="note"><b>Try it:</b> open <b>Raspberry Pi Configuration</b> from the desktop and flip the I2C toggle,
+  or open the terminal and type <code>sudo raspi-config</code>, arrow down to <b>Interface Options</b>, and toggle
+  SSH or I2C from there instead &mdash; then check that the miniscreen's Settings screen agrees.</div>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'Change the hostname in Raspberry Pi Configuration and watch the terminal prompt and taskbar update.',
+    'Enable SSH from <code>raspi-config</code>, then check it also shows as ON from the miniscreen.',
+    'Why do you think I2C is off by default but SPI is on? (Hint: which one the miniscreen itself depends on.)',
+  ],
+},
+{
+  id:'ports', title:'Expansion ports',
+  intro:`<h2>6. The Foundation &amp; Expansion Plate</h2>
+  <p>Underneath the pi-top [4] hub, a magnetic connector accepts either a <b>Foundation Plate</b> (simple sensors,
+  buttons, buzzers and LEDs) or the more advanced <b>Expansion Plate</b> (which adds motor and servo ports for
+  robotics). Both expose the same family of ports:</p>
+  ${PORTS_DIAGRAM}
+  <ul class="plain">
+    <li><b>Digital ports (D0&ndash;D3)</b> &mdash; simple on/off components like buttons, LEDs and buzzers</li>
+    <li><b>Analog ports (A0&ndash;A3)</b> &mdash; components that report a range of values, like light or sound sensors, read through a built-in analog-to-digital converter</li>
+    <li><b>I2C ports</b> &mdash; for smarter sensor boards, including the same kind of sensors used on a Sense HAT</li>
+  </ul>
+  <p>All of this sits alongside full access to the Raspberry Pi's own 40-pin GPIO header, broken out along the top
+  of the device, so any standard Raspberry Pi HAT can still be used too.</p>`,
+  examples:[],
+  ideasTitle:'Try it yourself',
+  ideas:[
+    'If you have a Foundation Plate, look at which port numbers are printed next to each socket and match them to the diagram above.',
+    'Which of D0&ndash;D3, A0&ndash;A3 or I2C would you use for: a push button? a light sensor? a Sense HAT-style board?',
+  ],
+},
+{
+  id:'whatnext', title:'What next?',
+  intro:`<h2>What next?</h2>
+  <p>Once you're comfortable finding your way around, here's where to go next:</p>
+  <ul class="plain">
+    <li>Explore pi-top's own Python library (<code>pitop</code>) to control the miniscreen and read Foundation/Expansion Plate sensors from code.</li>
+    <li>If you've got a Foundation Plate, try connecting a button or LED module and watching it react in a future physical computing lesson.</li>
+    <li>A Sense HAT plugs straight into a pi-top [4]'s GPIO header too &mdash; if you've already used the Sense HAT Interactive Lab, everything you learned there carries over directly.</li>
+    <li>Look at the pi-top Knowledge Base for details on programming the miniscreen buttons and building your own OLED menus.</li>
+  </ul>
+  <div class="ctaRow"><button class="cta" onclick="selectLesson(0)">&#8592; Back to overview</button></div>`,
+  examples:[],
+  ideasTitle:'',
+  ideas:[],
+},
+];
+
+/* ======================================================================
+   8. Nav + lesson rendering
+   ====================================================================== */
+let activeLessonIndex = 0;
+function renderNav(){
+  const nav = document.getElementById('lessonNav');
+  nav.innerHTML = '<div class="navlabel">LESSON STEPS</div>';
+  let stepNum = 0;
+  LESSONS.forEach((lesson, i) => {
+    const b = document.createElement('button');
+    b.className = 'navbtn' + (i === activeLessonIndex ? ' active' : '');
+    const isStep = !['overview','whatnext'].includes(lesson.id);
+    const label = isStep ? String(++stepNum) : (lesson.id === 'overview' ? '\u2605' : '\u2192');
+    b.innerHTML = `<span class="n">${label}</span><span>${lesson.title}</span>`;
+    b.addEventListener('click', () => selectLesson(i));
+    nav.appendChild(b);
+  });
+}
+function selectLesson(i){ activeLessonIndex = i; renderNav(); renderLesson(); }
+function renderLesson(){
+  const lesson = LESSONS[activeLessonIndex];
+  document.getElementById('lessonIntro').innerHTML = lesson.intro;
+  const hasIdeas = !!(lesson.ideas && lesson.ideas.length);
+  document.getElementById('ideasBox').style.display = hasIdeas ? '' : 'none';
+  if (hasIdeas){
+    document.getElementById('ideasBox').querySelector('h3').innerHTML = '&#9733; ' + (lesson.ideasTitle || 'Try it yourself');
+    const ul = document.getElementById('ideasList');
+    ul.innerHTML = '';
+    lesson.ideas.forEach(txt => { const li = document.createElement('li'); li.innerHTML = txt; ul.appendChild(li); });
+  }
+}
+
+/* ======================================================================
+   9. Boot
+   ====================================================================== */
+renderNav();
+renderLesson();
+renderMiniscreen();
+updateTray();
+</script>
+</body>
+</html>

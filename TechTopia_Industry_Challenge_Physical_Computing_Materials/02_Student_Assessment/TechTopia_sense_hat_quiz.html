@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started with the Sense HAT - Interactive Quiz</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #7c3aed;
+      --accent2: #2563eb;
+      --good: #166534;
+      --good-bg: #dcfce7;
+      --bad: #991b1b;
+      --bad-bg: #fee2e2;
+      --border: #dbe4f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #4338ca, #7c3aed, #2563eb);
+      color: white;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.18);
+      margin-bottom: 20px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 2rem; }
+    .hero p { margin: 6px 0; max-width: 820px; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+    }
+    .chip {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.24);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 18px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    .left-controls, .right-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.08s ease, opacity 0.2s ease;
+    }
+    button:hover { opacity: 0.95; }
+    button:active { transform: translateY(1px); }
+    .primary { background: var(--accent); color: white; }
+    .secondary { background: #e5edff; color: #1e3a8a; }
+    .ghost { background: #eef2f7; color: #374151; }
+    .question {
+      margin-bottom: 18px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fcfdff;
+    }
+    .question h3 {
+      margin: 0 0 12px;
+      font-size: 1.06rem;
+    }
+    .options { display: grid; gap: 10px; }
+    .option {
+      display: block;
+      border: 1px solid #d8e0ee;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: white;
+      cursor: pointer;
+    }
+    .option:hover { border-color: #a5b4fc; background: #f8faff; }
+    .option input { margin-right: 10px; }
+    .feedback {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.96rem;
+    }
+    .correct { background: var(--good-bg); color: var(--good); border: 1px solid #86efac; }
+    .incorrect { background: var(--bad-bg); color: var(--bad); border: 1px solid #fca5a5; }
+    .selected-missing { outline: 2px solid #f59e0b; }
+    .results {
+      display: none;
+      margin-top: 18px;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+    .score {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .small { color: var(--muted); font-size: 0.95rem; }
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    @media (max-width: 700px) {
+      .wrap { padding: 14px; }
+      .hero, .panel { padding: 16px; }
+      .controls { position: static; }
+      .hero h1 { font-size: 1.55rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Getting Started with the Sense HAT</h1>
+      <p>This interactive quiz reviews the Raspberry Pi Foundation project on using the Sense HAT with a Raspberry Pi. Students can answer 25 multiple-choice questions, submit for automatic grading, and review correct answers instantly.</p>
+      <div class="meta">
+        <div class="chip">25 Questions</div>
+        <div class="chip">Multiple Choice</div>
+        <div class="chip">Automatic Grading</div>
+        <div class="chip">Standalone HTML</div>
+      </div>
+    </section>
+
+    <section class="panel controls">
+      <div class="left-controls small">Choose one answer for each question, then click <strong>Grade Quiz</strong>.</div>
+      <div class="right-controls">
+        <button class="primary" onclick="gradeQuiz()">Grade Quiz</button>
+        <button class="secondary" onclick="showAnswers()">Show Answers</button>
+        <button class="ghost" onclick="resetQuiz()">Reset</button>
+      </div>
+    </section>
+
+    <section class="panel" id="quiz"></section>
+
+    <section class="results" id="results"></section>
+
+    <div class="footer-note">Built as a classroom-ready self-grading quiz for the Raspberry Pi Sense HAT introductory project.</div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        q: "1. What is the Sense HAT?",
+        options: [
+          "A web browser for Raspberry Pi",
+          "An add-on board for the Raspberry Pi",
+          "A replacement operating system",
+          "A cloud storage tool"
+        ],
+        answer: 1,
+        explanation: "The project explains that the Sense HAT is an add-on board for the Raspberry Pi."
+      },
+      {
+        q: "2. The Sense HAT was made especially for which competition?",
+        options: [
+          "Hour of Code",
+          "Astro Pi",
+          "Code Club World Cup",
+          "RoboCup Junior"
+        ],
+        answer: 1,
+        explanation: "The worksheet says the board was made especially for the Astro Pi competition."
+      },
+      {
+        q: "3. Which built-in output device does the Sense HAT use to display information?",
+        options: [
+          "A built-in LED matrix",
+          "A laser projector",
+          "A paper printer",
+          "A touch screen"
+        ],
+        answer: 0,
+        explanation: "The project highlights the built-in LED matrix as a main output feature."
+      },
+      {
+        q: "4. If students do not have the hardware, what does the project suggest using?",
+        options: [
+          "A spreadsheet",
+          "The emulator on Trinket",
+          "A calculator app",
+          "A webcam filter"
+        ],
+        answer: 1,
+        explanation: "The worksheet says students can use the emulator available on Trinket if they do not have a Sense HAT."
+      },
+      {
+        q: "5. Which line imports the Sense HAT software into Python?",
+        options: [
+          "import raspberrypi",
+          "from hat import Sense",
+          "from sense_hat import SenseHat",
+          "include sensehat"
+        ],
+        answer: 2,
+        explanation: "The sample program begins with 'from sense_hat import SenseHat'."
+      },
+      {
+        q: "6. What does the line 'sense = SenseHat()' create?",
+        options: [
+          "A message string",
+          "A Sense HAT object",
+          "A web connection",
+          "A file name"
+        ],
+        answer: 1,
+        explanation: "The project says this creates a 'sense' object representing the Sense HAT."
+      },
+      {
+        q: "7. Which method scrolls text across the LED matrix?",
+        options: [
+          "sense.write_text()",
+          "sense.scroll_led()",
+          "sense.show_message()",
+          "sense.print_screen()"
+        ],
+        answer: 2,
+        explanation: "The introductory example uses sense.show_message() to scroll text."
+      },
+      {
+        q: "8. In the project, what is the default value mentioned for scroll_speed?",
+        options: [
+          "0.1",
+          "1.0",
+          "10",
+          "255"
+        ],
+        answer: 0,
+        explanation: "The parameter table states that the default scroll_speed is 0.1."
+      },
+      {
+        q: "9. According to the project, a bigger scroll_speed number makes the text...",
+        options: [
+          "move faster",
+          "move slower",
+          "change color",
+          "turn upside down"
+        ],
+        answer: 1,
+        explanation: "The worksheet notes that the bigger the number, the slower the speed."
+      },
+      {
+        q: "10. Which parameter changes the color of the text itself?",
+        options: [
+          "back_colour",
+          "text_colour",
+          "rotation",
+          "pixel_map"
+        ],
+        answer: 1,
+        explanation: "The text_colour parameter changes the color of the text."
+      },
+      {
+        q: "11. Which parameter changes the background color behind the message?",
+        options: [
+          "show_colour",
+          "screen_colour",
+          "back_colour",
+          "font_colour"
+        ],
+        answer: 2,
+        explanation: "The back_colour parameter changes the background color."
+      },
+      {
+        q: "12. Which RGB tuple would create purple according to the project examples?",
+        options: [
+          "(255, 0, 255)",
+          "(255, 255, 0)",
+          "(0, 255, 0)",
+          "(0, 0, 0)"
+        ],
+        answer: 0,
+        explanation: "The worksheet explains that red + blue gives purple: (255, 0, 255)."
+      },
+      {
+        q: "13. Which programming structure did the project use to repeat a scrolling message?",
+        options: [
+          "A while loop",
+          "A class definition",
+          "A try/except block",
+          "A lambda function"
+        ],
+        answer: 0,
+        explanation: "The repeat example uses 'while True:' to keep showing the message."
+      },
+      {
+        q: "14. Which function can show a single character on the LED matrix?",
+        options: [
+          "sense.show_letter()",
+          "sense.show_symbol()",
+          "sense.letter_mode()",
+          "sense.set_text()"
+        ],
+        answer: 0,
+        explanation: "The worksheet introduces sense.show_letter() for single characters."
+      },
+      {
+        q: "15. Which Python module is imported to create pauses between letters?",
+        options: [
+          "math",
+          "time",
+          "os",
+          "json"
+        ],
+        answer: 1,
+        explanation: "The examples import 'sleep' from the time module to create pauses."
+      },
+      {
+        q: "16. Which function is used in the project to choose random color values?",
+        options: [
+          "choice()",
+          "sample()",
+          "randint()",
+          "shuffle()"
+        ],
+        answer: 2,
+        explanation: "The color-randomizing example imports randint from random."
+      },
+      {
+        q: "17. Which method can set all pixels in the matrix at once from a list of colors?",
+        options: [
+          "sense.set_pixels()",
+          "sense.fill_matrix()",
+          "sense.paint()",
+          "sense.pixel_show()"
+        ],
+        answer: 0,
+        explanation: "The worksheet introduces sense.set_pixels() to set the entire image at once."
+      },
+      {
+        q: "18. In the rainbow image example, what does the variable 'e' stand for?",
+        options: [
+          "extra bright",
+          "empty/black",
+          "electric blue",
+          "error color"
+        ],
+        answer: 1,
+        explanation: "The project defines e as empty/black: (0, 0, 0)."
+      },
+      {
+        q: "19. Which method changes the orientation of the LED matrix?",
+        options: [
+          "sense.turn()",
+          "sense.set_rotation()",
+          "sense.spin()",
+          "sense.adjust_angle()"
+        ],
+        answer: 1,
+        explanation: "The project uses sense.set_rotation() with angles like 0, 90, 180, and 270."
+      },
+      {
+        q: "20. Which of these is one of the rotation angles used in the project?",
+        options: [
+          "45",
+          "135",
+          "225",
+          "270"
+        ],
+        answer: 3,
+        explanation: "The worksheet lists four angles: 0, 90, 180, and 270."
+      },
+      {
+        q: "21. Which method flips the display horizontally?",
+        options: [
+          "sense.flip_h()",
+          "sense.rotate_h()",
+          "sense.mirror()",
+          "sense.left_right()"
+        ],
+        answer: 0,
+        explanation: "The project shows sense.flip_h() for horizontal flipping and sense.flip_v() for vertical flipping."
+      },
+      {
+        q: "22. Which three environmental readings does the project collect?",
+        options: [
+          "Light, sound, and voltage",
+          "Temperature, pressure, and humidity",
+          "Speed, distance, and time",
+          "Pitch, roll, and yaw"
+        ],
+        answer: 1,
+        explanation: "The environmental section lists temperature, pressure, and humidity."
+      },
+      {
+        q: "23. Which method returns the temperature in Celsius?",
+        options: [
+          "sense.read_temp()",
+          "sense.get_heat()",
+          "sense.get_temperature()",
+          "sense.temperature_value()"
+        ],
+        answer: 2,
+        explanation: "The worksheet says sense.get_temperature() returns temperature in Celsius."
+      },
+      {
+        q: "24. Which chip on the Sense HAT includes the gyroscope, accelerometer, and magnetometer?",
+        options: [
+          "CPU",
+          "IMU",
+          "GPU",
+          "ROM"
+        ],
+        answer: 1,
+        explanation: "The project says the movement sensors are part of the IMU (inertial measurement unit) chip."
+      },
+      {
+        q: "25. Which three axes are used to describe motion in the project?",
+        options: [
+          "North, south, east",
+          "Hot, cold, warm",
+          "Pitch, roll, yaw",
+          "Red, green, blue"
+        ],
+        answer: 2,
+        explanation: "The movement section explains the three axes as pitch, roll, and yaw."
+      }
+    ];
+
+    const quizEl = document.getElementById('quiz');
+    const resultsEl = document.getElementById('results');
+
+    function renderQuiz() {
+      quizEl.innerHTML = quizData.map((item, index) => `
+        <div class="question" id="q${index}">
+          <h3>${item.q}</h3>
+          <div class="options">
+            ${item.options.map((opt, i) => `
+              <label class="option">
+                <input type="radio" name="q${index}" value="${i}">
+                ${opt}
+              </label>
+            `).join('')}
+          </div>
+          <div class="feedback" id="feedback${index}"></div>
+        </div>
+      `).join('');
+      resultsEl.style.display = 'none';
+      resultsEl.innerHTML = '';
+    }
+
+    function gradeQuiz(showOnlyAnswers = false) {
+      let score = 0;
+      let answered = 0;
+
+      quizData.forEach((item, index) => {
+        const questionEl = document.getElementById(`q${index}`);
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const feedback = document.getElementById(`feedback${index}`);
+        const options = questionEl.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.remove('selected-missing'));
+
+        if (selected) answered++;
+
+        const correctText = item.options[item.answer];
+        let isCorrect = selected && Number(selected.value) === item.answer;
+
+        if (isCorrect) score++;
+
+        if (!showOnlyAnswers) {
+          if (!selected) {
+            feedback.className = 'feedback incorrect';
+            feedback.style.display = 'block';
+            feedback.innerHTML = `Not answered. Correct answer: <strong>${correctText}</strong><br>${item.explanation}`;
+            questionEl.classList.remove('correct', 'incorrect');
+          } else if (isCorrect) {
+            feedback.className = 'feedback correct';
+            feedback.style.display = 'block';
+            feedback.innerHTML = `Correct! <strong>${correctText}</strong><br>${item.explanation}`;
+          } else {
+            feedback.className = 'feedback incorrect';
+            feedback.style.display = 'block';
+            feedback.innerHTML = `Incorrect. Correct answer: <strong>${correctText}</strong><br>${item.explanation}`;
+          }
+        } else {
+          feedback.className = 'feedback correct';
+          feedback.style.display = 'block';
+          feedback.innerHTML = `Correct answer: <strong>${correctText}</strong><br>${item.explanation}`;
+        }
+      });
+
+      if (!showOnlyAnswers) {
+        const percent = Math.round((score / quizData.length) * 100);
+        let message = 'Keep practicing!';
+        if (percent >= 90) message = 'Excellent work!';
+        else if (percent >= 75) message = 'Great job!';
+        else if (percent >= 60) message = 'Good effort—review the missed questions.';
+
+        resultsEl.style.display = 'block';
+        resultsEl.innerHTML = `
+          <div class="score">Score: ${score} / ${quizData.length} (${percent}%)</div>
+          <div><strong>${message}</strong></div>
+          <div class="small" style="margin-top:8px;">Answered: ${answered} of ${quizData.length}</div>
+        `;
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        resultsEl.style.display = 'block';
+        resultsEl.innerHTML = `
+          <div class="score">Answer Key Displayed</div>
+          <div class="small">All correct answers and explanations are shown below.</div>
+        `;
+        resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function showAnswers() {
+      gradeQuiz(true);
+    }
+
+    function resetQuiz() {
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
