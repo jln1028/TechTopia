@@ -38,7 +38,7 @@ The quizzes and the Python projects were generated with AI tools (ChatGPT and Cl
 
 ## Open decisions
 
-- **Copyright holder.** `LICENSE-MIT.txt` names "TechTopia contributors" and 2026 as placeholders. Replace with the real holder name and year if you want a specific one.
+- **Copyright holder.** `LICENSE-MIT.txt` names Jim Newell (main contributor) and 2026 as the copyright holder and year. Update the year if the code was first written in a different year.
 - **File-to-source mapping** for the adapted lessons and guides, if you want it recorded per file.
 - **Embedded third-party code.** The HTML pages may contain Python examples from the Foundation's projects. Those fall under the same CC BY-SA 4.0 terms as the pages.
 
