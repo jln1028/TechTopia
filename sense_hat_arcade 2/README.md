@@ -40,3 +40,7 @@ python3 run_on_pi.py
 New tests were written first and run against the previous implementation. They failed (5 failures, 1 error), demonstrating missing countdown, restart, and best-score features. The implementation and existing tests were then updated for the new countdown behavior. All **17 automated tests pass** on a non-Pi machine. `py_compile` also passes for all Python files.
 
 The tests verify logic, not physical Sense HAT behavior. Test LED orientation, scrolling, joystick events, and timing on the real device. Best scores are **session-only**, not saved to disk. The score scroll temporarily blocks gameplay, only after game over.
+
+## License and attribution
+
+Adapted from learning resources by the [Raspberry Pi Foundation](https://www.raspberrypi.org), licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Changes were made for the TechTopia classroom, including AI-assisted drafting. Not endorsed by the Raspberry Pi Foundation. See [`NOTICE.md`](../NOTICE.md) and [`LICENSE`](../LICENSE).

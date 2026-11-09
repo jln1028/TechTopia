@@ -14,3 +14,7 @@ Run game on Raspberry Pi with Sense HAT: `python3 marble_maze.py`
 - Ctrl+C exits and clears the LED matrix.
 
 Tilt orientation depends on mounting. If movement is reversed, adjust `tilt_step` in `maze_logic.py`.
+
+## License and attribution
+
+Adapted from learning resources by the [Raspberry Pi Foundation](https://www.raspberrypi.org), licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Changes were made for the TechTopia classroom, including AI-assisted drafting. Not endorsed by the Raspberry Pi Foundation. See [`NOTICE.md`](../NOTICE.md) and [`LICENSE`](../LICENSE).

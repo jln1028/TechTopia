@@ -1,0 +1,24 @@
+site_name: TechTopia
+site_description: Classroom materials for the TechTopia Industry Challenge on physical computing
+repo_url: https://github.com/jln1028/TechTopia
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - search.suggest
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Learn: lessons.md
+  - Challenge: challenge.md
+  - Sense HAT projects: projects.md
+  - Reference:
+      - Repository guide: repository-guide.md
