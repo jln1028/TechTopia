@@ -7,6 +7,7 @@ body:
     attributes:
       label: Where is the problem?
       options:
+        - Select one
         - Part 1 lesson (intro lessons folder)
         - Part 2 Physical Computing Hub
         - Part 2 quiz

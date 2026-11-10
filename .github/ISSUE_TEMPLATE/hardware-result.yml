@@ -1,5 +1,6 @@
 name: Hardware test result
 description: Report what happened when you ran an example or a Part 2 snippet on real hardware.
+title: "[Hardware] "
 labels: ["hardware"]
 body:
   - type: markdown
@@ -40,6 +41,7 @@ body:
     attributes:
       label: Result
       options:
+        - Select one
         - Worked as described
         - Worked with differences (describe below)
         - Did not work
