@@ -1022,7 +1022,8 @@ while True:
         </div>
       `).join('');
 
-      document.querySelectorAll('.activity .activity-header, .activity .toggle-btn').forEach(el => {
+      // The Open/Close button sits inside the header, so a single header listener handles both
+      document.querySelectorAll('.activity .activity-header').forEach(el => {
         el.addEventListener('click', (e) => {
           const card = e.currentTarget.closest('.activity');
           card.classList.toggle('open');
@@ -1053,7 +1054,6 @@ while True:
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab).classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
 
