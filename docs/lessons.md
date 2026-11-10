@@ -13,4 +13,4 @@ Five interactive lessons. Take them in order.
 !!! note
     The links open the standalone lesson pages. They work on the published site and when the repository is opened locally with the `docs/` folder served from the repository root.
 
-Next: [Part 2, Physical Computing](physical-computing.md). For optional extension activities after lesson 5, see [Extra exploration](projects.md).
+Next: [Part 2, Physical Computing](physical-computing.md). For optional extension activities after lesson 5, see [Extra exploration](projects.md) and its [activity sheets](activities.md).

@@ -8,7 +8,7 @@ Classroom materials for the **TechTopia Industry Challenge** on physical computi
 |---|---|---|
 | **Part 1: Lessons** | Five interactive lessons, in order | [Lessons](lessons.md) |
 | **Part 2: Physical Computing** | Bridges the Sense HAT into physical computing with external components: hub, quizzes, team guides | [Physical Computing](physical-computing.md) |
-| **Extra exploration** | Four example Sense HAT games and apps in Python | [Extra exploration](projects.md) |
+| **Extra exploration** | Four example Sense HAT games and apps in Python, with activity sheets | [Extra exploration](projects.md), [activity sheets](activities.md) |
 
 Teachers: see [Getting started](getting-started.md). Contributors: see [CONTRIBUTING on GitHub](https://github.com/jln1028/TechTopia/blob/main/CONTRIBUTING.md).
 
@@ -31,5 +31,3 @@ flowchart LR
 
 !!! warning "Hardware verification"
     The Python projects have not been tested on a physical Sense HAT, and the `pitop` snippets in Part 2 have not been validated on a device. Check them on your hardware before classroom use.
-
-Site: <https://jln1028.github.io/TechTopia/>

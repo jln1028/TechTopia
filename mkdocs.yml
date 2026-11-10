@@ -19,6 +19,8 @@ nav:
   - Getting started: getting-started.md
   - Part 1, Lessons: lessons.md
   - Part 2, Physical Computing: physical-computing.md
-  - Extra exploration: projects.md
+  - Extra exploration:
+      - Overview: projects.md
+      - Activity sheets: activities.md
   - Reference:
       - Repository guide: repository-guide.md

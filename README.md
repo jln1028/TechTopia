@@ -1,5 +1,7 @@
 # TechTopia
 
+**Website: <https://jln1028.github.io/TechTopia/>**
+
 Classroom materials for the **TechTopia Industry Challenge** on physical computing. The course has two parts, plus optional extension activities:
 
 | Part | What | Folder |
@@ -77,6 +79,8 @@ Everything is self-contained: there is no shared code, no build step and no depe
 ## Extra exploration: Sense HAT Python examples
 
 Four complete example programs for students who want to explore further after lesson 5. Each is a working Sense HAT game or app written in Python. Students can run them, read the code, and change them (for example colours, speed, difficulty or controls). They are not required for the challenge.
+
+Each example has a ready-made activity sheet with four steps: **run it, predict and change it, read the tests, extend it**. See [`docs/activities.md`](docs/activities.md) (also on the [website](https://jln1028.github.io/TechTopia/activities/)).
 
 Suggested activities:
 
@@ -171,5 +175,6 @@ The Python projects and quizzes were drafted with AI tools without reference mat
 
 - [`docs/repository-guide.md`](docs/repository-guide.md): groupings, proposed folder structure and information-architecture recommendations
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): onboarding, conventions and how to add a project or lesson
+- [`docs/activities.md`](docs/activities.md): activity sheets for the four Python examples
 - `docs/` and [`mkdocs.yml`](mkdocs.yml): MkDocs site source. Preview with `pip install mkdocs-material && mkdocs serve`.
 - Entry pages for the HTML content: [intro lessons](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/index.html) and [Part 2 materials](TechTopia_Industry_Challenge_Physical_Computing_Materials/index.html).

@@ -9,6 +9,8 @@ Students can run an example, read the code, change it and see what happens. Sugg
 - Read a test file and explain what behaviour it checks.
 - Add a small feature, for example a new compass mode or a new maze.
 
+Ready-made sheets for each example (run it, predict and change it, read the tests, extend it) are on the [activity sheets](activities.md) page.
+
 The logic is testable on any computer; only the runner script needs the hardware.
 
 | Project | What it does | Run on a Pi | Details |
