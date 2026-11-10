@@ -84,4 +84,4 @@ If you test on a real Sense HAT or pi-top, record the device, OS version and wha
 
 ## 9. Issue templates
 
-Opening a new issue offers three forms: **Bug report (Python example)**, **Hardware test result** and **Lesson or documentation issue**. Blank issues are turned off. The forms live in `.github/ISSUE_TEMPLATE/`.
+Opening a new issue offers four forms: **Bug report (Python example)**, **Hardware test result**, **Lesson or documentation issue** and **Suggestion (new content)**. Blank issues are turned off. The forms live in `.github/ISSUE_TEMPLATE/`.

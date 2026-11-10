@@ -1,0 +1,58 @@
+name: Suggestion (new content)
+description: Propose a new example, lesson, team guide, activity sheet or teacher resource.
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of content?
+      options:
+        - New Sense HAT Python example
+        - New lesson (Part 1)
+        - New team build guide (Part 2)
+        - New activity sheet
+        - Teacher resource (quick start, timings, rubric)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What is the idea?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it needed?
+      description: The classroom need behind it. What do students or teachers struggle with today?
+    validations:
+      required: true
+  - type: input
+    id: audience
+    attributes:
+      label: Audience
+      description: Age or experience level.
+      placeholder: Students who have finished lesson 5
+  - type: dropdown
+    id: hardware
+    attributes:
+      label: Hardware needed
+      options:
+        - None (runs on any computer)
+        - Sense HAT only
+        - pi-top plus external components
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: help
+    attributes:
+      label: Can you help build it?
+      description: There is a single maintainer, so offers of help matter.
+      options:
+        - Yes, I can draft it
+        - I can review or test it
+        - No, this is only a suggestion
+    validations:
+      required: true
