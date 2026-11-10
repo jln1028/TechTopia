@@ -29,5 +29,5 @@ flowchart LR
     G -.optional.-> X
 ```
 
-!!! warning "Hardware verification"
-    The Python projects have not been tested on a physical Sense HAT, and the `pitop` snippets in Part 2 have not been validated on a device. Check them on your hardware before classroom use.
+!!! note "Hardware"
+    The Python projects and the `pitop` snippets in Part 2 have been run on pi-top hardware by the maintainer. There is no formal test log, so check them on your own hardware before classroom use.

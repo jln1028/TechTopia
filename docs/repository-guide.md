@@ -7,7 +7,7 @@ An analysis of how the TechTopia repository is organised today, a proposed struc
 | Folder | Purpose | Format | Hardware / SDK |
 |---|---|---|---|
 | `TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/` | Five numbered interactive lessons: pi-top [4] basics, terminal, terminal treasure hunt, Python, Sense HAT lab | 5 self-contained HTML pages | pi-top [4]; `sense_hat` (lesson 5) |
-| `TechTopia_Industry_Challenge_Physical_Computing_Materials/` | Part 2: bridges the Sense HAT into physical computing with external components. Curriculum hub, assessments, and team build guides | 6 HTML pages in 3 subfolders, plus `README.txt` | `pitop` SDK |
+| `TechTopia_Industry_Challenge_Physical_Computing_Materials/` | Part 2: bridges the Sense HAT into physical computing with external components. Curriculum hub, assessments, and team build guides | 6 HTML pages in 3 subfolders, plus `README.md` | `pitop` SDK |
 | `sensehat_compass/` | Interactive compass (arrow, cardinal, numeric) | Python + `unittest` | Sense HAT |
 | `sensehat_maze_joystick/` | Marble maze, joystick or tilt | Python + `unittest` | Sense HAT |
 | `sense_hat_arcade/` | 3-game arcade, difficulty levels, persistent high scores | Python + `unittest` | Sense HAT |
@@ -52,8 +52,8 @@ By **maturity**:
 2. **A folder name with a space** (`sense_hat_arcade 2`) breaks shell commands unless quoted.
 3. **Ambiguous names.** `sense_hat_arcade 2` is not a "version 2" of `sense_hat_arcade`; it is a separate codebase with different games and score handling. `arcade.py` is the hardware runner in one and pure game logic in the other.
 4. **Two hardware tracks are not distinguished** (`pitop` vs `sense_hat`) in folder names.
-5. **No entry page for the HTML content.** Pages are not linked to each other, and the only guide to them is `README.txt`.
-6. **Mixed documentation formats.** READMEs are `.md` except `README.txt` in the materials folder.
+5. **No entry page for the HTML content.** Pages are not linked to each other, and the only guide to them was `README.txt` (now `README.md` in the materials folder).
+6. **Mixed documentation formats.** Resolved: `README.txt` in the materials folder is now `README.md`.
 7. **No shared contributor guidance** and no automated way to run all tests at once.
 
 ## 4. Proposed structure
@@ -114,7 +114,7 @@ Lower-effort alternative (no moves): keep all folders and apply only the documen
 
 **Hardware testers**
 
-- Create `docs/hardware-notes.md` with a table: project, device, OS version, date, result, issues. All READMEs say the code has not been verified on a physical Sense HAT.
+- Create `docs/hardware-notes.md` with a table: project, device, OS version, date, result, issues. The code has been run on pi-top hardware by the maintainer, but nothing is recorded yet.
 
 ## 6. Documentation site recommendations
 
@@ -153,7 +153,7 @@ Information-architecture recommendations:
 4. **Add an `index.html`** in the lessons and challenge folders that lists the pages in order, so students are not browsing files.
 5. **State the SDK on every page** (`pitop` or `sense_hat`) in a consistent banner, because the two are not interchangeable.
 6. **Add a "last verified on hardware" line** to each project page, empty until tested.
-7. **Convert `README.txt` to `README.md`** so formatting and links render on GitHub.
+7. ~~Convert `README.txt` to `README.md`~~ so formatting and links render on GitHub. Done.
 
 ## 7. Suggested order of work
 

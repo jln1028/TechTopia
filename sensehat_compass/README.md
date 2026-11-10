@@ -18,7 +18,7 @@ Three joystick-controlled modes: directional arrow, cardinal text, and three-dig
 
 ## Red / Green tests
 
-The initial RED run failed because `compass_core` had not been implemented (`red_results.txt`). After implementation the GREEN run passed (`green_results.txt`). Tests cover direction boundaries, arrow positions, pixel validity, heading wraparound and joystick mode cycling. The code was not tested against a physical Sense HAT; verify sensor and joystick operation on your device.
+The initial RED run failed because `compass_core` had not been implemented (`red_results.txt`). After implementation the GREEN run passed (`green_results.txt`). Tests cover direction boundaries, arrow positions, pixel validity, heading wraparound and joystick mode cycling. The code has been run on pi-top hardware by the maintainer; still verify sensor and joystick operation on your own device.
 
 ## Notes
 
@@ -26,4 +26,4 @@ The `sense.get_compass()` API returns a heading in degrees based on the Sense HA
 
 ## License
 
-MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has not been tested on physical hardware.
+MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has been run on pi-top hardware by the maintainer.

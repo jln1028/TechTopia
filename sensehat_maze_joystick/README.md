@@ -17,4 +17,4 @@ Tilt orientation depends on mounting. If movement is reversed, adjust `tilt_step
 
 ## License
 
-MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has not been tested on physical hardware.
+MIT. See [`LICENSE-MIT.txt`](../LICENSE-MIT.txt) and [`NOTICE.md`](../NOTICE.md). The code was drafted with AI tools (ChatGPT and Claude) and has been run on pi-top hardware by the maintainer.

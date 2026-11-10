@@ -49,4 +49,4 @@ The quizzes and the Python projects were generated with AI tools (ChatGPT and Cl
 
 ## No warranty
 
-The Python code has not been tested on physical hardware, and the `pitop` snippets have not been validated on a device. Everything is provided as is.
+The Python code and the `pitop` snippets have been run on pi-top hardware by the maintainer. There is no formal hardware test log. Everything is provided as is.

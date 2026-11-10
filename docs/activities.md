@@ -11,7 +11,7 @@ Optional activities for the four Sense HAT Python examples, for students who hav
 - Joystick controls for each example are in its README.
 
 !!! warning "Not yet verified on hardware"
-    The example code has not been tested on a physical Sense HAT. If something does not behave as the sheet says, note what you saw: that is useful feedback.
+    The example code has been run on pi-top hardware by the maintainer. If something does not behave as the sheet says, note what you saw: that is useful feedback.
 
 Difficulty: ★ easy, ★★ medium, ★★★ challenge.
 

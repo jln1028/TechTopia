@@ -7,7 +7,7 @@ Classroom materials for the **TechTopia Industry Challenge** on physical computi
 | Part | What | Folder |
 |---|---|---|
 | **Part 1: Lessons** | Five interactive HTML lessons, from first power-on to Python and the Sense HAT | [`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/) |
-| **Part 2: Physical Computing** | Bridges the Sense HAT into physical computing with external components: curriculum hub, quizzes, and three team build guides | [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.txt) |
+| **Part 2: Physical Computing** | Bridges the Sense HAT into physical computing with external components: curriculum hub, quizzes, and three team build guides | [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.md) |
 | **Extra exploration** | Four example Sense HAT games and apps written in Python, to read, run and modify | [Sense HAT Python examples](#extra-exploration-sense-hat-python-examples) |
 
 ## Where do I start?
@@ -52,7 +52,7 @@ Part 1 is taken in order. Part 2 follows it and moves from the Sense HAT to phys
 | Folder | Course role | What it is | Hardware / SDK |
 |---|---|---|---|
 | [`TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/`](TechTopia_Industry_Challenge_Intro_Lessons_SenseHat/) | Part 1 | Five interactive HTML lessons: pi-top [4] basics, terminal, terminal treasure hunt, Python, Sense HAT lab | pi-top [4]; `sense_hat` in lesson 5 |
-| [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.txt) | Part 2 | Bridges the Sense HAT into physical computing: curriculum hub, two quizzes, and three team build guides | `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer) |
+| [`TechTopia_Industry_Challenge_Physical_Computing_Materials/`](TechTopia_Industry_Challenge_Physical_Computing_Materials/README.md) | Part 2 | Bridges the Sense HAT into physical computing: curriculum hub, two quizzes, and three team build guides | `pitop` SDK (LED, Button, Buzzer, LightSensor, SoundSensor, Potentiometer) |
 | [`sensehat_compass/`](sensehat_compass/README.md) | Extra | Joystick-controlled compass: arrow, cardinal and numeric heading modes | Sense HAT |
 | [`sensehat_maze_joystick/`](sensehat_maze_joystick/README.md) | Extra | Marble maze controlled by joystick or by tilting the board | Sense HAT |
 | [`sense_hat_arcade/`](sense_hat_arcade/README.md) | Extra | Arcade with 3 games, three difficulty levels and persistent high scores | Sense HAT |
@@ -155,8 +155,8 @@ Shared conventions:
 
 ## Known limitations
 
-- The Python projects have not been tested on physical Sense HAT hardware. Check LED orientation, timing, joystick events and sensor readings on the device.
-- The Python snippets in the Part 2 materials target pi-top [4] hardware and were carried forward from class materials; validate SDK component names, ports and sensor ranges before classroom use.
+- The Python projects and the Part 2 snippets have been run on pi-top hardware by the maintainer; there is no formal hardware test log. Check LED orientation, timing, joystick events and sensor readings on your own device.
+- The Part 2 snippets target pi-top [4] hardware and were carried forward from class materials; validate SDK component names, ports and sensor ranges on your setup before classroom use.
 - The materials folder has no embedded pi-top photos or TechTopia background images.
 
 ## Licensing
