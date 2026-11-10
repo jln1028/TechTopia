@@ -80,4 +80,8 @@ python3 -m unittest -v test_compass.CompassTests.test_cardinal_boundaries
 
 ## 8. Reporting hardware results
 
-If you test on a real Sense HAT or pi-top, record the device, OS version and what you observed (orientation, timing, joystick behaviour). This is currently the biggest documentation gap.
+If you test on a real Sense HAT or pi-top, record the device, OS version and what you observed (orientation, timing, joystick behaviour). This is currently the biggest documentation gap. Use the **Hardware test result** issue form to report it.
+
+## 9. Issue templates
+
+Opening a new issue offers three forms: **Bug report (Python example)**, **Hardware test result** and **Lesson or documentation issue**. Blank issues are turned off. The forms live in `.github/ISSUE_TEMPLATE/`.

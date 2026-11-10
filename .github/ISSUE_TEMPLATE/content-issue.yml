@@ -1,0 +1,37 @@
+name: Lesson or documentation issue
+description: A mistake, broken link or unclear step in a lesson, quiz, team guide, activity sheet or the docs.
+labels: ["content"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where is the problem?
+      options:
+        - Part 1 lesson (intro lessons folder)
+        - Part 2 Physical Computing Hub
+        - Part 2 quiz
+        - Part 2 team guide
+        - Activity sheets
+        - README or website docs
+        - Licensing or attribution
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Page or file
+      description: A URL on the website or a path in the repository.
+      placeholder: https://jln1028.github.io/TechTopia/activities/
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong or unclear?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix
+      description: Optional.

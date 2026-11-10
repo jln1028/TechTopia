@@ -1,0 +1,52 @@
+name: Hardware test result
+description: Report what happened when you ran an example or a Part 2 snippet on real hardware.
+labels: ["hardware"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Results reported here are used to build `docs/hardware-notes.md`. Working and failing results are both useful.
+  - type: input
+    id: item
+    attributes:
+      label: What did you run?
+      description: A project folder, a Part 2 team guide, or a specific snippet.
+      placeholder: sensehat_maze_joystick/marble_maze.py
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: pi-top [4] with Sense HAT
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS and Python version
+      placeholder: pi-topOS 11, Python 3.9
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date tested
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Worked as described
+        - Worked with differences (describe below)
+        - Did not work
+    validations:
+      required: true
+  - type: textarea
+    id: observations
+    attributes:
+      label: What did you observe?
+      description: LED orientation, timing, joystick events, sensor readings, SDK component names, ports, error messages.

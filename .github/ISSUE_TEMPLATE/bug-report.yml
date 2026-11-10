@@ -1,0 +1,58 @@
+name: Bug report (Python example)
+description: One of the Sense HAT Python examples crashes, misbehaves or fails its tests.
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: project
+    attributes:
+      label: Project
+      options:
+        - sensehat_compass
+        - sensehat_maze_joystick
+        - sense_hat_arcade
+        - sense_hat_arcade 2
+        - run_tests.py / CI
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Include the full error message or traceback if there is one.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact command you ran and, for games, what you pressed.
+      placeholder: |
+        1. cd sensehat_compass
+        2. python3 compass_app.py
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Device (for example pi-top [4] with Sense HAT, or a laptop), OS version and Python version.
+    validations:
+      required: true
+  - type: dropdown
+    id: tests
+    attributes:
+      label: Do the unit tests pass?
+      description: Run `python3 run_tests.py` from the repository root.
+      options:
+        - Yes, all pass
+        - No, some fail (paste output above)
+        - I have not run them
+    validations:
+      required: true
